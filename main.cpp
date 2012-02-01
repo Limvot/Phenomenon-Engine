@@ -8,11 +8,19 @@ This is important, as the engine uses it to handle window resizes, window loss o
 
 #include <iostream>
 #include "phenomenon/Window.h"
+#include "phenomenon/Node.h"
+#include "phenomenon/Triangle.h"
 
 using namespace std;
 
 int main()
 {
+    Node* parentNode = new Node;
+    NOde* childNode = new Triangle;
+
+    parentNode->addChild(childNode);
+
+
     Window *window;
     window = new Window;
 
@@ -50,12 +58,21 @@ int main()
             }
         } //end while
 
-        window->drawGLScene();                          //Draw the scene! (Note that if the window does not have focus, the engine will not draw.)
-    }                                                   //If this is not the desired behavior, it is simple to remove the isActive check in the drawGLScene function.
+        if (window->isActive)
+        {
+            window->clearScreen();
+            parentNode->draw();
+            window->swapBuffers();
+        }
 
+    }
 
+    cout << "about to delete window\n";
     delete window;
     window = NULL;
+    cout << "about to delete nodes\n";
+    delete parentNode;
+    //delete childNode;
 
     return 0;
 }

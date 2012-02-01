@@ -24,7 +24,8 @@ public:
     int resize(int,int,int,int);
     void handleEvent(SDL_Event*);
     int initGL();
-    int drawGLScene();
+    int clearScreen();
+    int swapBuffers();
     int getSDLVideoFlags();
     int toggleFullScreen();
 

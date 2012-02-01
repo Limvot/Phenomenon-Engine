@@ -162,33 +162,21 @@ int Window::initGL()
 
 }
 
-int Window::drawGLScene()
+int Window::clearScreen()
 {
     if (!isActive)                                      //If we don't have focus, don't draw.
         return 0;
-
-    static GLint TO     = 0;                            //To calculate FPS
-    static GLint Frames = 0;
 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear screen and depth buffer
 
     glLoadIdentity();
 
-    SDL_GL_SwapBuffers();                               //Draw to screen
+    return 0;
+}
 
-    Frames++;                                           //Increment Frames
-
-    {
-        GLint t = SDL_GetTicks();                       //Math to compute and display frames per second.
-        if (t - TO >= 2000) {
-            GLfloat seconds = (t - TO) / 1000.0;
-            GLfloat fps = Frames / seconds;
-            cout << Frames << " frames in " << seconds << " seconds = " << fps << " FPS\n";
-            TO = t;
-            Frames = 0;
-
-        }
-    }
+int Window::swapBuffers()
+{
+    SDL_GL_SwapBuffers();                               //Display on screen
     return 0;
 }
 
