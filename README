@@ -2,18 +2,19 @@
 Phenomenon
 ------------
 
+
 Phenomenon is a OpenGL graphics/game engine project by Nathan Braswell
 
 It is a learning project that seeks to create a working graphics engine from scratch. (almost)
 It currently uses SDL to handle platform specifics.
 
-It implements many of the NeHe OpenGL tutorials, specificly the ports to linux/SDL.
-The lazyfoo SDL/OpenGL tutorial is also used as a reference.
-However, no code is copy-pasted. It is all re-writen.
+It implements some of the NeHe OpenGL tutorials, specifically the ports to linux/SDL.
+The lazyfoo SDL/OpenGL tutorial is also used sparingly as a reference.
+However, no code is copy-pasted. It is all re-writen using C++, multiple files, and a node graph system.
 
-The code is heavliy commented, taking its cue from the NeHe tutorials off of which it is based.
+The code is heavily commented, taking its cue from the NeHe tutorials off of which it is based.
 
-Please note that this is a learning project, and I am a student. I'm learning as I go along, and the code will probally be buggy and inefficent. I take no responsiblity for any negitive consequences stemming from the use of this code or program.
+Please note that this is a learning project, and I am a student. I'm learning as I go along, and the code will probably be buggy and inefficient. I take no responsibility for any negative consequences stemming from the use of this code or program.
 
 The code may be used under the Zlib or the MIT license.
 
