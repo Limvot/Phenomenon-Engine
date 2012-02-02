@@ -16,7 +16,7 @@ using namespace std;
 int main()
 {
     Node* parentNode = new Node;
-    NOde* childNode = new Triangle;
+    Node* childNode = new Triangle;
 
     parentNode->addChild(childNode);
 
