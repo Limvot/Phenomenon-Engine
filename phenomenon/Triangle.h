@@ -2,6 +2,7 @@
 #define TRIANGLE_H
 
 #include "Node.h"
+#include "DataTypes.h"
 
 class Triangle: public Node
 {

@@ -40,6 +40,8 @@
 			<Add library="GLU" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="phenomenon/DataTypes.cpp" />
+		<Unit filename="phenomenon/DataTypes.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />

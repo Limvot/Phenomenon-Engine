@@ -15,13 +15,16 @@ using namespace std;
 
 int main()
 {
-    Node* parentNode = new Node;
-    Node* childNode = new Triangle;
+    Node* parentNode = new Node;                            //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    Node* childNode = new Triangle;                         //The Triangle class inherets the Node class, but draws a triangle on draw().
 
     parentNode->addChild(childNode);
 
+    parentNode->setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode will end up with a position of 1.0, 0.0, -6.0.
+    childNode->setLocalPosition(1.0f,0.0f,0.0f);
 
-    Window *window;
+
+    Window *window;                                         //Create our window class, which handles all the
     window = new Window;
 
     int done = false;   //Main loop variable
@@ -61,7 +64,7 @@ int main()
         if (window->isActive)
         {
             window->clearScreen();
-            parentNode->draw();
+            childNode->draw();                          //Dosn't matter weather the parentNode or the childNode is drawn, parentNode will call childNode's draw function anyway.
             window->swapBuffers();
         }
 
