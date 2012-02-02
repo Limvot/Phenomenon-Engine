@@ -19,6 +19,7 @@ public:
     Window();
 
     ~Window();
+    void quit();
 
     int start(int,int,int);
     int resize(int,int,int,int);

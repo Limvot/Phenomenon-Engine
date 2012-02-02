@@ -8,10 +8,14 @@ Window::Window() {
 
 Window::~Window() {
 //Destructor
-SDL_Quit(); //Quit SDL
-exit(0);    //Not sure where this is from, possibly SDL.
+    quit();
 }
 
+void Window::quit()
+{
+    SDL_Quit();
+    exit(0);
+}
 int Window::start(int width, int height, int inputBPP)
 {
     bpp = inputBPP;

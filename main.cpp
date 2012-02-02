@@ -15,23 +15,22 @@ using namespace std;
 
 int main()
 {
-    Node* parentNode = new Node;                            //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    Node rootNode;                            //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
     Node* childNode = new Triangle;                         //The Triangle class inherets the Node class, but draws a triangle on draw().
 
-    parentNode->addChild(childNode);
+    rootNode.addChild(childNode);
 
-    parentNode->setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode will end up with a position of 1.0, 0.0, -6.0.
+    rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode will end up with a position of 1.0, 0.0, -6.0.
     childNode->setLocalPosition(1.0f,0.0f,0.0f);
 
 
-    Window *window;                                         //Create our window class, which handles all the
-    window = new Window;
+    Window window;                                         //Create our window class, which handles all the
 
     int done = false;   //Main loop variable
     SDL_Event *event;    //Useed in collecting events
     event = new SDL_Event;
 
-    window->start(640,480,32);                          //Start the engine. Sets up SDL and OpenGL, sets some variables
+    window.start(640,480,32);                          //Start the engine. Sets up SDL and OpenGL, sets some variables
 
         while(!done)                                    //Main loop
     {
@@ -43,12 +42,11 @@ int main()
                 switch (event->key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        delete window;
-                        window = NULL;
+                        window.quit();
                         break;
 
                     case SDLK_F1:
-                        window->toggleFullScreen();
+                        window.toggleFullScreen();
                         break;
 
                     default:
@@ -57,25 +55,21 @@ int main()
 
             } else                                      //If not a keypress, let the engine handle the event. Possibilities include window resize, losing window focus, (X) button being pressed, etc
             {
-                window->handleEvent(event);
+                window.handleEvent(event);
             }
         } //end while
 
-        if (window->isActive)
+        if (window.isActive)
         {
-            window->clearScreen();
+            window.clearScreen();
             childNode->draw();                          //Dosn't matter weather the parentNode or the childNode is drawn, parentNode will call childNode's draw function anyway.
-            window->swapBuffers();
+            window.swapBuffers();
         }
 
     }
 
-    cout << "about to delete window\n";
-    delete window;
-    window = NULL;
     cout << "about to delete nodes\n";
-    delete parentNode;
-    //delete childNode;
+    delete childNode;
 
     return 0;
 }
