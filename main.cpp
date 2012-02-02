@@ -10,18 +10,22 @@ This is important, as the engine uses it to handle window resizes, window loss o
 #include "phenomenon/Window.h"
 #include "phenomenon/Node.h"
 #include "phenomenon/Triangle.h"
+#include "phenomenon/Square.h"
 
 using namespace std;
 
 int main()
 {
-    Node rootNode;                            //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
-    Node* childNode = new Triangle;                         //The Triangle class inherets the Node class, but draws a triangle on draw().
+    Node rootNode;                                     //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    Node* childNode = new Triangle;                    //The Triangle class inherets the Node class, but draws a triangle on draw().
+    Node* childNode2 = new Square;                     //Same with the Square class, but it draws a square.
 
     rootNode.addChild(childNode);
+    childNode->addChild(childNode2);
 
     rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode will end up with a position of 1.0, 0.0, -6.0.
-    childNode->setLocalPosition(1.0f,0.0f,0.0f);
+    childNode->setLocalPosition(-2.0f,0.0f,0.0f);
+    childNode2->setLocalPosition(4.0f, 0.0f, 0.0f);
 
 
     Window window;                                         //Create our window class, which handles all the
@@ -62,8 +66,8 @@ int main()
         if (window.isActive)
         {
             window.clearScreen();
-            childNode->draw();                          //Dosn't matter weather the parentNode or the childNode is drawn, parentNode will call childNode's draw function anyway.
-            window.swapBuffers();
+            rootNode.draw();                          //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
+            window.swapBuffers();                      //Thus, calling rootNode.draw() will draw the entire scene.
         }
 
     }

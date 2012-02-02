@@ -44,6 +44,8 @@
 		<Unit filename="phenomenon/DataTypes.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
+		<Unit filename="phenomenon/Square.cpp" />
+		<Unit filename="phenomenon/Square.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />
 		<Unit filename="phenomenon/Triangle.h" />
 		<Unit filename="phenomenon/Window.cpp" />

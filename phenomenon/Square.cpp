@@ -1,12 +1,12 @@
-#include "Triangle.h"
+#include "Square.h"
 
-Triangle::Triangle()                                                        //Please note that the Triangle inherets the Node class, and all of its node releated functions.
+Square::Square()                                                        //Please note that the Triangle inherets the Node class, and all of its node releated functions.
 {
     parent = NULL;
     children = NULL;
 }
 
-Triangle::~Triangle()
+Square::~Square()
 {
     if (children != NULL)
     {
@@ -15,15 +15,16 @@ Triangle::~Triangle()
     }
 }
 
-int Triangle::draw()
+int Square::draw()
 {
     getGlobalPosition();
     glTranslatef(globalPosition.x, globalPosition.y, globalPosition.z);
 
-    glBegin( GL_TRIANGLES );
-        glVertex3f( 0.0f,   1.0f,   0.0f    );
+    glBegin( GL_QUADS );
+        glVertex3f( -1.0f,  1.0f,   0.0f    );
         glVertex3f( -1.0f,  -1.0f,  0.0f    );
-        glVertex3f( 1.0f,   -1.0f,  0.0f    );
+        glVertex3f( 1.0f,  -1.0f,   0.0f    );
+        glVertex3f( 1.0f,   1.0f,   0.0f    );
     glEnd();
 
     glLoadIdentity();
