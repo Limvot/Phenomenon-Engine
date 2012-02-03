@@ -7,7 +7,7 @@
 class Triangle: public Node
 {
     public:
-        Triangle();
+        Triangle(string);
         virtual ~Triangle();
         int draw();
     protected:

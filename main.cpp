@@ -16,22 +16,25 @@ using namespace std;
 
 int main()
 {
-    Node rootNode;                                     //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
-    Node* childNode = new Triangle;                    //The Triangle class inherets the Node class, but draws a triangle on draw().
-    Node* childNode2 = new Square;                     //Same with the Square class, but it draws a square.
+    Node rootNode("root");                                     //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    Node* childNode = new Triangle("triangle");                    //The Triangle class inherets the Node class, but draws a triangle on draw().
+    Node* childNode2 = new Square("square");                     //Same with the Square class, but it draws a square.
+    Node* childNode3 = new Square("square2");
 
     rootNode.addChild(childNode);
-    childNode->addChild(childNode2);
+    rootNode.addChild(childNode2);
+    childNode2->addChild(childNode3);
 
-    rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode will end up with a position of 1.0, 0.0, -6.0.
+    rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
-    childNode2->setLocalPosition(4.0f, 0.0f, 0.0f);
+    childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
+    childNode3->setLocalPosition(0.0f,-2.5f,0.0f);
 
 
     Window window;                                         //Create our window class, which handles all the
 
-    int done = false;   //Main loop variable
-    SDL_Event *event;    //Useed in collecting events
+    int done = false;                                      //Main loop variable
+    SDL_Event *event;                                      //Useed in collecting events
     event = new SDL_Event;
 
     window.start(640,480,32);                          //Start the engine. Sets up SDL and OpenGL, sets some variables
@@ -73,7 +76,8 @@ int main()
     }
 
     cout << "about to delete nodes\n";
-    delete childNode;
-
+    delete childNode;                           //I think these should be deleated when rootNode falls out of scope, but I'm not sure...
+    delete childNode2;                          //Note that childNode3 will definitly be deleted when childNode2 is.
+                                                //All Node's destructors delete their children.
     return 0;
 }

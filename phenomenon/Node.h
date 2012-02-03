@@ -8,18 +8,21 @@
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 
 //Includes from with in engine
-#include "DataTypes.h"
+#include "DataTypes.h"      //Also includes ExpandableArray.h
+
+using std::string;
 
 class Node
 {
     public:
         Node();
+        Node(string tmp_name);
         virtual ~Node();
         int setParent(Node*);
         int addChild(Node*);
 
-        //Node* getChild(int);
-        int getIndex();
+        Node* findChild(string);
+        int deleteChild(string);
 
         virtual int draw();
         Vertex getLocalPosition();
@@ -27,11 +30,13 @@ class Node
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vertex);
 
+        string name;
 
-        int index;              //What position is this node in the parent's array
     protected:
     Node *parent;
-    Node *children;
+    ExpandableArray<Node*> children;
+    Node *tmp_return_child;
+    int numChildren;
     Vertex localPosition;
     Vertex globalPosition;
 };

@@ -1,17 +1,19 @@
 #include "Square.h"
 
-Square::Square()                                                        //Please note that the Triangle inherets the Node class, and all of its node releated functions.
+Square::Square(string tmp_name)                                                        //Please note that the Square inherets the Node class, and all of its node releated functions.
 {
+    name = tmp_name;
     parent = NULL;
-    children = NULL;
+    tmp_return_child = NULL;
+    numChildren = 0;
 }
 
 Square::~Square()
 {
-    if (children != NULL)
+    for (int i = 0; i < numChildren;)
     {
-        delete children;                                                    //Delete our children
-        std::cout << "Deleted Children, deleting self\n";
+        delete children.getArrayMember(i);
+        i += 1;
     }
 }
 
@@ -29,9 +31,13 @@ int Square::draw()
 
     glLoadIdentity();
 
-    if (children != NULL)                                                   //Draw children, if we have any.
+    if (numChildren > 0)                            //If we have children, go through and draw them
     {
-        children->draw();
+        for (int i = 0; i < numChildren;)
+        {
+            children.getArrayMember(i)->draw();
+            i += 1;
+        }
     }
 
     return 0;

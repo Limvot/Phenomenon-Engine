@@ -42,6 +42,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="phenomenon/DataTypes.cpp" />
 		<Unit filename="phenomenon/DataTypes.h" />
+		<Unit filename="phenomenon/ExpandableArray.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Square.cpp" />

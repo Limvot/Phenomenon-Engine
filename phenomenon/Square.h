@@ -7,7 +7,7 @@
 class Square: public Node
 {
     public:
-        Square();
+        Square(string);
         virtual ~Square();
         int draw();
     protected:
