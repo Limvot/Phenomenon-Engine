@@ -2,10 +2,7 @@
 
 Triangle::Triangle(string tmp_name)                                                        //Please note that the Triangle inherets the Node class, and all of its node releated functions.
 {
-    name = tmp_name;
-    parent = NULL;
-    tmp_return_child = NULL;
-    numChildren = 0;
+    name = tmp_name;                    //The rest of the init is taken care of by the Node constructor.
 }
 
 Triangle::~Triangle()

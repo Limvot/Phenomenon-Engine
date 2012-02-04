@@ -2,7 +2,7 @@
 
 Node::Node()
 {
-    //Don't call this. Nodes need unique names.
+    //Don't call this. Nodes need unique names. Note that this is called by objects that inherit this class, but they re-assign the name.
     name = "no_name";
     parent = NULL;
     tmp_return_child = NULL;

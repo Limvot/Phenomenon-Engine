@@ -19,7 +19,7 @@ int main()
     Node rootNode("root");                                     //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
     Node* childNode = new Triangle("triangle");                    //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                     //Same with the Square class, but it draws a square.
-    Node* childNode3 = new Square("square2");
+    Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
 
     rootNode.addChild(childNode);
     rootNode.addChild(childNode2);

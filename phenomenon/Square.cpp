@@ -2,10 +2,7 @@
 
 Square::Square(string tmp_name)                                                        //Please note that the Square inherets the Node class, and all of its node releated functions.
 {
-    name = tmp_name;
-    parent = NULL;
-    tmp_return_child = NULL;
-    numChildren = 0;
+    name = tmp_name;                            //Rest of init is taken care of by the Node constructor
 }
 
 Square::~Square()
