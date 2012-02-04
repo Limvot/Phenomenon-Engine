@@ -31,6 +31,7 @@ class Node
         int setLocalPosition(Vertex);
 
         string name;
+        Color3f color;
 
     protected:
     Node *parent;

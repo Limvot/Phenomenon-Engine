@@ -40,3 +40,57 @@ Vertex Vertex::operator- (Vertex tmp_in_vertex)                    //Overload - 
 
     return (tmp_return);
 }
+
+//////////////////
+//Color3f
+//////////////////
+
+Color3f::Color3f()                                                    //If no arguments, init to 0
+{
+    r = 1;
+    g = 1;
+    b = 1;
+}
+
+Color3f::Color3f(float tmp_in_r, float tmp_in_g, float tmp_in_b)      //If we do have arguments, init to them
+{
+    r = tmp_in_r;
+    g = tmp_in_g;
+    b = tmp_in_b;
+}
+
+Color3f::~Color3f()
+{
+
+}
+
+int Color3f::setColor(float tmp_r, float tmp_g, float tmp_b)
+{
+    r = tmp_r;
+    g = tmp_g;
+    b = tmp_b;
+
+    return 0;
+}
+
+Color3f Color3f::operator+ (Color3f tmp_in_color3f)                    //Overload + so we can add vertexes
+{
+    Color3f tmp_return;
+
+    tmp_return.r = r + tmp_in_color3f.r;
+    tmp_return.g = g + tmp_in_color3f.g;
+    tmp_return.b = b + tmp_in_color3f.b;
+
+    return (tmp_return);
+}
+
+Color3f Color3f::operator- (Color3f tmp_in_color3f)                    //Overload - so we can subtract vertexes
+{
+    Color3f tmp_return;
+
+    tmp_return.r = r - tmp_in_color3f.r;
+    tmp_return.g = g - tmp_in_color3f.g;
+    tmp_return.b = b - tmp_in_color3f.b;
+
+    return (tmp_return);
+}

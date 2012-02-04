@@ -22,6 +22,7 @@ int Square::draw()
 {
     getGlobalPosition();
     glTranslatef(globalPosition.x, globalPosition.y, globalPosition.z);
+    glColor3f(color.r, color.g, color.b);
 
     glBegin( GL_QUADS );
         glVertex3f( -1.0f,  1.0f,   0.0f    );

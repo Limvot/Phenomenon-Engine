@@ -185,3 +185,9 @@ int Window::toggleFullScreen()
     SDL_WM_ToggleFullScreen(surface);                   //If toggle fullscreen function called, toggle full screen.
     return 0;
 }
+
+int Window::setCaption(string caption)
+{
+    SDL_WM_SetCaption(caption.c_str(), caption.c_str());
+    return 0;
+}

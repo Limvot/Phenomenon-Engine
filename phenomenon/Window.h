@@ -29,6 +29,7 @@ public:
     int swapBuffers();
     int getSDLVideoFlags();
     int toggleFullScreen();
+    int setCaption(string);
 
     SDL_Surface *surface;
     int bpp;

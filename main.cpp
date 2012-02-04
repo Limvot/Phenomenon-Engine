@@ -30,6 +30,11 @@ int main()
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.5f,0.0f);
 
+    childNode->color.setColor(1.0f, 0.0f, 0.0f);
+    childNode2->color.setColor(0.0f, 1.0f, 0.0f);
+    childNode3->color.setColor(0.0f, 0.0f, 1.0f);
+
+
 
     Window window;                                         //Create our window class, which handles all the
 
@@ -38,6 +43,7 @@ int main()
     event = new SDL_Event;
 
     window.create(640,480,32);                          //Creates the window. Sets up SDL and OpenGL, sets some variables
+    window.setCaption("Phenomenon Engine Test/Demo");
 
     cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Test OpenGL version
 
