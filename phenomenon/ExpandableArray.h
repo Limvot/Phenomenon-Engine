@@ -35,8 +35,8 @@ class ExpandableArray
 template <class T>
 ExpandableArray<T>::ExpandableArray()
 {
-    Array = new T[2];
-    NumArraySlots = 2;
+    Array = new T[1];
+    NumArraySlots = 1;
     UsedSlots = 0;
     tmp_Array = NULL;
 }

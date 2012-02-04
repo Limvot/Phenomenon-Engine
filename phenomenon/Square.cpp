@@ -7,11 +7,15 @@ Square::Square(string tmp_name)                                                 
 
 Square::~Square()
 {
-    for (int i = 0; i < numChildren;)
+    if (numChildren > 0)
     {
-        delete children.getArrayMember(i);
-        i += 1;
+        for (int i = 0; i < numChildren;)
+        {
+            delete children.getArrayMember(i);
+            i += 1;
+        }
     }
+    numChildren = 0;
 }
 
 int Square::draw()

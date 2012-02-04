@@ -14,9 +14,9 @@ Window::~Window() {
 void Window::quit()
 {
     SDL_Quit();
-    exit(0);
+    isActive = false;       //Let the outside world know that we're not active. Hopefully, they won't try to draw with a window that's quit.
 }
-int Window::start(int width, int height, int inputBPP)
+int Window::create(int width, int height, int inputBPP)
 {
     bpp = inputBPP;
     isActive = true;    //Set to true when starting, since we should have focus. (Whether or not the window is active (focus))
@@ -134,10 +134,6 @@ void Window::handleEvent(SDL_Event* event) {
         case SDL_VIDEORESIZE:
             //Handle resize
             resize(event->resize.w, event->resize.h, bpp, getSDLVideoFlags());
-            break;
-
-        case SDL_QUIT:          //If the sdl/operating system/window manager wants us to quit, quit. (ie, (X) button on window pressed)
-            delete this;
             break;
 
         default:

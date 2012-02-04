@@ -19,11 +19,16 @@ Node::Node(string tmp_name)
 
 Node::~Node()
 {
-    for (int i = 0; i < numChildren;)
+    if (numChildren > 0)
     {
-        delete children.getArrayMember(i);
-        i += 1;
+
+        for (int i = 0; i < numChildren;)
+        {
+            delete children.getArrayMember(i);
+            i += 1;
+        }
     }
+    numChildren = 0;
 
 }
 

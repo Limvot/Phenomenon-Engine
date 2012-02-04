@@ -21,7 +21,7 @@ public:
     ~Window();
     void quit();
 
-    int start(int,int,int);
+    int create(int,int,int);
     int resize(int,int,int,int);
     void handleEvent(SDL_Event*);
     int initGL();

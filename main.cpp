@@ -37,7 +37,9 @@ int main()
     SDL_Event *event;                                      //Useed in collecting events
     event = new SDL_Event;
 
-    window.start(640,480,32);                          //Start the engine. Sets up SDL and OpenGL, sets some variables
+    window.create(640,480,32);                          //Creates the window. Sets up SDL and OpenGL, sets some variables
+
+    cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Test OpenGL version
 
         while(!done)                                    //Main loop
     {
@@ -49,7 +51,8 @@ int main()
                 switch (event->key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        window.quit();
+                        window.quit();              //Don't use window after you quit it, it will probally cause a seg fault.
+                        done = true;
                         break;
 
                     case SDLK_F1:
@@ -60,13 +63,20 @@ int main()
                         break;
                 }
 
-            } else                                      //If not a keypress, let the engine handle the event. Possibilities include window resize, losing window focus, (X) button being pressed, etc
+            } else
             {
-                window.handleEvent(event);
+                if (event->type == SDL_QUIT)        //If the system wants us to quit, then do so.
+                {
+                    window.quit();
+                    done = true;
+                } else
+                {
+                    window.handleEvent(event);  //If not a keypress or SDL_QUIT, let the engine handle the event. Possibilities include window resize, losing window focus.
+                }
             }
         } //end while
 
-        if (window.isActive)
+        if (window.isActive)                        //window.isActive is false if we've already quit, or if we're minimised.
         {
             window.clearScreen();
             rootNode.draw();                          //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
@@ -74,10 +84,9 @@ int main()
         }
 
     }
-
-    cout << "about to delete nodes\n";
-    delete childNode;                           //I think these should be deleated when rootNode falls out of scope, but I'm not sure...
-    delete childNode2;                          //Note that childNode3 will definitly be deleted when childNode2 is.
-                                                //All Node's destructors delete their children.
+                                /////////////////////////
+                                //NOTE
+                                /////////////////////////
+                                //Nodes get destroyed when rootNode falls out of scope. If you delete them manually, rootNode will segfault when it trys to delete them.
     return 0;
 }
