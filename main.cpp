@@ -95,6 +95,14 @@ int main()
                         camera.rotate(0.0f, -10.0f, 0.0f);
                         break;
 
+                    case SDLK_UP:
+                        camera.goForward(1.0f);
+                        break;
+
+                    case SDLK_DOWN:
+                        camera.goBackward(1.0f);
+                        break;
+
                     default:
                         break;
                 }

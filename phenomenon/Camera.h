@@ -1,8 +1,14 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <math.h>
+
 #include "Node.h"
 #include "DataTypes.h"
+
+#ifndef PI
+#define PI 3.141592654f
+#endif
 
 class Camera: public Node
 {

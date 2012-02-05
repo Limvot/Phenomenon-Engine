@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(string tmp_name)                                                        //Please note that the Square inherets the Node class, and all of its node releated functions.
+Camera::Camera(string tmp_name)                 //Please note that the Square inherets the Node class, and all of its node releated functions.
 {
     name = tmp_name;                            //Rest of init is taken care of by the Node constructor
 }
@@ -67,15 +67,29 @@ int Camera::rotate(float rot_x, float rot_y, float rot_z)
     return 0;
 }
 
-int Camera::goForward(float)
+int Camera::goForward(float movement_ammount)
 {
-    //To Do
+    float x_rotation_radians, y_rotation_radians;
+    x_rotation_radians = -((localRotation.x/180) * PI);                          //Change degrees to radians, and reverse sign.
+    y_rotation_radians = -((localRotation.y/180) * PI);                         //This is necessary because the camera rotations are reversed compared to objects, and we store the rotations like an object.
+
+    localPosition.x += float(movement_ammount * sin(y_rotation_radians));        //Fid the x component of the movement
+    localPosition.y -= float(movement_ammount * sin(x_rotation_radians));        //Find the y component of the movement
+    localPosition.z -= float(movement_ammount * cos(y_rotation_radians));        //Find the z component of the movemen
+
     return 0;
 }
 
-int Camera::goBackward(float)
+int Camera::goBackward(float movement_ammount)
 {
-    //To Do
+    float x_rotation_radians, y_rotation_radians;
+    x_rotation_radians = -((localRotation.x/180) * PI);                          //Change degrees to radians, and reverse sign.
+    y_rotation_radians = -((localRotation.y/180) * PI);                         //This is necessary because the camera rotations are reversed compared to objects, and we store the rotations like an object.
+
+    localPosition.x -= float(movement_ammount * sin(y_rotation_radians));        //Fid the x component of the movement
+    localPosition.y += float(movement_ammount * sin(x_rotation_radians));        //Find the y component of the movement
+    localPosition.z += float(movement_ammount * cos(y_rotation_radians));        //Find the z component of the movement
+
     return 0;
 }
 
