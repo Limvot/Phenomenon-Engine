@@ -21,8 +21,20 @@ Triangle::~Triangle()
 
 int Triangle::draw()
 {
-    getGlobalPosition();
-    glTranslatef(globalPosition.x, globalPosition.y, globalPosition.z);
+    getGlobalPosition();                                //Update all our global varibles.
+    getGlobalRotation();
+    getGlobalScale();
+
+    glLoadIdentity();
+
+    glTranslatef(globalPosition.x, globalPosition.y, globalPosition.z);     //Translate to our position
+
+    glRotatef(globalRotation.x, 1.0f, 0.0f, 0.0f);      //Must be a better way to do this. (rotate each axis the proper ammount.
+    glRotatef(globalRotation.y, 0.0f, 1.0f, 0.0f);
+    glRotatef(globalRotation.z, 0.0f, 0.0f, 1.0f);
+
+    glScalef(globalScale.x, globalScale.y, globalScale.z);      //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
+
     glColor3f(color.r, color.g, color.b);
 
     glBegin( GL_TRIANGLES );

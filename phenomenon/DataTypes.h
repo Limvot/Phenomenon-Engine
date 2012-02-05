@@ -11,6 +11,7 @@ class Vertex           //Simple vertex class.
         ~Vertex();
         Vertex operator+ (Vertex);
         Vertex operator- (Vertex);
+        Vertex operator* (Vertex);
         float x,y,z;
 };
 

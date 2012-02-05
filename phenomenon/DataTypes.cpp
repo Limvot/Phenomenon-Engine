@@ -41,6 +41,17 @@ Vertex Vertex::operator- (Vertex tmp_in_vertex)                    //Overload - 
     return (tmp_return);
 }
 
+Vertex Vertex::operator* (Vertex tmp_in_vertex)
+{
+    Vertex tmp_return;
+
+    tmp_return.x = x * tmp_in_vertex.x;
+    tmp_return.y = y * tmp_in_vertex.y;
+    tmp_return.z = z * tmp_in_vertex.z;
+
+    return (tmp_return);
+}
+
 //////////////////
 //Color3f
 //////////////////
@@ -62,15 +73,6 @@ Color3f::Color3f(float tmp_in_r, float tmp_in_g, float tmp_in_b)      //If we do
 Color3f::~Color3f()
 {
 
-}
-
-int Color3f::setColor(float tmp_r, float tmp_g, float tmp_b)
-{
-    r = tmp_r;
-    g = tmp_g;
-    b = tmp_b;
-
-    return 0;
 }
 
 Color3f Color3f::operator+ (Color3f tmp_in_color3f)                    //Overload + so we can add vertexes

@@ -7,6 +7,22 @@ Node::Node()
     parent = NULL;
     tmp_return_child = NULL;
     numChildren = 0;
+
+    localPosition.x = 0;
+    localPosition.y = 0;
+    localPosition.z = 0;
+
+    localRotation.x = 0;
+    localRotation.y = 0;
+    localRotation.z = 0;
+
+    localScale.x = 1;
+    localScale.y = 1;
+    localScale.z = 1;
+
+    globalScale.x = 1;
+    globalScale.y = 1;
+    globalScale.z = 1;
 }
 
 Node::Node(string tmp_name)
@@ -15,6 +31,22 @@ Node::Node(string tmp_name)
     parent = NULL;
     tmp_return_child = NULL;
     numChildren = 0;
+
+    localPosition.x = 0;
+    localPosition.y = 0;
+    localPosition.z = 0;
+
+    localRotation.x = 0;
+    localRotation.y = 0;
+    localRotation.z = 0;
+
+    localScale.x = 1;
+    localScale.y = 1;
+    localScale.z = 1;
+
+    globalScale.x = 1;
+    globalScale.y = 1;
+    globalScale.z = 1;
 }
 
 Node::~Node()
@@ -96,11 +128,6 @@ int Node::draw()
     return 0;                       //Base node type has no draw functionality, just calls children's draw() function.
 }
 
-Vertex Node::getLocalPosition()
-{
-    return localPosition;
-}
-
 int Node::setLocalPosition(float set_x, float set_y, float set_z)
 {
     localPosition.x = set_x;
@@ -117,14 +144,85 @@ int Node::setLocalPosition(Vertex set_position)
     return 0;
 }
 
+Vertex Node::getLocalPosition()
+{
+    return localPosition;
+}
+
 Vertex Node::getGlobalPosition()
 {
     if (parent == NULL)                                                 //If we don't have a parent
     {
         globalPosition = localPosition;                                 //Global position is the same as local position
     } else {                                                            //If we do have a parent
-        globalPosition = localPosition + parent->getGlobalPosition();   //Add its positon to ours. (note that this is recursive, and will continue back to the root node.)
+        globalPosition = localPosition + parent->getGlobalPosition();   //Add its positon to ours. (note that this will continue back to the root node.)
     }
 
     return globalPosition;
 }
+
+int Node::setColor3f(float tmp_r, float tmp_g, float tmp_b)
+{
+    color.r = tmp_r;
+    color.g = tmp_g;
+    color.b = tmp_b;
+
+    return 0;
+}
+
+int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
+{
+    localScale.x = tmp_x_scale;
+    localScale.y = tmp_y_scale;
+    localScale.z = tmp_z_scale;
+
+    return 0;
+}
+
+Vertex Node::getLocalScale()
+{
+    return localScale;
+}
+
+Vertex Node::getGlobalScale()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        globalScale = localScale;                                 //Global scale is the same as local scale
+    } else {                                                            //If we do have a parent
+        globalScale = localScale * parent->getGlobalScale();   //Multiply its scale with ours. (note that this will continue back to the root node.)
+    }
+
+    return globalScale;
+}
+
+
+
+int Node::setLocalRotation(float tmp_x_rot, float tmp_y_rot, float tmp_z_rot)
+{
+    localRotation.x = tmp_x_rot;
+    localRotation.y = tmp_y_rot;
+    localRotation.z = tmp_z_rot;
+
+    return 0;
+}
+
+Vertex Node::getLocalRotation()
+{
+    return localRotation;
+}
+
+Vertex Node::getGlobalRotation()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        globalRotation = localRotation;                                 //Global rotation is the same as local rotation
+    } else {                                                            //If we do have a parent
+        globalRotation = localRotation + parent->getGlobalRotation();   //Add its rotation to ours. (note that this will continue back to the root node.)
+    }
+
+    return globalRotation;
+}
+
+
+
