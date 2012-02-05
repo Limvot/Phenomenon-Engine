@@ -28,7 +28,7 @@ int main()
     rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
-    childNode3->setLocalPosition(0.0f,-2.0f,0.0f);
+    childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
 
     childNode->setColor3f(1.0f, 0.0f, 0.0f);
     childNode2->setColor3f(0.0f, 1.0f, 0.0f);
