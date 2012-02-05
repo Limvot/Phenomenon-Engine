@@ -93,14 +93,26 @@ int Camera::goBackward(float movement_ammount)
     return 0;
 }
 
-int Camera::goLeft(float)
+int Camera::goLeft(float movement_ammount)
 {
-    //To Do
+    float y_rotation_radians;
+                                                                                //Change degrees to radians, and reverse sign.
+    y_rotation_radians = -((localRotation.y/180) * PI);                         //This is necessary because the camera rotations are reversed compared to objects, and we store the rotations like an object.
+
+    localPosition.x -= float(movement_ammount * cos(y_rotation_radians));        //Fid the x component of the movement
+    localPosition.z -= float(movement_ammount * sin(y_rotation_radians));        //Find the z component of the movement
+
     return 0;
 }
 
-int Camera::goRight(float)
+int Camera::goRight(float movement_ammount)
 {
-    //To Do
+    float y_rotation_radians;
+                                                                                //Change degrees to radians, and reverse sign.
+    y_rotation_radians = -((localRotation.y/180) * PI);                         //This is necessary because the camera rotations are reversed compared to objects, and we store the rotations like an object.
+
+    localPosition.x += float(movement_ammount * cos(y_rotation_radians));        //Fid the x component of the movement
+    localPosition.z += float(movement_ammount * sin(y_rotation_radians));        //Find the z component of the movement
+
     return 0;
 }

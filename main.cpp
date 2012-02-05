@@ -103,6 +103,14 @@ int main()
                         camera.goBackward(1.0f);
                         break;
 
+                    case SDLK_LEFT:
+                        camera.goLeft(1.0f);
+                        break;
+
+                    case SDLK_RIGHT:
+                        camera.goRight(1.0f);
+                        break;
+
                     default:
                         break;
                 }
