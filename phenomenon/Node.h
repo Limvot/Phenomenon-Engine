@@ -29,6 +29,9 @@ class Node
         Vertex getGlobalPosition();
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vertex);
+        int setColor3f();
+        int setRotatation();
+        int setScale();
 
         string name;
         Color3f color;
@@ -40,6 +43,8 @@ class Node
     int numChildren;
     Vertex localPosition;
     Vertex globalPosition;
+    Vertex rotation;
+    Vertex scale;
 };
 
 #endif // NODE_H
