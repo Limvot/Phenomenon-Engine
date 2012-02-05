@@ -9,6 +9,7 @@ This is important, as the engine uses it to handle window resizes, window loss o
 #include <iostream>
 #include "phenomenon/Window.h"
 #include "phenomenon/Node.h"
+#include "phenomenon/Camera.h"
 #include "phenomenon/Triangle.h"
 #include "phenomenon/Square.h"
 
@@ -25,7 +26,7 @@ int main()
     rootNode.addChild(childNode2);
     childNode2->addChild(childNode3);
 
-    rootNode.setLocalPosition(0.0f, 0.0f, -6.0f);        //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
+    rootNode.setLocalPosition(0.0f, 0.0f, 0.0f);        //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
@@ -41,6 +42,12 @@ int main()
     childNode->setLocalScale(1.0f, 1.0f, 1.0f);
     childNode2->setLocalScale(0.5f, 1.0f, 1.0f);
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);        //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
+
+
+    Camera camera("camera");                            //Cameras inherit Node too, and thus require a name.
+
+    camera.setLocalPosition(0.0f, 0.0f, 6.0f);          //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
+    camera.setLocalRotation(0.0f, 0.0f, 0.0f);
 
 
     Window window;                                         //Create our window class, which handles all the
@@ -72,6 +79,22 @@ int main()
                         window.toggleFullScreen();
                         break;
 
+                    case SDLK_w:
+                        camera.rotate(10.0f, 0.0f, 0.0f);
+                        break;
+
+                    case SDLK_a:
+                        camera.rotate(0.0f, 10.0f, 0.0f);
+                        break;
+
+                    case SDLK_s:
+                        camera.rotate(-10.0f, 0.0f, 0.0f);
+                        break;
+
+                    case SDLK_d:
+                        camera.rotate(0.0f, -10.0f, 0.0f);
+                        break;
+
                     default:
                         break;
                 }
@@ -92,7 +115,7 @@ int main()
         if (window.isActive)                        //window.isActive is false if we've already quit, or if we're minimised.
         {
             window.clearScreen();
-            rootNode.draw();                          //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
+            camera.drawScene(&rootNode);                          //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
             window.swapBuffers();                      //Thus, calling rootNode.draw() will draw the entire scene.
         }
 

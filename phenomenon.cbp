@@ -40,6 +40,8 @@
 			<Add library="GLU" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="phenomenon/Camera.cpp" />
+		<Unit filename="phenomenon/Camera.h" />
 		<Unit filename="phenomenon/DataTypes.cpp" />
 		<Unit filename="phenomenon/DataTypes.h" />
 		<Unit filename="phenomenon/ExpandableArray.h" />
