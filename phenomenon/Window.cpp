@@ -164,9 +164,6 @@ int Window::initGL()
 
 int Window::clearScreen()
 {
-    if (!isActive)                                      //If we don't have focus, don't draw.
-        return 0;
-
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear screen and depth buffer
 
     glLoadIdentity();

@@ -3,7 +3,7 @@ This is main.cpp, a demo file for the phenomenon engine. It will start the engin
 It is an ideal base and tutorial for using phenomenon.
 It is also the main method of testing and experementing with the engine.
 One important part to notice is that this file uses the SDL_Event system, and passes events that it doesn't handle to the engine.
-This is important, as the engine uses it to handle window resizes, window loss of focus, and quit events from the system.
+This is important, as the engine uses it to handle window resize and window loss of focus.
 */
 
 #include <iostream>
@@ -48,6 +48,7 @@ int main()
 
     camera.setLocalPosition(0.0f, 0.0f, 6.0f);              //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);
+    camera.setLocalScale(1.0f, 1.0f, 1.0f);
 
 
     Window window;                                          //Create our window class, which handles all the
@@ -132,9 +133,9 @@ int main()
         {
             window.clearScreen();
             camera.drawScene(&rootNode);                //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
-            window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene.
-        }
-
+            window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
+        }                                               //and pass it the rootNode. It will apply the appropriate translation, rotation, and scale for its own properties,
+                                                        //Then have call draw() on the root node.
     }
                                 /////////////////////////
                                 //NOTE
