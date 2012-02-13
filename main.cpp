@@ -36,7 +36,7 @@ int main()
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
-    lightNode->setLocalPosition(0.0f, 0.0f, -1.0f);
+    lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
 
     childNode->setColor3f(1.0f, 0.0f, 0.0f);
     childNode2->setColor3f(0.0f, 1.0f, 0.0f);
