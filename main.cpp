@@ -12,6 +12,8 @@ This is important, as the engine uses it to handle window resize and window loss
 #include "phenomenon/Camera.h"
 #include "phenomenon/Triangle.h"
 #include "phenomenon/Square.h"
+#include "phenomenon/Light.h"
+#include "phenomenon/Render.h"      //Not Implemented yet...
 
 using namespace std;
 
@@ -21,15 +23,18 @@ int main()
     Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
+    Light* lightNode = new Light("light");
 
     rootNode.addChild(childNode);
     rootNode.addChild(childNode2);
     childNode2->addChild(childNode3);
+    rootNode.addChild(dynamic_cast<Node*>(lightNode));
 
     rootNode.setLocalPosition(0.0f, 0.0f, 0.0f);                //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
+    lightNode->setLocalPosition(0.0f, 0.0f, -1.0f);
 
     childNode->setColor3f(1.0f, 0.0f, 0.0f);
     childNode2->setColor3f(0.0f, 1.0f, 0.0f);
@@ -110,6 +115,15 @@ int main()
 
                     case SDLK_RIGHT:
                         camera.goRight(1.0f);
+                        break;
+
+                    case SDLK_l:
+                        glEnable(GL_LIGHTING);
+                        lightNode->enable();
+                        break;
+
+                    case SDLK_k:
+                        glDisable(GL_LIGHTING);
                         break;
 
                     default:
