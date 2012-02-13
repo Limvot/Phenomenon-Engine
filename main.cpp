@@ -13,12 +13,27 @@ using namespace std;
 
 int main()
 {
+
+    Window window;                                              //Create our window class, which handles all the windowing/SDL/GL init stuff
+
+    int done = false;                                           //Main loop variable
+    SDL_Event *event;                                           //Useed in collecting events
+    event = new SDL_Event;
+
+    window.create(640,480,32);                                  //Creates the window. Sets up SDL and OpenGL, sets some variables
+    window.setCaption("Phenomenon Engine Test/Demo");           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
+
+    cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
+
+
+
     Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
     Node* rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
     Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
+    scene.enableLighting();                                     //Enable lighting by default.
 
     lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
     lightNode->LightDiffuse[1] = 2.0f;
@@ -57,17 +72,6 @@ int main()
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);
     camera.setLocalScale(1.0f, 1.0f, 1.0f);
 
-
-    Window window;                                          //Create our window class, which handles all the windowing/SDL/GL init stuff
-
-    int done = false;                                       //Main loop variable
-    SDL_Event *event;                                       //Useed in collecting events
-    event = new SDL_Event;
-
-    window.create(640,480,32);                              //Creates the window. Sets up SDL and OpenGL, sets some variables
-    window.setCaption("Phenomenon Engine Test/Demo");
-
-    cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
 
     while(!done)                                            //Main loop
     {
