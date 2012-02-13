@@ -20,6 +20,10 @@ int main()
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
 
+    lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
+    lightNode->LightDiffuse[1] = 2.0f;
+    lightNode->LightDiffuse[2] = 0.5f;
+
     rootNode->addChild(childNode);
     rootNode->addChild(childNode2);
     childNode2->addChild(childNode3);
@@ -142,6 +146,9 @@ int main()
 
         if (window.isActive)                            //window.isActive is false if we've already quit, or if we're minimised.
         {
+            childNode->increaseLocalRotation(0.0f, 1.0f, 0.0f);
+            childNode2->increaseLocalRotation(0.0f, 0.0f, 1.0f);
+            childNode3->increaseLocalRotation(1.0f, 0.0f, 0.0f);
             window.clearScreen();
             camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it

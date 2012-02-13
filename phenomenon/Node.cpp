@@ -220,5 +220,50 @@ Vertex Node::getGlobalRotation()
     return globalRotation;
 }
 
+int Node::increaseLocalPosition(float inc_x, float inc_y, float inc_z)
+{
+    localPosition.x += inc_x;
+    localPosition.y += inc_y;
+    localPosition.z += inc_z;
+
+    return 0;
+}
+
+int Node::increaseLocalScale(float inc_x, float inc_y, float inc_z)
+{
+    localScale.x += inc_x;
+    localScale.y += inc_y;
+    localScale.z += inc_z;
+
+    return 0;
+}
+
+int Node::increaseLocalRotation(float inc_x, float inc_y, float inc_z)
+{
+    localRotation.x += inc_x;
+    localRotation.y += inc_y;
+    localRotation.z += inc_z;
+
+    if (localRotation.x > 360)              //Keep varibles within reasonable range. May be able to take out, as floats probally loop around when their limits are reached.
+        localRotation.x -= 360;
+    if (localRotation.x < -360)
+        localRotation.x += 360;
+
+
+    if (localRotation.y > 360)
+        localRotation.y -= 360;
+    if (localRotation.y < -360)
+        localRotation.y += 360;
+
+
+    if (localRotation.z > 360)
+        localRotation.z -= 360;
+    if (localRotation.z < -360)
+        localRotation.z += 360;
+
+
+    return 0;
+}
+
 
 

@@ -36,6 +36,9 @@ class Node
         int setLocalRotation(float,float,float);
         Vertex getLocalRotation();
         Vertex getGlobalRotation();
+        int increaseLocalPosition(float,float,float);
+        int increaseLocalScale(float,float,float);
+        int increaseLocalRotation(float,float,float);
 
         string name;
         Color3f color;
