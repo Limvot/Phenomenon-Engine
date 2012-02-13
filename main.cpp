@@ -156,7 +156,7 @@ int main()
             window.clearScreen();
             camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
-        }                                               //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
+        } else {sleep(1);}                              //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
                                                         //Scene will set up lights and rendering, then call draw() on the root node.
     }
                                 /////////////////////////
