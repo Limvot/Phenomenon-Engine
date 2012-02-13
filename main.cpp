@@ -7,30 +7,28 @@ This is important, as the engine uses it to handle window resize and window loss
 */
 
 #include <iostream>
-#include "phenomenon/Window.h"
-#include "phenomenon/Node.h"
-#include "phenomenon/Camera.h"
-#include "phenomenon/Triangle.h"
-#include "phenomenon/Square.h"
-#include "phenomenon/Light.h"
-#include "phenomenon/Render.h"      //Not Implemented yet...
+#include "phenomenon/Phenomenon.h"
 
 using namespace std;
 
 int main()
 {
-    Node rootNode("root");                                      //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
+    Node* rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
     Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
-    Light* lightNode = new Light("light");
+    Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
 
-    rootNode.addChild(childNode);
-    rootNode.addChild(childNode2);
+    rootNode->addChild(childNode);
+    rootNode->addChild(childNode2);
     childNode2->addChild(childNode3);
-    rootNode.addChild(dynamic_cast<Node*>(lightNode));
+                                                                //Lights do not have to be childen of a rootNode, the scene object takes care of them.
+                                                                //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
+                                                                //parentNode.addChild(dynamic_cast<Node*>(lightNode));
 
-    rootNode.setLocalPosition(0.0f, 0.0f, 0.0f);                //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
+
+    rootNode->setLocalPosition(0.0f, 0.0f, 0.0f);                //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
@@ -49,14 +47,14 @@ int main()
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);            //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
 
 
-    Camera camera("camera");                                //Cameras inherit Node too, and thus require a name.
+    Camera camera("camera");                                //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
     camera.setLocalPosition(0.0f, 0.0f, 6.0f);              //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);
     camera.setLocalScale(1.0f, 1.0f, 1.0f);
 
 
-    Window window;                                          //Create our window class, which handles all the
+    Window window;                                          //Create our window class, which handles all the windowing/SDL/GL init stuff
 
     int done = false;                                       //Main loop variable
     SDL_Event *event;                                       //Useed in collecting events
@@ -67,7 +65,7 @@ int main()
 
     cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
 
-        while(!done)                                        //Main loop
+    while(!done)                                            //Main loop
     {
                                                             //Handle events in queue
         while (SDL_PollEvent(event))
@@ -118,12 +116,11 @@ int main()
                         break;
 
                     case SDLK_l:
-                        glEnable(GL_LIGHTING);
-                        lightNode->enable();
+                        scene.enableLighting();
                         break;
 
                     case SDLK_k:
-                        glDisable(GL_LIGHTING);
+                        scene.disableLighting();
                         break;
 
                     default:
@@ -146,10 +143,10 @@ int main()
         if (window.isActive)                            //window.isActive is false if we've already quit, or if we're minimised.
         {
             window.clearScreen();
-            camera.drawScene(&rootNode);                //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
+            camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
-        }                                               //and pass it the rootNode. It will apply the appropriate translation, rotation, and scale for its own properties,
-                                                        //Then have call draw() on the root node.
+        }                                               //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
+                                                        //Scene will set up lights and rendering, then call draw() on the root node.
     }
                                 /////////////////////////
                                 //NOTE
@@ -157,6 +154,7 @@ int main()
                                 //Nodes get destroyed when their parents falls out of scope.
                                 //If you delete them manually (without using the deleteChild(child's name) from the parent node)
                                 //the parent will segfault when it trys to delete them.
-                                //Here rootNode is the parent of every other dynamically allocated node, so it deletes them all when it falls out of scope.
+                                //Here scene owns rootNode, which is the parent of every other dynamically allocated node except for lights, so it deletes them all when it falls out of scope.
+                                //Lights are handeld by scene as well, and are deleted when it falls out of scope.
     return 0;
 }

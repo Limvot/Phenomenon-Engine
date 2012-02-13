@@ -49,8 +49,11 @@
 		<Unit filename="phenomenon/Light.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
+		<Unit filename="phenomenon/Phenomenon.h" />
 		<Unit filename="phenomenon/Render.cpp" />
 		<Unit filename="phenomenon/Render.h" />
+		<Unit filename="phenomenon/Scene.cpp" />
+		<Unit filename="phenomenon/Scene.h" />
 		<Unit filename="phenomenon/Square.cpp" />
 		<Unit filename="phenomenon/Square.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />

@@ -53,15 +53,13 @@ Node::~Node()
 {
     if (numChildren > 0)
     {
-
         for (int i = 0; i < numChildren;)
         {
             delete children.getArrayMember(i);
             i += 1;
         }
+        numChildren = 0;
     }
-    numChildren = 0;
-
 }
 
 int Node::setParent(Node* tempParent)
@@ -87,10 +85,8 @@ Node* Node::findChild(string child_name)
             i += 1;                                                                         //If not, continue on to the next child
         }
 
-    } else {
-        return 0;                                                                           //The child is not under us, so return 0.
     }
-    return 0;   //Never reaches here, but prevents warnings
+    return 0;   //Couldn't find the child, not under us. Return.
 }
 
 int Node::addChild(Node* newChild)
@@ -103,11 +99,11 @@ int Node::addChild(Node* newChild)
 
 int Node::deleteChild(string child_name)
 {
-    for (int i = 0; i < numChildren;)                            //Iterate through our children to find the child named
+    for (int i = 0; i < numChildren;)                           //Iterate through our children to find the child named
     {
         if (children.getArrayMember(i)->name == child_name)     //If this child is it
         {
-                delete children.getArrayMember(i);          //Delete the child
+                delete children.getArrayMember(i);              //Delete the child
                 return 0;                                       //Success
         }
     }

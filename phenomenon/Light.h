@@ -10,17 +10,12 @@ class Light: public Node
         Light(string);
         virtual ~Light();
         int draw();
-        int update();
-        int enable();
 
         GLfloat LightAmbient[4];    //Light settings
         GLfloat LightDiffuse[4];
-        GLfloat LightPosition[4];
-
-        static int lightIndex;
 
     protected:
     private:
 };
 
-#endif // SQUARE_H
+#endif // LIGHT_H

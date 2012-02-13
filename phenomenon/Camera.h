@@ -3,6 +3,7 @@
 
 #include <math.h>
 
+#include "Scene.h"
 #include "Node.h"
 #include "DataTypes.h"
 
@@ -16,7 +17,7 @@ class Camera: public Node
         Camera(string);
         virtual ~Camera();
         int draw();
-        int drawScene(Node*);
+        int drawScene(Scene*);
         int rotate(float,float,float);
         int goForward(float);
         int goBackward(float);

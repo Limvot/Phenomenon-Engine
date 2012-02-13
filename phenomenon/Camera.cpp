@@ -36,7 +36,7 @@ int Camera::draw()
     return 0;
 }
 
-int Camera::drawScene(Node *rootNode)
+int Camera::drawScene(Scene *scene)
 {
     getGlobalPosition();
     getGlobalRotation();
@@ -53,7 +53,7 @@ int Camera::drawScene(Node *rootNode)
 
     glScalef((1/globalScale.x), (1/globalScale.y), (1/globalScale.z));                  //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
 
-    rootNode->draw();                                                          //Draw from the root down. This may eventually reach the camera, in which case our draw function will draw our children.
+    scene->render();                                                          //Render the scene. This may eventually reach the camera, in which case our draw function will draw our children.
 
     return 0;
 }
