@@ -33,15 +33,24 @@ int main()
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
+    Light* lightNode2 = scene.newLight("moving_light");
     scene.enableLighting();                                     //Enable lighting by default.
+
+    Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
+
 
     lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
     lightNode->LightDiffuse[1] = 2.0f;
     lightNode->LightDiffuse[2] = 0.5f;
 
+    lightNode2->LightDiffuse[0] = 0.0f;
+    lightNode2->LightDiffuse[1] = 0.6f;
+    lightNode2->LightDiffuse[2] = 0.6f;
+
     rootNode->addChild(childNode);
     rootNode->addChild(childNode2);
     childNode2->addChild(childNode3);
+    camera.addChild(dynamic_cast<Node*>(lightNode));
                                                                 //Lights do not have to be childen of a rootNode, the scene object takes care of them.
                                                                 //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
                                                                 //parentNode.addChild(dynamic_cast<Node*>(lightNode));
@@ -51,7 +60,7 @@ int main()
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
-    lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
+    lightNode2->setLocalPosition(0.0f, 0.0f, -1.0f);
 
     childNode->setColor3f(1.0f, 0.0f, 0.0f);
     childNode2->setColor3f(0.0f, 1.0f, 0.0f);
@@ -66,7 +75,6 @@ int main()
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);            //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
 
 
-    Camera camera("camera");                                //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
     camera.setLocalPosition(0.0f, 0.0f, 6.0f);              //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);

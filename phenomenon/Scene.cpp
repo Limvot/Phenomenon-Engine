@@ -21,6 +21,7 @@ Scene::~Scene()
 
 int Scene::render()
 {
+    GLenum current_light;
 
     for (int i = 0; i < numLights; i +=1)
     {
@@ -32,10 +33,11 @@ int Scene::render()
 
 
                                 ///////////ADD MULTIPLE LIGHT SUPPORT
-        glLightfv(GL_LIGHT1, GL_AMBIENT, LightArray.getArrayMember(i)->LightAmbient);
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, LightArray.getArrayMember(i)->LightDiffuse);
-        glLightfv(GL_LIGHT1, GL_POSITION, tmpLightPosition);
-        glEnable(GL_LIGHT1);
+        current_light = GL_LIGHT0 + i;
+        glLightfv(current_light, GL_AMBIENT, LightArray.getArrayMember(i)->LightAmbient);
+        glLightfv(current_light, GL_DIFFUSE, LightArray.getArrayMember(i)->LightDiffuse);
+        glLightfv(current_light, GL_POSITION, tmpLightPosition);
+        glEnable(current_light);
 
     }
     rootNode.draw();
@@ -49,6 +51,10 @@ Node* Scene::getRootNode()
 
 Light* Scene::newLight(string light_name)
 {
+    if (numLights >= 8)
+        return NULL;                        //We can't have more than 8 OpenGL lights
+
+
     tmp_light = new Light(light_name);
     LightArray.addArrayMember(tmp_light);
     numLights += 1;
