@@ -25,7 +25,10 @@ int Square::draw()
 
     glScalef(globalScale.x, globalScale.y, globalScale.z);                  //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
 
-    glColor3f(color.r, color.g, color.b);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);         //Apply material
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, material->specularHardness);
 
     glBegin( GL_QUADS );
         glVertex3f( -1.0f,  1.0f,   0.0f    );

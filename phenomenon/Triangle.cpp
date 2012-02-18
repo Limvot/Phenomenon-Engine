@@ -1,12 +1,12 @@
 #include "Triangle.h"
 
-Triangle::Triangle(string tmp_name)                                                        //Please note that the Triangle inherets the Node class, and all of its node releated functions.
+Triangle::Triangle(string tmp_name)                                         //Please note that the Triangle inherets the Node class, and all of its node releated functions.
 {
-    name = tmp_name;                    //The rest of the init is taken care of by the Node constructor.
+    name = tmp_name;                                                        //The rest of the init is taken care of by the Node constructor.
 }
 
 Triangle::~Triangle()
-{                                       //Taken care of by the Node destructor
+{                                                                           //Taken care of by the Node destructor
 }
 
 int Triangle::draw()
@@ -25,7 +25,9 @@ int Triangle::draw()
 
     glScalef(globalScale.x, globalScale.y, globalScale.z);                  //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
 
-    glColor3f(color.r, color.g, color.b);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);         //Apply material
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, material->specularHardness);
 
     glBegin( GL_TRIANGLES );
         glVertex3f( 0.0f,   1.0f,   0.0f    );

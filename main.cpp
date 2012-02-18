@@ -42,14 +42,23 @@ int main(int argc, char* argv[])
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
 
+    childNode->setMaterial(red_material);
+    red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
+    red_material->setSpecular(0.0f, 1.0f, 0.0f);                //Default is 1.0f, 1.0f, 1.0f
+    red_material->setSpecularHardness(32.0f);                   //Default hardness is 128
 
-    lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
-    lightNode->LightDiffuse[1] = 2.0f;
-    lightNode->LightDiffuse[2] = 0.5f;
+    childNode2->setMaterial(green_material);
+    green_material->setDiffuse(0.0f, 1.0f, 0.0f);
+    green_material->setSpecular(0.0f, 0.0f, 1.0f);
 
-    lightNode2->LightDiffuse[0] = 0.0f;
-    lightNode2->LightDiffuse[1] = 0.6f;
-    lightNode2->LightDiffuse[2] = 0.6f;
+    childNode3->setMaterial(blue_material);
+    blue_material->setDiffuse(0.0f, 0.0f, 1.0f);
+
+    lightNode->setDiffuse(1.5f, 2.0f, 0.5f);                    //Default is full white (1.0f, 1.0f, 1.0f)
+    lightNode->setAmbient(0.2f, 0.2f, 0.2f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
+
+    lightNode2->setDiffuse(0.0f, 0.6f, 0.6f);
+    lightNode2->setAmbient(0.0f, 0.0f, 0.0f);
 
     rootNode->addChild(childNode);
     rootNode->addChild(childNode2);
@@ -65,10 +74,6 @@ int main(int argc, char* argv[])
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
     lightNode2->setLocalPosition(0.0f, 0.0f, -1.0f);
-
-    childNode->setColor3f(1.0f, 0.0f, 0.0f);
-    childNode2->setColor3f(0.0f, 1.0f, 0.0f);
-    childNode3->setColor3f(0.0f, 0.0f, 1.0f);
 
     childNode->setLocalRotation(0.0f, 30.0f, 0.0f);
     childNode2->setLocalRotation(0.0f, 0.0f, 45.0f);

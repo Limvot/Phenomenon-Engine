@@ -34,3 +34,21 @@ int Light::draw()
 
     return 0;
 }
+
+int Light::setAmbient(float r, float g, float b)
+{
+    LightAmbient[0] = r;
+    LightAmbient[1] = g;
+    LightAmbient[2] = b;
+
+    return 0;
+}
+
+int Light::setDiffuse(float r, float g, float b)
+{
+    LightDiffuse[0] = r;
+    LightDiffuse[1] = g;
+    LightDiffuse[2] = b;
+
+    return 0;
+}

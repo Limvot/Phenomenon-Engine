@@ -111,3 +111,9 @@ int Scene::disableLighting()
     return 0;
 }
 
+Material* Scene::newMaterial(string mat_name)
+{
+    Material* new_mat = new Material(mat_name);
+    return new_mat;
+}
+

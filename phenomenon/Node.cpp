@@ -181,14 +181,6 @@ Vertex Node::getGlobalPosition()
     return globalPosition;
 }
 
-int Node::setColor3f(float tmp_r, float tmp_g, float tmp_b)
-{
-    color.r = tmp_r;
-    color.g = tmp_g;
-    color.b = tmp_b;
-
-    return 0;
-}
 
 int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
 {
@@ -286,6 +278,12 @@ int Node::increaseLocalRotation(float inc_x, float inc_y, float inc_z)
         localRotation.z += 360;
 
 
+    return 0;
+}
+
+int Node::setMaterial(Material* tmp_mat)
+{
+    material = tmp_mat;
     return 0;
 }
 

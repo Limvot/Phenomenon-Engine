@@ -9,6 +9,7 @@
 //Includes from with in engine
 #include "Node.h"
 #include "Light.h"
+#include "Material.h"
 #include "DataTypes.h"      //Also includes ExpandableArray.h
 
 using std::string;
@@ -25,6 +26,7 @@ class Scene
         int deleteLight(string light_name);
         int enableLighting();
         int disableLighting();
+        Material* newMaterial(string mat_name);
 
     protected:
     private:
