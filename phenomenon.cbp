@@ -31,10 +31,13 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-pg" />
+			<Add option="-g" />
 			<Add option="-fexceptions" />
 			<Add directory="/usr/include/SDL" />
 		</Compiler>
 		<Linker>
+			<Add option="-pg" />
 			<Add library="SDL" />
 			<Add library="GL" />
 			<Add library="GLU" />
@@ -58,6 +61,8 @@
 		<Unit filename="phenomenon/Scene.h" />
 		<Unit filename="phenomenon/Square.cpp" />
 		<Unit filename="phenomenon/Square.h" />
+		<Unit filename="phenomenon/Texture.cpp" />
+		<Unit filename="phenomenon/Texture.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />
 		<Unit filename="phenomenon/Triangle.h" />
 		<Unit filename="phenomenon/Window.cpp" />

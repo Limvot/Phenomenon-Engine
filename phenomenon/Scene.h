@@ -26,7 +26,10 @@ class Scene
         int deleteLight(string light_name);
         int enableLighting();
         int disableLighting();
+
         Material* newMaterial(string mat_name);
+        Material* findMaterial(string mat_name);
+        int deleteMaterial(string mat_name);
 
     protected:
     private:
@@ -36,6 +39,9 @@ class Scene
         int numLights;
         Vertex tmpGlobalLightPosition;
         GLfloat tmpLightPosition[4];
+
+        ExpandableArray<Material*> MaterialArray;
+        int numMaterials;
 };
 
 #endif // SCENE_H

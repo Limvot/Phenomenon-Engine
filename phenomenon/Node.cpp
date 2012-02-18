@@ -57,7 +57,7 @@ Node::~Node()
         {
             if (children.getArrayMember(i) != NULL)
                 delete children.getArrayMember(i);
-            children.setArrayMember(i, NULL);
+                children.setArrayMember(i, NULL);
             i += 1;
         }
         numChildren = 0;

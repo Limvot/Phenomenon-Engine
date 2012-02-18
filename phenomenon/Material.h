@@ -6,6 +6,8 @@
 #include "stdlib.h"
 #include <string>
 
+#include "Texture.h"        //For textured materials
+
 using namespace std;
 
 class Material
@@ -18,11 +20,13 @@ class Material
         int setDiffuse(float,float,float);
         int setSpecular(float,float,float);
         int setSpecularHardness(float);
+        int setTexture(Texture*);
 
         string name;
         GLfloat diffuse[3];    //Material settings
         GLfloat specular[3];
         GLfloat specularHardness[1];
+        Texture* material_texture;
 
     protected:
     private:

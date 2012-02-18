@@ -3,6 +3,7 @@
 Material::Material()
 {
     name = "no_name";
+    material_texture = NULL;
 
     diffuse[0] = 1.0f;
     diffuse[1] = 1.0f;
@@ -19,6 +20,7 @@ Material::Material()
 Material::Material(string tmp_name)
 {
     name = tmp_name;
+    material_texture = NULL;
 
     diffuse[0] = 1.0f;
     diffuse[1] = 1.0f;
@@ -59,5 +61,11 @@ int Material::setSpecularHardness(float hardness)
 {
     specularHardness[0] = hardness;
 
+    return 0;
+}
+
+int Material::setTexture(Texture* set_tex)
+{
+    material_texture = set_tex;
     return 0;
 }

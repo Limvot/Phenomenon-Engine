@@ -3,21 +3,23 @@
 Scene::Scene()
 {
     numLights = 0;
+    numMaterials = 0;
     tmp_light = NULL;
 }
 
 Scene::~Scene()
 {
-    if (numLights > 0)
+    if (numMaterials > 0)
     {
-        for (int i = 0; i < numLights;)
+        for (int i = 0; i < numMaterials; i++)
         {
-            if (LightArray.getArrayMember(i) != NULL)
-                delete LightArray.getArrayMember(i);
-            LightArray.setArrayMember(i, NULL);
-            i += 1;
+            if (MaterialArray.getArrayMember(i) != NULL)
+            {
+                delete MaterialArray.getArrayMember(i);
+                MaterialArray.setArrayMember(i, NULL);
+            }
         }
-        numLights = 0;
+        numMaterials = 0;
     }
 }
 
@@ -114,6 +116,41 @@ int Scene::disableLighting()
 Material* Scene::newMaterial(string mat_name)
 {
     Material* new_mat = new Material(mat_name);
+    MaterialArray.addArrayMember(new_mat);
+    numMaterials += 1;
     return new_mat;
+}
+
+Material* Scene::findMaterial(string mat_name)
+{
+    if (numMaterials > 0)
+    {
+        for (int i = 0; i < numMaterials; i++)
+        {
+            if (MaterialArray.getArrayMember(i)->name == mat_name)
+                return MaterialArray.getArrayMember(i);
+        }
+
+        return NULL;
+    }
+    return NULL;
+}
+
+int Scene::deleteMaterial(string mat_name)
+{
+    if (numMaterials > 0)
+    {
+        for (int i = 0; i < numMaterials; i++)
+        {
+            if (MaterialArray.getArrayMember(i)->name == mat_name)
+            {
+                delete MaterialArray.getArrayMember(i);
+                MaterialArray.setArrayMember(i, NULL);
+                return 0;
+            }
+        }
+        return 1;               //Couldn't find material
+    }
+    return 1;                   //No materials
 }
 
