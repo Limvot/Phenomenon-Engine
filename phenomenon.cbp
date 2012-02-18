@@ -47,6 +47,8 @@
 		<Unit filename="phenomenon/ExpandableArray.h" />
 		<Unit filename="phenomenon/Light.cpp" />
 		<Unit filename="phenomenon/Light.h" />
+		<Unit filename="phenomenon/Material.cpp" />
+		<Unit filename="phenomenon/Material.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Phenomenon.h" />

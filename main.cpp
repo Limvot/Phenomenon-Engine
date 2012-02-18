@@ -38,6 +38,10 @@ int main()
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
+    Material* red_material = scene.newMaterial("red");
+    Material* green_material = scene.newMaterial("green");
+    Material* blue_material = scene.newMaterial("blue");
+
 
     lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
     lightNode->LightDiffuse[1] = 2.0f;
