@@ -1,7 +1,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <string>
-//#include <stdlib.h>
+#include <stdlib.h>
+#include <iostream>
 #include "SDL.h"
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 

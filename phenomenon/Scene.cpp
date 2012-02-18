@@ -10,9 +10,11 @@ Scene::~Scene()
 {
     if (numLights > 0)
     {
-        for (int i = 0; i< numLights;)
+        for (int i = 0; i < numLights;)
         {
-            delete LightArray.getArrayMember(i);
+            if (LightArray.getArrayMember(i) != NULL)
+                delete LightArray.getArrayMember(i);
+            LightArray.setArrayMember(i, NULL);
             i += 1;
         }
         numLights = 0;
@@ -25,19 +27,20 @@ int Scene::render()
 
     for (int i = 0; i < numLights; i +=1)
     {
-        tmpGlobalLightPosition = LightArray.getArrayMember(i)->getGlobalPosition();
-        tmpLightPosition[0] = tmpGlobalLightPosition.x;
-        tmpLightPosition[1] = tmpGlobalLightPosition.y;
-        tmpLightPosition[2] = tmpGlobalLightPosition.z;
-        tmpLightPosition[3] = 1.0f;                         //What does this do?
+        if (LightArray.getArrayMember(i) != NULL)
+        {
+            tmpGlobalLightPosition = LightArray.getArrayMember(i)->getGlobalPosition();
+            tmpLightPosition[0] = tmpGlobalLightPosition.x;
+            tmpLightPosition[1] = tmpGlobalLightPosition.y;
+            tmpLightPosition[2] = tmpGlobalLightPosition.z;
+            tmpLightPosition[3] = 1.0f;                                                         //What does this do?
 
-
-                                ///////////ADD MULTIPLE LIGHT SUPPORT
-        current_light = GL_LIGHT0 + i;
-        glLightfv(current_light, GL_AMBIENT, LightArray.getArrayMember(i)->LightAmbient);
-        glLightfv(current_light, GL_DIFFUSE, LightArray.getArrayMember(i)->LightDiffuse);
-        glLightfv(current_light, GL_POSITION, tmpLightPosition);
-        glEnable(current_light);
+            current_light = GL_LIGHT0 + i;                                                      //Is a GLenum, so since we're zero indexed, just add our offset to the base GL_LIGHT
+            glLightfv(current_light, GL_AMBIENT, LightArray.getArrayMember(i)->LightAmbient);
+            glLightfv(current_light, GL_DIFFUSE, LightArray.getArrayMember(i)->LightDiffuse);
+            glLightfv(current_light, GL_POSITION, tmpLightPosition);
+            glEnable(current_light);
+        }
 
     }
     rootNode.draw();
@@ -52,11 +55,11 @@ Node* Scene::getRootNode()
 Light* Scene::newLight(string light_name)
 {
     if (numLights >= 8)
-        return NULL;                        //We can't have more than 8 OpenGL lights
-
+        return NULL;                                        //We can't have more than 8 OpenGL lights
 
     tmp_light = new Light(light_name);
     LightArray.addArrayMember(tmp_light);
+    rootNode.addChild(dynamic_cast<Node*>(tmp_light));      //Add our new light to rootNode by default.
     numLights += 1;
     return tmp_light;
 }
@@ -79,15 +82,21 @@ Light* Scene::findLight(string light_name)
 
 int Scene::deleteLight(string light_name)
 {
-    tmp_light = findLight(light_name);
-
-    if (tmp_light != NULL)
+    if (numLights > 0)
     {
-        delete tmp_light;
-        tmp_light = NULL;
-        return 0;               //Sucess
+        for (int i = 0; i < numLights; i++)
+        {
+            if (LightArray.getArrayMember(i)->name == light_name)
+            {
+                delete LightArray.getArrayMember(i);
+                LightArray.setArrayMember(i, NULL);
+                return 0;
+            }
+        }
+
+        return 1;   //We couldn't find the light, return 1
     }
-    return 1;                   //Failure
+    return 1;       //No lights
 }
 
 int Scene::enableLighting()
