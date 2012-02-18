@@ -55,7 +55,9 @@ Node::~Node()
     {
         for (int i = 0; i < numChildren;)
         {
-            delete children.getArrayMember(i);
+            if (children.getArrayMember(i) != NULL)
+                delete children.getArrayMember(i);
+            children.setArrayMember(i, NULL);
             i += 1;
         }
         numChildren = 0;
@@ -64,6 +66,10 @@ Node::~Node()
 
 int Node::setParent(Node* tempParent)
 {
+    if (parent != NULL)                                                                     //If we already have a parent, get rid of their reference to us.
+    {
+        parent->removeChild(name);
+    }
     parent = tempParent;
     return 0;
 }
@@ -89,6 +95,22 @@ Node* Node::findChild(string child_name)
     return 0;   //Couldn't find the child, not under us. Return.
 }
 
+
+int Node::removeChild(string child_name)
+{
+    for (int i = 0; i < numChildren;)                           //Iterate through our children to find the child named
+    {
+        if (children.getArrayMember(i)->name == child_name)         //If this child is it
+        {
+                children.setArrayMember(i, NULL);                   //Remove our reference
+                return 0;                                           //Success
+        }
+    }
+
+    return 1; //Failure
+
+}
+
 int Node::addChild(Node* newChild)
 {
     children.addArrayMember(newChild);
@@ -104,6 +126,7 @@ int Node::deleteChild(string child_name)
         if (children.getArrayMember(i)->name == child_name)     //If this child is it
         {
                 delete children.getArrayMember(i);              //Delete the child
+                children.setArrayMember(i, NULL);
                 return 0;                                       //Success
         }
     }
@@ -117,7 +140,8 @@ int Node::draw()
     {
         for (int i = 0; i < numChildren;)
         {
-            children.getArrayMember(i)->draw();
+            if (children.getArrayMember(i) != NULL)
+                children.getArrayMember(i)->draw();
             i += 1;
         }
     }

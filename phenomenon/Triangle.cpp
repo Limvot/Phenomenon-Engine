@@ -6,17 +6,7 @@ Triangle::Triangle(string tmp_name)                                             
 }
 
 Triangle::~Triangle()
-{
-    if (numChildren > 0)
-    {
-
-        for (int i = 0; i < numChildren;)
-        {
-            delete children.getArrayMember(i);
-            i += 1;
-        }
-    }
-    numChildren = 0;
+{                                       //Taken care of by the Node destructor
 }
 
 int Triangle::draw()
@@ -49,7 +39,8 @@ int Triangle::draw()
     {
         for (int i = 0; i < numChildren;)
         {
-            children.getArrayMember(i)->draw();
+            if (children.getArrayMember(i) != NULL)
+                children.getArrayMember(i)->draw();
             i += 1;
         }
     }

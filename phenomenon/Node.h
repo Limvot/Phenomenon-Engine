@@ -22,6 +22,7 @@ class Node
         int addChild(Node*);
 
         Node* findChild(string);
+        int removeChild(string);
         int deleteChild(string);
 
         virtual int draw();

@@ -18,3 +18,20 @@ Please note that this is a learning project, and I am a student. I'm learning as
 
 The code may be used under the Zlib or the MIT license.
 
+-------------
+General Instructions
+-------------
+main.cpp has a little demo which shows the current capibilites of the engine and is a good starting point.
+
+All that is necessary to use the engine is to include the phenomenon.h file.
+The provide main.cpp and Code::Blocks project files should be enough to get started. Currently, the only dependency
+the Phenomenon engine has is on SDL, so if you can get SDL working everything should be fine.
+
+-------------
+Special Windows Instructions
+-------------
+
+Compiling the demo on Windows is just a tad more complicated than it is on Linux. Make sure that the Code::Blocks
+project file has the correct location of your SDL installation. You also need to copy SDL.dll
+into the program directory.
+

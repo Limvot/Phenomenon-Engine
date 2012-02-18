@@ -26,7 +26,8 @@ int Light::draw()
     {
         for (int i = 0; i < numChildren;)
         {
-            children.getArrayMember(i)->draw();
+            if (children.getArrayMember(i) != NULL)
+                children.getArrayMember(i)->draw();
             i += 1;
         }
     }
