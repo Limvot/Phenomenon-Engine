@@ -146,6 +146,8 @@ void Window::handleEvent(SDL_Event* event) {
 
 int Window::initGL()
 {
+    glEnable(GL_TEXTURE_2D);                            //Texturing
+
     glShadeModel (GL_SMOOTH);                           //Smooth Shadeing
 
     glClearColor(0, 0, 0, 0);                           //Set background black

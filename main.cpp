@@ -32,8 +32,9 @@ int main(int argc, char* argv[])
     Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
+    Node* logoNode = new Square("logo");
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
-    Light* lightNode2 = scene.newLight("moving_light");
+    Light* lightNode2 = scene.newLight("camera_light");
     scene.enableLighting();                                     //Enable lighting by default.
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
@@ -41,8 +42,9 @@ int main(int argc, char* argv[])
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
+    Material* logo_material = scene.newMaterial("logo");
 
-    childNode->setMaterial(red_material);
+    childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
     red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
     red_material->setSpecular(0.0f, 1.0f, 0.0f);                //Default is 1.0f, 1.0f, 1.0f
     red_material->setSpecularHardness(32.0f);                   //Default hardness is 128
@@ -54,7 +56,12 @@ int main(int argc, char* argv[])
     childNode3->setMaterial(blue_material);
     blue_material->setDiffuse(0.0f, 0.0f, 1.0f);
 
-    lightNode->setDiffuse(1.5f, 2.0f, 0.5f);                    //Default is full white (1.0f, 1.0f, 1.0f)
+    logoNode->setMaterial(logo_material);                       //Set this square to use the logo material
+    Texture* logo_texture = new Texture("logo_texture");        //Create a Texture object named logo_texture
+    logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
+    logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
+
+    lightNode->setDiffuse(1.0f, 1.0f, 1.1f);                    //Default is full white (1.0f, 1.0f, 1.0f)
     lightNode->setAmbient(0.2f, 0.2f, 0.2f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
 
     lightNode2->setDiffuse(0.0f, 0.6f, 0.6f);
@@ -63,7 +70,8 @@ int main(int argc, char* argv[])
     rootNode->addChild(childNode);
     rootNode->addChild(childNode2);
     childNode2->addChild(childNode3);
-    camera.addChild(dynamic_cast<Node*>(lightNode));
+    rootNode->addChild(logoNode);
+    camera.addChild(dynamic_cast<Node*>(lightNode));            //Attach lightNode to the camera.
                                                                 //Lights do not have to be childen of a rootNode, the scene object takes care of them.
                                                                 //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
                                                                 //parentNode.addChild(dynamic_cast<Node*>(lightNode));
@@ -73,6 +81,7 @@ int main(int argc, char* argv[])
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
+    logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
     lightNode2->setLocalPosition(0.0f, 0.0f, -1.0f);
 
     childNode->setLocalRotation(0.0f, 30.0f, 0.0f);
@@ -82,7 +91,7 @@ int main(int argc, char* argv[])
     childNode->setLocalScale(1.0f, 1.0f, 1.0f);
     childNode2->setLocalScale(0.5f, 1.0f, 1.0f);
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);            //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
-
+    logoNode->setLocalScale(3.0f, 3.0f, 1.0f);
 
 
     camera.setLocalPosition(0.0f, 0.0f, 6.0f);              //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
@@ -184,5 +193,6 @@ int main(int argc, char* argv[])
                                 //the parent will segfault when it trys to delete them.
                                 //Here scene owns rootNode, which is the parent of every other dynamically allocated node except for lights, so it deletes them all when it falls out of scope.
                                 //Lights are handeld by scene as well, and are deleted when it falls out of scope.
+    delete logo_texture;
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 #include "stdlib.h"
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -16,9 +17,11 @@ class Texture
         virtual ~Texture();
 
         int load(string);
+        int bind();
 
         string name;
-        GLuint texture_id;
+        SDL_Surface* texture_image[1];
+        GLuint texture_id[1];
     protected:
     private:
 };

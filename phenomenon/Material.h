@@ -21,6 +21,7 @@ class Material
         int setSpecular(float,float,float);
         int setSpecularHardness(float);
         int setTexture(Texture*);
+        int bindTexture();
 
         string name;
         GLfloat diffuse[3];    //Material settings

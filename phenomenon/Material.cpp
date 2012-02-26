@@ -69,3 +69,14 @@ int Material::setTexture(Texture* set_tex)
     material_texture = set_tex;
     return 0;
 }
+
+int Material::bindTexture()
+{
+    if (material_texture != NULL)
+    {
+        material_texture->bind();
+        return 0;
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return 0;
+}

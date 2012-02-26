@@ -29,9 +29,16 @@ int Triangle::draw()
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, material->specularHardness);
 
+    material->bindTexture();                                                //Bind the texture, if we have one.
+
     glBegin( GL_TRIANGLES );
+        glTexCoord2f(0.5f, 0.0f);
         glVertex3f( 0.0f,   1.0f,   0.0f    );
+
+        glTexCoord2f(0.0f, 1.0f);
         glVertex3f( -1.0f,  -1.0f,  0.0f    );
+
+        glTexCoord2f(1.0f, 1.0f);
         glVertex3f( 1.0f,   -1.0f,  0.0f    );
     glEnd();
 
