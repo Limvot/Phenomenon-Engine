@@ -158,6 +158,11 @@ int main(int argc, char* argv[])
                         scene.disableLighting();
                         break;
 
+                    case SDLK_j:
+                        window.initGL();
+                        logo_texture->load("./data/phenomenon.bmp");
+                        scene.enableLighting();
+
                     default:
                         break;
                 }
