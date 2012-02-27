@@ -24,7 +24,7 @@ General Instructions
 main.cpp has a little demo which shows the current capibilites of the engine and is a good starting point.
 
 All that is necessary to use the engine is to include the phenomenon.h file.
-The provide main.cpp and Code::Blocks project files should be enough to get started. Currently, the only dependency
+The provided main.cpp and Code::Blocks project files should be enough to get started. Currently, the only dependency
 the Phenomenon engine has is on SDL, so if you can get SDL working everything should be fine.
 
 -------------
