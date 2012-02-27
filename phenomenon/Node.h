@@ -9,6 +9,7 @@
 
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h
+#include "Material.h"
 
 using std::string;
 
@@ -22,6 +23,7 @@ class Node
         int addChild(Node*);
 
         Node* findChild(string);
+        int removeChild(string);
         int deleteChild(string);
 
         virtual int draw();
@@ -29,7 +31,6 @@ class Node
         Vertex getGlobalPosition();
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vertex);
-        int setColor3f(float,float,float);
         int setLocalScale(float,float,float);
         Vertex getLocalScale();
         Vertex getGlobalScale();
@@ -40,8 +41,10 @@ class Node
         int increaseLocalScale(float,float,float);
         int increaseLocalRotation(float,float,float);
 
+        int setMaterial(Material*);
+
         string name;
-        Color3f color;
+        Material* material;
 
     protected:
     Node *parent;

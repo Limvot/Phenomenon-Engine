@@ -32,39 +32,58 @@ int main(int argc, char* argv[])
     Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
+    Node* logoNode = new Square("logo");
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
-    Light* lightNode2 = scene.newLight("moving_light");
+    Light* lightNode2 = scene.newLight("camera_light");
     scene.enableLighting();                                     //Enable lighting by default.
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
+    Material* red_material = scene.newMaterial("red");
+    Material* green_material = scene.newMaterial("green");
+    Material* blue_material = scene.newMaterial("blue");
+    Material* logo_material = scene.newMaterial("logo");
 
-    lightNode->LightDiffuse[0] = 1.5f;                          //Light color.
-    lightNode->LightDiffuse[1] = 2.0f;
-    lightNode->LightDiffuse[2] = 0.5f;
+    childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
+    red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
+    red_material->setSpecular(0.0f, 1.0f, 0.0f);                //Default is 1.0f, 1.0f, 1.0f
+    red_material->setSpecularHardness(32.0f);                   //Default hardness is 128
 
-    lightNode2->LightDiffuse[0] = 0.0f;
-    lightNode2->LightDiffuse[1] = 0.6f;
-    lightNode2->LightDiffuse[2] = 0.6f;
+    childNode2->setMaterial(green_material);
+    green_material->setDiffuse(0.0f, 1.0f, 0.0f);
+    green_material->setSpecular(0.0f, 0.0f, 1.0f);
 
-    rootNode->addChild(childNode);
-    rootNode->addChild(childNode2);
+    childNode3->setMaterial(blue_material);
+    blue_material->setDiffuse(0.0f, 0.0f, 1.0f);
+
+    logoNode->setMaterial(logo_material);                       //Set this square to use the logo material
+    Texture* logo_texture = scene.newTexture("logo_texture");   //Create a Texture object named logo_texture
+    logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
+    logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
+
+    lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
+    lightNode->setAmbient(0.2f, 0.2f, 0.2f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
+
+    lightNode2->setDiffuse(0.0f, 1.0f, 1.0f);
+    lightNode2->setAmbient(0.0f, 0.0f, 0.0f);
+
+    rootNode->addChild(childNode);                              //You should add most nodes to your root node so that everything gets deleted properly on exit.
+    rootNode->addChild(childNode2);                             //You can also assign a child to a new parent at will, the child will automatically remove itself from its previous parent's index.
     childNode2->addChild(childNode3);
-    camera.addChild(dynamic_cast<Node*>(lightNode));
-                                                                //Lights do not have to be childen of a rootNode, the scene object takes care of them.
+    rootNode->addChild(logoNode);
+    camera.addChild(dynamic_cast<Node*>(lightNode2));           //Attach lightNode2 to the camera.
+                                                                //On creation, lights are automatically added as children of the root node by the scene object, so you don't have to assign them manually.
                                                                 //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
                                                                 //parentNode.addChild(dynamic_cast<Node*>(lightNode));
 
 
-    rootNode->setLocalPosition(0.0f, 0.0f, 0.0f);                //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
+    rootNode->setLocalPosition(0.0f, 0.0f, 0.0f);               //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
-    lightNode2->setLocalPosition(0.0f, 0.0f, -1.0f);
-
-    childNode->setColor3f(1.0f, 0.0f, 0.0f);
-    childNode2->setColor3f(0.0f, 1.0f, 0.0f);
-    childNode3->setColor3f(0.0f, 0.0f, 1.0f);
+    logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
+    lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
+    lightNode2->setLocalPosition(0.0f, 0.0f, -4.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
 
     childNode->setLocalRotation(0.0f, 30.0f, 0.0f);
     childNode2->setLocalRotation(0.0f, 0.0f, 45.0f);
@@ -72,31 +91,31 @@ int main(int argc, char* argv[])
 
     childNode->setLocalScale(1.0f, 1.0f, 1.0f);
     childNode2->setLocalScale(0.5f, 1.0f, 1.0f);
-    childNode3->setLocalScale(1.0f, 0.5f, 1.0f);            //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
+    childNode3->setLocalScale(1.0f, 0.5f, 1.0f);                //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
+    logoNode->setLocalScale(3.0f, 3.0f, 1.0f);
 
 
-
-    camera.setLocalPosition(0.0f, 0.0f, 6.0f);              //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
+    camera.setLocalPosition(0.0f, 0.0f, 6.0f);                  //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);
     camera.setLocalScale(1.0f, 1.0f, 1.0f);
 
 
-    while(!done)                                            //Main loop
+    while(!done)                                                //Main loop
     {
-                                                            //Handle events in queue
+                                                                //Handle events in queue
         while (SDL_PollEvent(event))
         {
-            if (event->type == SDL_KEYDOWN)                 //If a key is pressed, we handle it
+            if (event->type == SDL_KEYDOWN)                     //If a key is pressed, we handle it
             {
                 switch (event->key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        window.quit();                      //Don't use window after you quit it, it will probally cause a seg fault.
+                        window.quit();                          //Don't use window after you quit it, it will probally cause a seg fault.
                         done = true;
                         break;
 
                     case SDLK_F1:
-                        window.toggleFullScreen();          //Still needs work. Fails on some systems, and dosn't actually change the OpenGL size on every platform.
+                        window.toggleFullScreen();              //Still needs work. Fails on some systems, and dosn't actually change the OpenGL size on every platform.
                         break;
 
                     case SDLK_w:
@@ -147,7 +166,7 @@ int main(int argc, char* argv[])
             {
                 if (event->type == SDL_QUIT)            //If the system wants us to quit, then do so.
                 {
-                    window.quit();
+                    window.quit();                      //Quit window stuff
                     done = true;
                 } else
                 {
@@ -161,10 +180,11 @@ int main(int argc, char* argv[])
             childNode->increaseLocalRotation(0.0f, 1.0f, 0.0f);
             childNode2->increaseLocalRotation(0.0f, 0.0f, 1.0f);
             childNode3->increaseLocalRotation(1.0f, 0.0f, 0.0f);
+
             window.clearScreen();
             camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
-        } else {/*sleep(1);*/}                              //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
+        } else {/*sleep(1);*/}                          //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
                                                         //Scene will set up lights and rendering, then call draw() on the root node.
     }
                                 /////////////////////////
@@ -173,7 +193,7 @@ int main(int argc, char* argv[])
                                 //Nodes get destroyed when their parents falls out of scope.
                                 //If you delete them manually (without using the deleteChild(child's name) from the parent node)
                                 //the parent will segfault when it trys to delete them.
-                                //Here scene owns rootNode, which is the parent of every other dynamically allocated node except for lights, so it deletes them all when it falls out of scope.
-                                //Lights are handeld by scene as well, and are deleted when it falls out of scope.
+                                //Here scene owns rootNode, which is the parent of every other dynamically allocated node, so it deletes them all when it falls out of scope.
+                                //Materials and textures are handeld by scene as well, and are deleted when it falls out of scope.
     return 0;
 }

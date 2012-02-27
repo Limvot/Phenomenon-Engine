@@ -53,10 +53,11 @@ Node::~Node()
 {
     if (numChildren > 0)
     {
-        for (int i = 0; i < numChildren;)
+        for (int i = 0; i < numChildren; i++)
         {
-            delete children.getArrayMember(i);
-            i += 1;
+            if (children.getArrayMember(i) != NULL)
+                delete children.getArrayMember(i);
+                children.setArrayMember(i, NULL);
         }
         numChildren = 0;
     }
@@ -64,6 +65,10 @@ Node::~Node()
 
 int Node::setParent(Node* tempParent)
 {
+    if (parent != NULL)                                                                     //If we already have a parent, get rid of their reference to us.
+    {
+        parent->removeChild(name);
+    }
     parent = tempParent;
     return 0;
 }
@@ -72,7 +77,7 @@ Node* Node::findChild(string child_name)
 {
     if (numChildren > 0)                                                                    //Only search if we have children
     {
-        for (int i = 0; i < numChildren;)                                                    //Iliterate through the children we have
+        for (int i = 0; i < numChildren; i++)                                                    //Iliterate through the children we have
         {
             if (children.getArrayMember(i)->name == child_name)                             //If the current child is the one we're searching for, return its pointer
                 return children.getArrayMember(i);
@@ -80,13 +85,27 @@ Node* Node::findChild(string child_name)
             tmp_return_child = children.getArrayMember(i)->findChild(child_name);           //If not, tell the child to run a search
 
             if (tmp_return_child != 0)                                                      //If the child returned the child we're looking for, return its pointer
-                return tmp_return_child;
-
-            i += 1;                                                                         //If not, continue on to the next child
+                return tmp_return_child;                                                    //If not, continue on to the next child
         }
 
     }
     return 0;   //Couldn't find the child, not under us. Return.
+}
+
+
+int Node::removeChild(string child_name)
+{
+    for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
+    {
+        if (children.getArrayMember(i)->name == child_name)         //If this child is it
+        {
+                children.setArrayMember(i, NULL);                   //Remove our reference
+                return 0;                                           //Success
+        }
+    }
+
+    return 1; //Failure
+
 }
 
 int Node::addChild(Node* newChild)
@@ -99,11 +118,12 @@ int Node::addChild(Node* newChild)
 
 int Node::deleteChild(string child_name)
 {
-    for (int i = 0; i < numChildren;)                           //Iterate through our children to find the child named
+    for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
     {
         if (children.getArrayMember(i)->name == child_name)     //If this child is it
         {
                 delete children.getArrayMember(i);              //Delete the child
+                children.setArrayMember(i, NULL);
                 return 0;                                       //Success
         }
     }
@@ -115,10 +135,10 @@ int Node::draw()
 {
     if (numChildren > 0)
     {
-        for (int i = 0; i < numChildren;)
+        for (int i = 0; i < numChildren; i++)
         {
-            children.getArrayMember(i)->draw();
-            i += 1;
+            if (children.getArrayMember(i) != NULL)
+                children.getArrayMember(i)->draw();
         }
     }
     return 0;                       //Base node type has no draw functionality, just calls children's draw() function.
@@ -157,14 +177,6 @@ Vertex Node::getGlobalPosition()
     return globalPosition;
 }
 
-int Node::setColor3f(float tmp_r, float tmp_g, float tmp_b)
-{
-    color.r = tmp_r;
-    color.g = tmp_g;
-    color.b = tmp_b;
-
-    return 0;
-}
 
 int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
 {
@@ -262,6 +274,12 @@ int Node::increaseLocalRotation(float inc_x, float inc_y, float inc_z)
         localRotation.z += 360;
 
 
+    return 0;
+}
+
+int Node::setMaterial(Material* tmp_mat)
+{
+    material = tmp_mat;
     return 0;
 }
 

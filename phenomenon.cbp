@@ -12,6 +12,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wextra" />
 					<Add option="-g" />
 					<Add directory="src" />
 				</Compiler>
@@ -30,7 +31,7 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
+			<Add option="-g" />
 			<Add option="-fexceptions" />
 			<Add directory="/usr/include/SDL" />
 		</Compiler>
@@ -47,6 +48,8 @@
 		<Unit filename="phenomenon/ExpandableArray.h" />
 		<Unit filename="phenomenon/Light.cpp" />
 		<Unit filename="phenomenon/Light.h" />
+		<Unit filename="phenomenon/Material.cpp" />
+		<Unit filename="phenomenon/Material.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Phenomenon.h" />
@@ -56,6 +59,8 @@
 		<Unit filename="phenomenon/Scene.h" />
 		<Unit filename="phenomenon/Square.cpp" />
 		<Unit filename="phenomenon/Square.h" />
+		<Unit filename="phenomenon/Texture.cpp" />
+		<Unit filename="phenomenon/Texture.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />
 		<Unit filename="phenomenon/Triangle.h" />
 		<Unit filename="phenomenon/Window.cpp" />

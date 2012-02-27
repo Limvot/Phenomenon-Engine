@@ -1,9 +1,9 @@
 #include "Light.h"
 
-Light::Light(string tmp_name)                                                        //Please note that the Light inherets the Node class, and all of its node releated functions.
+Light::Light(string tmp_name)                                               //Please note that the Light inherets the Node class, and all of its node releated functions.
 {
 
-    name = tmp_name;                            //Rest of init is taken care of by the Node constructor
+    name = tmp_name;                                                        //Rest of init is taken care of by the Node constructor
     LightAmbient[0] = 0.5f;
     LightAmbient[1] = 0.5f;
     LightAmbient[2] = 0.5f;
@@ -26,10 +26,29 @@ int Light::draw()
     {
         for (int i = 0; i < numChildren;)
         {
-            children.getArrayMember(i)->draw();
+            if (children.getArrayMember(i) != NULL)
+                children.getArrayMember(i)->draw();
             i += 1;
         }
     }
+
+    return 0;
+}
+
+int Light::setAmbient(float r, float g, float b)
+{
+    LightAmbient[0] = r;
+    LightAmbient[1] = g;
+    LightAmbient[2] = b;
+
+    return 0;
+}
+
+int Light::setDiffuse(float r, float g, float b)
+{
+    LightDiffuse[0] = r;
+    LightDiffuse[1] = g;
+    LightDiffuse[2] = b;
 
     return 0;
 }

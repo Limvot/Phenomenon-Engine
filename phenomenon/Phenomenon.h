@@ -8,3 +8,5 @@
 #include "Square.h"
 #include "Triangle.h"
 #include "Window.h"
+#include "Material.h"
+#include "Texture.h"
