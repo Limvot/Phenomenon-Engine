@@ -41,7 +41,7 @@ int Scene::render()
 {
     GLenum current_light;
 
-    for (int i = 0; i < numLights; i +=1)
+    for (int i = 0; i < numLights; i++)
     {
         if (LightArray.getArrayMember(i) != NULL)
         {

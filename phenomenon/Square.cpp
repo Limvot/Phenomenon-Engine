@@ -50,11 +50,10 @@ int Square::draw()
 
     if (numChildren > 0)                                                    //If we have children, go through and draw them
     {
-        for (int i = 0; i < numChildren;)
+        for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
                 children.getArrayMember(i)->draw();
-            i += 1;
         }
     }
 

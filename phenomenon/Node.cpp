@@ -53,12 +53,11 @@ Node::~Node()
 {
     if (numChildren > 0)
     {
-        for (int i = 0; i < numChildren;)
+        for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
                 delete children.getArrayMember(i);
                 children.setArrayMember(i, NULL);
-            i += 1;
         }
         numChildren = 0;
     }
@@ -78,7 +77,7 @@ Node* Node::findChild(string child_name)
 {
     if (numChildren > 0)                                                                    //Only search if we have children
     {
-        for (int i = 0; i < numChildren;)                                                    //Iliterate through the children we have
+        for (int i = 0; i < numChildren; i++)                                                    //Iliterate through the children we have
         {
             if (children.getArrayMember(i)->name == child_name)                             //If the current child is the one we're searching for, return its pointer
                 return children.getArrayMember(i);
@@ -86,9 +85,7 @@ Node* Node::findChild(string child_name)
             tmp_return_child = children.getArrayMember(i)->findChild(child_name);           //If not, tell the child to run a search
 
             if (tmp_return_child != 0)                                                      //If the child returned the child we're looking for, return its pointer
-                return tmp_return_child;
-
-            i += 1;                                                                         //If not, continue on to the next child
+                return tmp_return_child;                                                    //If not, continue on to the next child
         }
 
     }
@@ -98,7 +95,7 @@ Node* Node::findChild(string child_name)
 
 int Node::removeChild(string child_name)
 {
-    for (int i = 0; i < numChildren;)                           //Iterate through our children to find the child named
+    for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
     {
         if (children.getArrayMember(i)->name == child_name)         //If this child is it
         {
@@ -121,7 +118,7 @@ int Node::addChild(Node* newChild)
 
 int Node::deleteChild(string child_name)
 {
-    for (int i = 0; i < numChildren;)                           //Iterate through our children to find the child named
+    for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
     {
         if (children.getArrayMember(i)->name == child_name)     //If this child is it
         {
@@ -138,11 +135,10 @@ int Node::draw()
 {
     if (numChildren > 0)
     {
-        for (int i = 0; i < numChildren;)
+        for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
                 children.getArrayMember(i)->draw();
-            i += 1;
         }
     }
     return 0;                       //Base node type has no draw functionality, just calls children's draw() function.
