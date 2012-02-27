@@ -1,40 +1,16 @@
 #include "Camera.h"
 
+Camera::Camera()
+{
+    name = "camera";
+}
+
 Camera::Camera(string tmp_name)                 //Please note that the Square inherets the Node class, and all of its node releated functions.
 {
     name = tmp_name;                            //Rest of init is taken care of by the Node constructor
 }
 
-Camera::~Camera()
-{
-    if (numChildren > 0)
-    {
-        for (int i = 0; i < numChildren;)
-        {
-            delete children.getArrayMember(i);
-            i += 1;
-        }
-    }
-    numChildren = 0;
-}
-
-int Camera::draw()
-{
-    getGlobalPosition();                                                    //Update our world-space varibles.
-    getGlobalRotation();
-    getGlobalScale();
-
-    if (numChildren > 0)                                                    //If we have children, go through and draw them
-    {
-        for (int i = 0; i < numChildren;)
-        {
-            children.getArrayMember(i)->draw();
-            i += 1;
-        }
-    }
-
-    return 0;
-}
+                                                //Inherit destructor as well.
 
 int Camera::drawScene(Scene *scene)
 {

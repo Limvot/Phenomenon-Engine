@@ -14,9 +14,9 @@
 class Camera: public Node
 {
     public:
+        Camera();
         Camera(string);
-        virtual ~Camera();
-        int draw();
+        //Destructor is inhereted
         int drawScene(Scene*);
         int rotate(float,float,float);
         int goForward(float);

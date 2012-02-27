@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Light.h"
 #include "Material.h"
+#include "Texture.h"
 #include "DataTypes.h"      //Also includes ExpandableArray.h
 
 using std::string;
@@ -31,6 +32,10 @@ class Scene
         Material* findMaterial(string mat_name);
         int deleteMaterial(string mat_name);
 
+        Texture* newTexture(string tex_name);
+        Texture* findTexture(string tex_name);
+        int deleteTexture(string tex_name);
+
     protected:
     private:
         Node rootNode;
@@ -42,6 +47,9 @@ class Scene
 
         ExpandableArray<Material*> MaterialArray;
         int numMaterials;
+
+        ExpandableArray<Texture*> TextureArray;
+        int numTextures;
 };
 
 #endif // SCENE_H

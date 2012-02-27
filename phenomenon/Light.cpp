@@ -1,9 +1,9 @@
 #include "Light.h"
 
-Light::Light(string tmp_name)                                                        //Please note that the Light inherets the Node class, and all of its node releated functions.
+Light::Light(string tmp_name)                                               //Please note that the Light inherets the Node class, and all of its node releated functions.
 {
 
-    name = tmp_name;                            //Rest of init is taken care of by the Node constructor
+    name = tmp_name;                                                        //Rest of init is taken care of by the Node constructor
     LightAmbient[0] = 0.5f;
     LightAmbient[1] = 0.5f;
     LightAmbient[2] = 0.5f;

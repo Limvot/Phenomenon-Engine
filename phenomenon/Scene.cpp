@@ -4,6 +4,7 @@ Scene::Scene()
 {
     numLights = 0;
     numMaterials = 0;
+    numTextures = 0;
     tmp_light = NULL;
 }
 
@@ -20,6 +21,19 @@ Scene::~Scene()
             }
         }
         numMaterials = 0;
+    }
+
+        if (numTextures > 0)
+    {
+        for (int i = 0; i < numTextures; i++)
+        {
+            if (TextureArray.getArrayMember(i) != NULL)
+            {
+                delete TextureArray.getArrayMember(i);
+                TextureArray.setArrayMember(i, NULL);
+            }
+        }
+        numTextures = 0;
     }
 }
 
@@ -152,5 +166,47 @@ int Scene::deleteMaterial(string mat_name)
         return 1;               //Couldn't find material
     }
     return 1;                   //No materials
+}
+
+
+Texture* Scene::newTexture(string tex_name)
+{
+    Texture* new_tex = new Texture(tex_name);
+    TextureArray.addArrayMember(new_tex);
+    numTextures += 1;
+    return new_tex;
+}
+
+Texture* Scene::findTexture(string tex_name)
+{
+    if (numTextures > 0)
+    {
+        for (int i = 0; i < numTextures; i++)
+        {
+            if (TextureArray.getArrayMember(i)->name == tex_name)
+                return TextureArray.getArrayMember(i);
+        }
+
+        return NULL;
+    }
+    return NULL;
+}
+
+int Scene::deleteTexture(string tex_name)
+{
+    if (numTextures > 0)
+    {
+        for (int i = 0; i < numTextures; i++)
+        {
+            if (TextureArray.getArrayMember(i)->name == tex_name)
+            {
+                delete TextureArray.getArrayMember(i);
+                TextureArray.setArrayMember(i, NULL);
+                return 0;
+            }
+        }
+        return 1;               //Couldn't find texture
+    }
+    return 1;                   //No textures
 }
 
