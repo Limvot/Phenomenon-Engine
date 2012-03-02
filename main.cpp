@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
+    Material* white_material = scene.newMaterial("white");
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
@@ -66,7 +67,8 @@ int main(int argc, char* argv[])
     logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-    loadedObject->setMaterial(green_material);
+    loadedObject->setMaterial(white_material);
+    white_material->setDiffuse(1.0f, 1.0f, 1.0f);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
     lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
@@ -92,7 +94,7 @@ int main(int argc, char* argv[])
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
 
-    loadedObject->setLocalPosition(0.0f, 0.0f, 2.0f);
+    loadedObject->setLocalPosition(0.0f, 0.0f, 0.0f);
 
     logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
     lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
@@ -201,6 +203,7 @@ int main(int argc, char* argv[])
             childNode->increaseLocalRotation(0.0f, 1.0f, 0.0f);
             childNode2->increaseLocalRotation(0.0f, 0.0f, 1.0f);
             childNode3->increaseLocalRotation(1.0f, 0.0f, 0.0f);
+            loadedObject->increaseLocalRotation(0.0f, -1.0f, 0.0f);
 
             window.clearScreen();
             camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.

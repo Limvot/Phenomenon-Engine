@@ -68,13 +68,28 @@ int StaticObject::draw()
 //BEGIN INDEXED VBO DRAW
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glEnableVertexAttribArray(0);                                               //We like to give vertices on stream 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    //Used for OpenGL 2.1
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    //End OpenGL 2.1
+
+    //This is for OpenGL >2.1
+    //glEnableVertexAttribArray(0);                                               //We like to give vertices on stream 0
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    //End OpenGL >2.1
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-    glDisableVertexAttribArray(0);
+    //For OpenGL 2.1
+    glDisableClientState(GL_VERTEX_ARRAY);
+    //End OpenGL 2.1
+
+    //For OpenGL >2.1
+    //glDisableVertexAttribArray(0);
+    //End OpenGL >2.1
 
 //END INDEXED VBO DRAW
 
