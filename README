@@ -6,13 +6,12 @@ Phenomenon
 Phenomenon is a OpenGL graphics/game engine project by Nathan Braswell
 
 It is a learning project that seeks to create a working graphics engine from scratch. (almost)
-It currently uses SDL to handle platform specifics.
+It currently uses SDL to handle platform specifics and GLEW for OpenGL extension loading.
 
-It implements some of the NeHe OpenGL tutorials, specifically the ports to linux/SDL.
-The lazyfoo SDL/OpenGL tutorial is also used sparingly as a reference.
+It was made using many tutorials and references, including http://ogldev.atspace.co.uk/index.html, www.opengl-tutorial.org, http://en.wikibooks.org/wiki/OpenGL_Programming, http://www.opengl.org/wiki/Main_Page, as well as Wikipedia, NeHe, and Swiftless.
 However, no code is copy-pasted. It is all re-writen using C++, multiple files, and a node graph system.
 
-The code is heavily commented, taking its cue from the NeHe tutorials off of which it is based.
+The code should be well-commented, parts to an almost tutorial extent. Others are less commented just because I haven't gotten around to it.
 
 Please note that this is a learning project, and I am a student. I'm learning as I go along, and the code will probably be buggy and inefficient. I take no responsibility for any negative consequences stemming from the use of this code or program.
 
@@ -24,8 +23,8 @@ General Instructions
 main.cpp has a little demo which shows the current capibilites of the engine and is a good starting point.
 
 All that is necessary to use the engine is to include the phenomenon.h file.
-The provided main.cpp and Code::Blocks project files should be enough to get started. Currently, the only dependency
-the Phenomenon engine has is on SDL, so if you can get SDL working everything should be fine.
+The provided main.cpp and Code::Blocks project files should be enough to get started. Currently, the only dependencies
+the Phenomenon engine has is on SDL and GLEW, so if you can get them working everything should be fine.
 
 -------------
 Special Windows Instructions
@@ -33,5 +32,5 @@ Special Windows Instructions
 
 Compiling the demo on Windows is just a tad more complicated than it is on Linux. Make sure that the Code::Blocks
 project file has the correct location of your SDL installation. You also need to copy SDL.dll
-into the program directory.
+into the program directory. GLEW needs to be included as well.
 
