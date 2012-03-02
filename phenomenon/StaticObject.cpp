@@ -69,28 +69,32 @@ int StaticObject::draw()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+    //#define PHENOMENON_OPENGL_2_1
+    #ifdef PHENOMENON_OPENGL_2_1
     //Used for OpenGL 2.1
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, 0);
     //End OpenGL 2.1
-
+    #else
     //This is for OpenGL >2.1
-    //glEnableVertexAttribArray(0);                                               //We like to give vertices on stream 0
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);                                               //We like to give vertices on stream 0
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     //End OpenGL >2.1
+    #endif
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
+    #ifdef PHENOMEN_OPENGL_2_1
     //For OpenGL 2.1
     glDisableClientState(GL_VERTEX_ARRAY);
     //End OpenGL 2.1
-
+    #else
     //For OpenGL >2.1
-    //glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(0);
     //End OpenGL >2.1
-
+    #endif
 //END INDEXED VBO DRAW
 
     glPopMatrix();                                                          //Return to state before object's translations, rotations, scale.
