@@ -1,6 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#define NO_SDL_GLEXT
+
+#include <GL/glew.h>
 #include "SDL.h"
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 #include "stdlib.h"

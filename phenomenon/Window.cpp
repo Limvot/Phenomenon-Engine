@@ -46,6 +46,15 @@ int Window::create(int width, int height, int inputBPP)
 
     resize(width, height, bpp, getSDLVideoFlags());   //Resize the inital window
 
+    GLenum error = glewInit();         //Init GLEW so we can use OpenGL extensions
+    if (error != GLEW_OK)
+    {
+        cout << "GLEW could not init: " << glewGetErrorString(error) << "\n";
+    } else {
+        cout << "GLEW init sucessful\n";
+    }
+
+
     return (0);                                       //Done starting up
 }
 

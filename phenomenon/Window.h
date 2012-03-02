@@ -5,6 +5,10 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define NO_SDL_GLEXT
+
+#include <GL/glew.h>
 #include "SDL.h"
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 

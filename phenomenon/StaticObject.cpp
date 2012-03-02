@@ -1,15 +1,45 @@
-#include "Square.h"
+#include "StaticObject.h"
 
-Square::Square(string tmp_name)                                                        //Please note that the Square inherets the Node class, and all of its node releated functions.
+StaticObject::StaticObject(string tmp_name)                                                        //Please note that the StaticObject inherets the Node class, and all of its node releated functions.
 {
     name = tmp_name;                            //Rest of init is taken care of by the Node constructor
+    createVBO();
+    createIBO();
 }
 
-Square::~Square()
-{                                               //Taken care of by Node destructor
+StaticObject::~StaticObject()
+{
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &IBO);
 }
 
-int Square::draw()
+int StaticObject::createVBO()
+{
+    Vertex Vertices[4];
+    Vertices[0] = Vertex(-1.0f, -1.0f, 0.0f);
+    Vertices[1] = Vertex(0.0f, -1.0f, 1.0f);
+    Vertices[2] = Vertex(1.0f, -1.0f, 0.0f);
+    Vertices[3] = Vertex(0.0f, 1.0f, 0.0f);
+
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+
+}
+
+int StaticObject::createIBO()
+{
+    unsigned int Indices[] = {  0, 3, 1,
+                                1, 3, 2,
+                                2, 3, 0,
+                                0, 2, 1 };
+
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+}
+
+int StaticObject::draw()
 {
     getGlobalPosition();                                                    //Update our world-space varibles.
     getGlobalRotation();
@@ -25,6 +55,7 @@ int Square::draw()
 
     glScalef(globalScale.x, globalScale.y, globalScale.z);                  //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
 
+
     if (material != NULL)
     {
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);         //Apply material
@@ -34,20 +65,18 @@ int Square::draw()
         material->bindTexture();                                                //Bind the material texture, if there is one.
     }
 
+//BEGIN INDEXED VBO DRAW
 
-    glBegin( GL_QUADS );
-        glTexCoord2f(0.0f, 0.0f);                                           //Because of the way SDL loads textures, the cords are upside-down
-        glVertex3f( -1.0f,  1.0f,   0.0f    );
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glEnableVertexAttribArray(0);                                               //We like to give vertices on stream 0
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-        glTexCoord2f(0.0f, 1.0f);
-        glVertex3f( -1.0f,  -1.0f,  0.0f    );
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex3f( 1.0f,  -1.0f,   0.0f    );
+    glDisableVertexAttribArray(0);
 
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex3f( 1.0f,   1.0f,   0.0f    );
-    glEnd();
+//END INDEXED VBO DRAW
 
     glPopMatrix();                                                          //Return to state before object's translations, rotations, scale.
 

@@ -39,6 +39,7 @@
 			<Add library="SDL" />
 			<Add library="GL" />
 			<Add library="GLU" />
+			<Add library="GLEW" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Unit filename="phenomenon/Camera.cpp" />
@@ -59,6 +60,8 @@
 		<Unit filename="phenomenon/Scene.h" />
 		<Unit filename="phenomenon/Square.cpp" />
 		<Unit filename="phenomenon/Square.h" />
+		<Unit filename="phenomenon/StaticObject.cpp" />
+		<Unit filename="phenomenon/StaticObject.h" />
 		<Unit filename="phenomenon/Texture.cpp" />
 		<Unit filename="phenomenon/Texture.h" />
 		<Unit filename="phenomenon/Triangle.cpp" />

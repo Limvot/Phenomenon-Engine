@@ -33,6 +33,11 @@ int main(int argc, char* argv[])
     Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Node* logoNode = new Square("logo");
+
+    StaticObject* ploadedObject = new StaticObject("monkey");
+    Node* loadedObject = dynamic_cast<Node*>(ploadedObject);
+    //Node* loadedObject = scene.loadStaticObject("./data/monkey.obj", "monkey");
+
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
     Light* lightNode2 = scene.newLight("camera_light");
     scene.enableLighting();                                     //Enable lighting by default.
@@ -61,8 +66,10 @@ int main(int argc, char* argv[])
     logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
+    loadedObject->setMaterial(green_material);
+
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
-    lightNode->setAmbient(0.2f, 0.2f, 0.2f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
+    lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
 
     lightNode2->setDiffuse(0.0f, 1.0f, 1.0f);
     lightNode2->setAmbient(0.0f, 0.0f, 0.0f);
@@ -70,6 +77,9 @@ int main(int argc, char* argv[])
     rootNode->addChild(childNode);                              //You should add most nodes to your root node so that everything gets deleted properly on exit.
     rootNode->addChild(childNode2);                             //You can also assign a child to a new parent at will, the child will automatically remove itself from its previous parent's index.
     childNode2->addChild(childNode3);
+
+    rootNode->addChild(loadedObject);
+
     rootNode->addChild(logoNode);
     camera.addChild(dynamic_cast<Node*>(lightNode2));           //Attach lightNode2 to the camera.
                                                                 //On creation, lights are automatically added as children of the root node by the scene object, so you don't have to assign them manually.
@@ -81,6 +91,9 @@ int main(int argc, char* argv[])
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
+
+    loadedObject->setLocalPosition(0.0f, 0.0f, 2.0f);
+
     logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
     lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
     lightNode2->setLocalPosition(0.0f, 0.0f, -4.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
@@ -162,6 +175,9 @@ int main(int argc, char* argv[])
                         window.initGL();
                         logo_texture->load("./data/phenomenon.bmp");
                         scene.enableLighting();
+                        static_cast<StaticObject*>(loadedObject)->createVBO();
+                        static_cast<StaticObject*>(loadedObject)->createIBO();
+                        cout << "j key pressed, ran workarounds\n";
 
                     default:
                         break;
