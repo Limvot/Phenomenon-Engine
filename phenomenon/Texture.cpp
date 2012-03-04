@@ -46,6 +46,7 @@ int Texture::load(string file_path)
 
 int Texture::bind()
 {
+    //Future- investigate glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id[0]);
     return 0;
 }

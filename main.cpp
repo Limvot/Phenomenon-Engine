@@ -34,8 +34,22 @@ int main(int argc, char* argv[])
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Node* logoNode = new Square("logo");
 
-    StaticObject* ploadedObject = new StaticObject("monkey");
-    Node* loadedObject = dynamic_cast<Node*>(ploadedObject);
+    StaticObject* loadedObject = new StaticObject("monkey");
+    Vertex objectVertices[5];
+    objectVertices[0] = Vertex(0.0f, 0.0f, 0.0f);
+    objectVertices[1] = Vertex(-1.0f, 1.0f, -1.0f);
+    objectVertices[2] = Vertex(-1.0f, 1.0f, 1.0f);
+    objectVertices[3] = Vertex(1.0f, 1.0f, -1.0f);
+    objectVertices[4] = Vertex(1.0f, 1.0f, 1.0f);
+
+    GLuint objectIndices[] = {  0,  2,  1,
+                                0,  1,  3,
+                                0,  3,  4,
+                                0,  4,  2,
+                                2,  1,  3,
+                                2,  3,  4 };
+    loadedObject->createVBO(5, objectVertices);
+    loadedObject->createIBO(18, objectIndices);
     //Node* loadedObject = scene.loadStaticObject("./data/monkey.obj", "monkey");
 
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
@@ -177,8 +191,8 @@ int main(int argc, char* argv[])
                         window.initGL();
                         logo_texture->load("./data/phenomenon.bmp");
                         scene.enableLighting();
-                        static_cast<StaticObject*>(loadedObject)->createVBO();
-                        static_cast<StaticObject*>(loadedObject)->createIBO();
+                        //static_cast<StaticObject*>(loadedObject)->createVBO();
+                        //static_cast<StaticObject*>(loadedObject)->createIBO();
                         cout << "j key pressed, ran workarounds\n";
 
                     default:
