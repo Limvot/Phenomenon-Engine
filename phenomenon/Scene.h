@@ -45,7 +45,7 @@ class Scene
         ExpandableArray<Light*> LightArray;
         Light* tmp_light;
         int numLights;
-        Vertex tmpGlobalLightPosition;
+        Vector tmpGlobalLightPosition;
         GLfloat tmpLightPosition[4];
 
         ExpandableArray<Material*> MaterialArray;

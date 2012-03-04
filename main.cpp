@@ -35,12 +35,13 @@ int main(int argc, char* argv[])
     Node* logoNode = new Square("logo");
 
     StaticObject* loadedObject = new StaticObject("monkey");
+
     Vertex objectVertices[5];
-    objectVertices[0] = Vertex(0.0f, 0.0f, 0.0f);
-    objectVertices[1] = Vertex(-1.0f, 1.0f, -1.0f);
-    objectVertices[2] = Vertex(-1.0f, 1.0f, 1.0f);
-    objectVertices[3] = Vertex(1.0f, 1.0f, -1.0f);
-    objectVertices[4] = Vertex(1.0f, 1.0f, 1.0f);
+    objectVertices[0] = Vertex(0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 1.0f);        //Vertexes take 8 floats, xyz normal xyz, and uv coords.
+    objectVertices[1] = Vertex(-1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f);
+    objectVertices[2] = Vertex(-1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 0.0f);
+    objectVertices[3] = Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f);
+    objectVertices[4] = Vertex(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f);
 
     GLuint objectIndices[] = {  0,  2,  1,
                                 0,  1,  3,
@@ -48,8 +49,10 @@ int main(int argc, char* argv[])
                                 0,  4,  2,
                                 2,  1,  3,
                                 2,  3,  4 };
+
     loadedObject->createVBO(5, objectVertices);
     loadedObject->createIBO(18, objectIndices);
+
     //Node* loadedObject = scene.loadStaticObject("./data/monkey.obj", "monkey");
 
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
@@ -58,7 +61,6 @@ int main(int argc, char* argv[])
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
-    Material* white_material = scene.newMaterial("white");
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
@@ -81,8 +83,7 @@ int main(int argc, char* argv[])
     logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-    loadedObject->setMaterial(white_material);
-    white_material->setDiffuse(1.0f, 1.0f, 1.0f);
+    loadedObject->setMaterial(logo_material);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
     lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
@@ -112,7 +113,7 @@ int main(int argc, char* argv[])
 
     logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
     lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
-    lightNode2->setLocalPosition(0.0f, 0.0f, -4.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
+    lightNode2->setLocalPosition(0.0f, 0.0f, -3.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
 
     childNode->setLocalRotation(0.0f, 30.0f, 0.0f);
     childNode2->setLocalRotation(0.0f, 0.0f, 45.0f);

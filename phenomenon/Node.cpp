@@ -153,19 +153,19 @@ int Node::setLocalPosition(float set_x, float set_y, float set_z)
     return 0;
 }
 
-int Node::setLocalPosition(Vertex set_position)
+int Node::setLocalPosition(Vector set_position)
 {
     localPosition = set_position;
 
     return 0;
 }
 
-Vertex Node::getLocalPosition()
+Vector Node::getLocalPosition()
 {
     return localPosition;
 }
 
-Vertex Node::getGlobalPosition()
+Vector Node::getGlobalPosition()
 {
     if (parent == NULL)                                                 //If we don't have a parent
     {
@@ -187,12 +187,12 @@ int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
     return 0;
 }
 
-Vertex Node::getLocalScale()
+Vector Node::getLocalScale()
 {
     return localScale;
 }
 
-Vertex Node::getGlobalScale()
+Vector Node::getGlobalScale()
 {
     if (parent == NULL)                                                 //If we don't have a parent
     {
@@ -215,12 +215,12 @@ int Node::setLocalRotation(float tmp_x_rot, float tmp_y_rot, float tmp_z_rot)
     return 0;
 }
 
-Vertex Node::getLocalRotation()
+Vector Node::getLocalRotation()
 {
     return localRotation;
 }
 
-Vertex Node::getGlobalRotation()
+Vector Node::getGlobalRotation()
 {
     if (parent == NULL)                                                 //If we don't have a parent
     {

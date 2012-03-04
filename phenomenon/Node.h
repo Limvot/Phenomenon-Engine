@@ -31,16 +31,16 @@ class Node
         int deleteChild(string);
 
         virtual int draw();
-        Vertex getLocalPosition();
-        Vertex getGlobalPosition();
+        Vector getLocalPosition();
+        Vector getGlobalPosition();
         int setLocalPosition(float,float,float);
-        int setLocalPosition(Vertex);
+        int setLocalPosition(Vector);
         int setLocalScale(float,float,float);
-        Vertex getLocalScale();
-        Vertex getGlobalScale();
+        Vector getLocalScale();
+        Vector getGlobalScale();
         int setLocalRotation(float,float,float);
-        Vertex getLocalRotation();
-        Vertex getGlobalRotation();
+        Vector getLocalRotation();
+        Vector getGlobalRotation();
         int increaseLocalPosition(float,float,float);
         int increaseLocalScale(float,float,float);
         int increaseLocalRotation(float,float,float);
@@ -55,12 +55,12 @@ class Node
     ExpandableArray<Node*> children;
     Node *tmp_return_child;
     int numChildren;
-    Vertex localPosition;
-    Vertex globalPosition;
-    Vertex localScale;
-    Vertex globalScale;
-    Vertex localRotation;
-    Vertex globalRotation;
+    Vector localPosition;
+    Vector globalPosition;
+    Vector localScale;
+    Vector globalScale;
+    Vector localRotation;
+    Vector globalRotation;
 };
 
 #endif // NODE_H
