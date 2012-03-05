@@ -51,6 +51,8 @@
 		<Unit filename="phenomenon/Light.h" />
 		<Unit filename="phenomenon/Material.cpp" />
 		<Unit filename="phenomenon/Material.h" />
+		<Unit filename="phenomenon/ModelLoader.cpp" />
+		<Unit filename="phenomenon/ModelLoader.h" />
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Phenomenon.h" />

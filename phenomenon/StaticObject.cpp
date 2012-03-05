@@ -67,7 +67,7 @@ int StaticObject::draw()
 
     glTranslatef(globalPosition.x, globalPosition.y, globalPosition.z);                                 //Translate to our position
 
-    glRotatef(globalRotation.x, 1.0f, 0.0f, 0.0f);                                                      //Must be a better way to do this. (rotate each axis the proper ammount.
+    glRotatef(globalRotation.x, 1.0f, 0.0f, 0.0f);                                                      //Must be a better way to do this. (rotate each axis the proper ammount.)
     glRotatef(globalRotation.y, 0.0f, 1.0f, 0.0f);
     glRotatef(globalRotation.z, 0.0f, 0.0f, 1.0f);
 

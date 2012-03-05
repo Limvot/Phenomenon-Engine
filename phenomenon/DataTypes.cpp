@@ -53,6 +53,58 @@ Vector Vector::operator* (Vector tmp_in_vector)
 }
 
 //////////////////
+//Vector2f
+//////////////////
+
+Vector2f::Vector2f()                                                    //If no arguments, init to 0
+{
+    x = 0;
+    y = 0;
+}
+
+Vector2f::Vector2f(float tmp_in_x, float tmp_in_y)      //If we do have arguments, init to them
+{
+    x = tmp_in_x;
+    y = tmp_in_y;
+}
+
+Vector2f::~Vector2f()
+{
+
+}
+
+Vector2f Vector2f::operator+ (Vector2f tmp_in_vector)                    //Overload + so we can add vertexes
+{
+    Vector2f tmp_return;
+
+    tmp_return.x = x + tmp_in_vector.x;
+    tmp_return.y = y + tmp_in_vector.y;
+
+    return (tmp_return);
+}
+
+Vector2f Vector2f::operator- (Vector2f tmp_in_vector)                    //Overload - so we can subtract vertexes
+{
+    Vector2f tmp_return;
+
+    tmp_return.x = x - tmp_in_vector.x;
+    tmp_return.y = y - tmp_in_vector.y;
+
+    return (tmp_return);
+}
+
+Vector2f Vector2f::operator* (Vector2f tmp_in_vector)
+{
+    Vector2f tmp_return;
+
+    tmp_return.x = x * tmp_in_vector.x;
+    tmp_return.y = y * tmp_in_vector.y;
+
+    return (tmp_return);
+}
+
+
+//////////////////
 //Color3f
 //////////////////
 

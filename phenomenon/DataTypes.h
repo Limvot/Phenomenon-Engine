@@ -15,6 +15,18 @@ class Vector           //Simple vector class.
         float x,y,z;
 };
 
+class Vector2f           //Simple vector class.
+{
+    public:
+        Vector2f();
+        Vector2f(float,float);
+        ~Vector2f();
+        Vector2f operator+ (Vector2f);
+        Vector2f operator- (Vector2f);
+        Vector2f operator* (Vector2f);
+        float x,y;
+};
+
 class Color3f           //Simple rgb color class.
 {
     public:

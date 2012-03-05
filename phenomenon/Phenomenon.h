@@ -11,3 +11,5 @@
 #include "StaticObject.h"
 #include "Material.h"
 #include "Texture.h"
+#include "ModelLoader.h"
+

@@ -1,0 +1,16 @@
+# My own handmade .obj obj
+# Nathan Braswell
+
+v 0.0 0.0 0.0
+v -1.0 1.0 -1.0
+v -1.0 1.0 1.0
+v 1.0 1.0 -1.0
+v 1.0 1.0 1.0
+
+f 1  3  2
+f 1  2  4
+f 1  4  5
+f 1  5  3
+f 3  2  4
+f 3  4  5 
+

@@ -34,26 +34,9 @@ int main(int argc, char* argv[])
     Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Node* logoNode = new Square("logo");
 
-    StaticObject* loadedObject = new StaticObject("monkey");
 
-    Vertex objectVertices[5];
-    objectVertices[0] = Vertex(0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 1.0f);        //Vertexes take 8 floats, xyz normal xyz, and uv coords.
-    objectVertices[1] = Vertex(-1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f);
-    objectVertices[2] = Vertex(-1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 0.0f);
-    objectVertices[3] = Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f);
-    objectVertices[4] = Vertex(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f);
-
-    GLuint objectIndices[] = {  0,  2,  1,
-                                0,  1,  3,
-                                0,  3,  4,
-                                0,  4,  2,
-                                2,  1,  3,
-                                2,  3,  4 };
-
-    loadedObject->createVBO(5, objectVertices);
-    loadedObject->createIBO(18, objectIndices);
-
-    //Node* loadedObject = scene.loadStaticObject("./data/monkey.obj", "monkey");
+    ModelLoader model_loader;                                   //Our model-loading object
+    Node* loadedObject = model_loader.loadOBJ("./data/Monkey_simple.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
 
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
     Light* lightNode2 = scene.newLight("camera_light");
@@ -61,10 +44,12 @@ int main(int argc, char* argv[])
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
+    Material* white_material = scene.newMaterial("white");
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
     Material* logo_material = scene.newMaterial("logo");
+    Material* monkey_material = scene.newMaterial("monkey");
 
     childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
     red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
@@ -83,7 +68,10 @@ int main(int argc, char* argv[])
     logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-    loadedObject->setMaterial(logo_material);
+    loadedObject->setMaterial(white_material);
+    Texture* monkey_texture = scene.newTexture("monkey");
+    monkey_texture->load("./data/MonkeyFace.bmp");
+    monkey_material->setTexture(monkey_texture);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
     lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
@@ -123,6 +111,8 @@ int main(int argc, char* argv[])
     childNode2->setLocalScale(0.5f, 1.0f, 1.0f);
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);                //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
     logoNode->setLocalScale(3.0f, 3.0f, 1.0f);
+
+    loadedObject->setLocalRotation(90.0f, 0.0f, 0.0f);
 
 
     camera.setLocalPosition(0.0f, 0.0f, 6.0f);                  //Setting the camera 6 units toward the screen is the same as setting everything else 6 units away.
@@ -218,7 +208,7 @@ int main(int argc, char* argv[])
             childNode->increaseLocalRotation(0.0f, 1.0f, 0.0f);
             childNode2->increaseLocalRotation(0.0f, 0.0f, 1.0f);
             childNode3->increaseLocalRotation(1.0f, 0.0f, 0.0f);
-            loadedObject->increaseLocalRotation(0.0f, -1.0f, 0.0f);
+            loadedObject->increaseLocalRotation(0.0f, 0.0f, 1.0f);
 
             window.clearScreen();
             camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
