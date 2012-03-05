@@ -89,8 +89,8 @@ int StaticObject::draw()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    #define PHENOMENON_OPENGL_2_1
-    #ifdef PHENOMENON_OPENGL_2_1
+    #define PHENOMENON_OPENGL_OLD_WAY
+    #ifdef PHENOMENON_OPENGL_OLD_WAY
     //Used for OpenGL 2.1
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, sizeof(Vertex), BUFFER_OFFSET(0));                                                                 //We're drawing triangles, so we tell it to use sets of 3 floats
@@ -104,13 +104,13 @@ int StaticObject::draw()
     #else
     //This is for OpenGL >2.1
     glEnableVertexAttribArray(0);                                                                       //We like to give vertices on stream 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));                                              //We're drawing triangles, so we tell it to use sets of 3 floats
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));                  //We're drawing triangles, so we tell it to use sets of 3 floats
 
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(12));
 
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(24));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(24));
     //End OpenGL >2.1
     #endif
 
@@ -118,7 +118,7 @@ int StaticObject::draw()
 
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);                                       //Draw the triangles.
 
-    #ifdef PHENOMEN_OPENGL_2_1
+    #ifdef PHENOMEN_OPENGL_OLD_WAY
     //For OpenGL 2.1
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
