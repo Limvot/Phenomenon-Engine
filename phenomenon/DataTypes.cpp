@@ -186,6 +186,23 @@ Vertex::~Vertex()
 
 }
 
+bool Vertex::operator== (Vertex tmp_in_vertex)                    //Overload == so we can check for equality
+{
+
+    if (    (x == tmp_in_vertex.x) &&
+            (y == tmp_in_vertex.y) &&
+            (z == tmp_in_vertex.z) &&
+            (nx == tmp_in_vertex.nx) &&
+            (ny == tmp_in_vertex.ny) &&
+            (nz == tmp_in_vertex.nz) &&
+            (u == tmp_in_vertex.u) &&
+            (v == tmp_in_vertex.v)  )
+        {
+            return true;                                            //If everything is equal, return true. If not, return false.
+        }
+        return false;
+}
+
 Vertex Vertex::operator+ (Vertex tmp_in_vertex)                    //Overload + so we can add vertexes
 {
     Vertex tmp_return;

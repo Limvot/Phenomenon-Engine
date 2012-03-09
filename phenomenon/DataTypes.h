@@ -40,12 +40,13 @@ class Color3f           //Simple rgb color class.
 };
 
 
-class Vertex           //Simple vertex class.
+class Vertex           //Vertex class.
 {
     public:
         Vertex();
         Vertex(float x,float y, float z, float nx, float ny, float nz, float u, float v);
         ~Vertex();
+        bool operator== (Vertex);
         Vertex operator+ (Vertex);
         Vertex operator- (Vertex);
         Vertex operator* (Vertex);

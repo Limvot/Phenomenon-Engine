@@ -71,7 +71,7 @@ int StaticObject::draw()
     glRotatef(globalRotation.y, 0.0f, 1.0f, 0.0f);
     glRotatef(globalRotation.z, 0.0f, 0.0f, 1.0f);
 
-    glScalef(globalScale.x, globalScale.y, globalScale.z);                                              //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
+    glScalef(globalScale.x, globalScale.y, globalScale.z);                                              //Scale along each axis the proper ammount.
 
 
     if (material != NULL)
@@ -93,7 +93,7 @@ int StaticObject::draw()
     #ifdef PHENOMENON_OPENGL_OLD_WAY
     //Used for OpenGL 2.1
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), BUFFER_OFFSET(0));                                                                 //We're drawing triangles, so we tell it to use sets of 3 floats
+    glVertexPointer(3, GL_FLOAT, sizeof(Vertex), BUFFER_OFFSET(0));                                     //We're drawing triangles, so we tell it to use sets of 3 floats
 
     glEnableClientState(GL_NORMAL_ARRAY);
     glNormalPointer(GL_FLOAT, sizeof(Vertex), BUFFER_OFFSET(12));

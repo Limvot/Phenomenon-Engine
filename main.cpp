@@ -36,7 +36,12 @@ int main(int argc, char* argv[])
 
 
     ModelLoader model_loader;                                   //Our model-loading object
-    Node* loadedObject = model_loader.loadOBJ("./data/Monkey_simple.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
+    Node* loadedObject = model_loader.loadOBJ("./data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
+    if (loadedObject == NULL)                                                          //Quit if the load failed.
+    {
+        cout << "Problem loading the demonstration .obj file, will now quit.\n";
+        return 0;
+    }
 
     Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
     Light* lightNode2 = scene.newLight("camera_light");
@@ -68,9 +73,9 @@ int main(int argc, char* argv[])
     logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-    loadedObject->setMaterial(white_material);
+    loadedObject->setMaterial(monkey_material);
     Texture* monkey_texture = scene.newTexture("monkey");
-    monkey_texture->load("./data/MonkeyFace.bmp");
+    monkey_texture->load("./data/MonkeyFace_flipped_safe.bmp");
     monkey_material->setTexture(monkey_texture);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
@@ -182,8 +187,6 @@ int main(int argc, char* argv[])
                         window.initGL();
                         logo_texture->load("./data/phenomenon.bmp");
                         scene.enableLighting();
-                        //static_cast<StaticObject*>(loadedObject)->createVBO();
-                        //static_cast<StaticObject*>(loadedObject)->createIBO();
                         cout << "j key pressed, ran workarounds\n";
 
                     default:

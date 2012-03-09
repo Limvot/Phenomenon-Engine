@@ -13,72 +13,103 @@ ModelLoader::~ModelLoader()
 StaticObject* ModelLoader::loadOBJ(string file_path, string name)
 {
     std::vector<Vector> vertices;
-    std::vector<Vector> normals;
     std::vector<Vector2f> uvs;
-    std::vector<GLuint> vert_indices;
+    std::vector<Vector> normals;
+    std::vector<GLuint> vertices_indices, uv_indices, normal_indices;
+    std::vector<Vertex> out_vertices;
+    std::vector<GLuint> out_indices;
 
-    ifstream in(file_path.c_str(), ios::in);
-    if (!in)
+    FILE * file = fopen(file_path.c_str(), "r");
+    if (file == NULL)
     {
-        std::cout << "Could not open file\n";
-        return NULL;
+        std::cout << "Could not open file.\n";
+        return false;
     }
 
-    string line;
-    while (getline(in, line))
+    while (1)
     {
-        if (line.substr(0,2) == "v ")
+        char lineHeader[128];                   //Assuming words are less than 128 chars, which is pretty bad
+
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break;                              //Reached end of file
+
+        if (strcmp(lineHeader, "v") == 0)
         {
-            istringstream s(line.substr(2));
-            Vector v;
-            s >> v.x; s >> v.y; s >> v.z;
-            vertices.push_back(v);
+            Vector vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+            vertices.push_back(vertex);
+        }
 
-        } else if (line.substr(0, 2) == "vn ") {
+        if (strcmp(lineHeader, "vt") == 0)
+        {
+            Vector2f uv;
+            fscanf(file, "%f %f\n", &uv.x, &uv.y);
+            uvs.push_back(uv);
+        }
 
-            istringstream s(line.substr(2));
-            Vector n;
-            s >> n.x; s >> n.y; s >> n.z;
-            normals.push_back(n);
+        if (strcmp(lineHeader, "vn") == 0)
+        {
+            Vector normal;
+            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+            normals.push_back(normal);
+        }
 
-        } else if (line.substr(0, 2) == "vt ") {
+        if (strcmp(lineHeader, "f") == 0)
+        {
+            GLuint vertex_index[3], uv_index[3], normal_index[3];
+            GLuint num_values = 0;
 
-            istringstream s(line.substr(2));
-            Vector2f t;
-            s >> t.x; s >> t.y;
-            uvs.push_back(t);
+            num_values = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertex_index[0], &uv_index[0], &normal_index[0], &vertex_index[1], &uv_index[1], &normal_index[1], &vertex_index[2], &uv_index[2], &normal_index[2]);
+            if (num_values != 9)
+            {
+                std::cout << "This .obj file cannot be loaded by our very limited loader. It must have normals and uvs, and be made of only triangles.\n";
+                return NULL;
+            }
+            vertices_indices.push_back((vertex_index[0])-1);    //.obj indices are 1 based, C++ arrays and OpenGL are 0 based
+            vertices_indices.push_back((vertex_index[1])-1);
+            vertices_indices.push_back((vertex_index[2])-1);
 
-        } else if (line.substr(0, 2) == "f ") {
+            uv_indices.push_back((uv_index[0])-1);
+            uv_indices.push_back((uv_index[1])-1);
+            uv_indices.push_back((uv_index[2])-1);
 
-            istringstream s(line.substr(2));
-            GLuint a,b,c;
-            s >> a; s >> b; s >> c;
-            a--; b--; c--;
-            vert_indices.push_back(a); vert_indices.push_back(b); vert_indices.push_back(c);
-
-        } else {/*ignore this line*/}
+            normal_indices.push_back((normal_index[0])-1);
+            normal_indices.push_back((normal_index[1])-1);
+            normal_indices.push_back((normal_index[2])-1);
+        }
     }
 
-    Vertex* vertices_out = new Vertex[vertices.size()];
+    bool found_match;
 
-    for (GLuint i = 0; i < vertices.size(); i++)
+    for (GLuint i = 0; i < vertices_indices.size(); i++)
     {
-        vertices_out[i].x = vertices[i].x;
-        vertices_out[i].y = vertices[i].y;
-        vertices_out[i].z = vertices[i].z;
+        Vertex out_vertex(vertices[vertices_indices[i]].x, vertices[vertices_indices[i]].y, vertices[vertices_indices[i]].z, normals[normal_indices[i]].x, normals[normal_indices[i]].y, normals[normal_indices[i]].z, uvs[uv_indices[i]].x, uvs[uv_indices[i]].y);
 
-        std::cout << vertices_out[i].x << "\n";
+        found_match = false;
+        for (GLuint j = 0; j < out_vertices.size(); j++)
+        {
+            if (out_vertex == out_vertices[j])
+            {
+                found_match = true;
+                out_indices.push_back(j);
+                break;
+            }
+        }
+        if (found_match != true)                                //If we didn't find an equal vertex, add this one to out_vertices and its position to out_indices
+        {
+            out_vertices.push_back(out_vertex);
+            out_indices.push_back(out_vertices.size()-1);       //Position of new vertex is the number of vertices - 1, since arrays are 0 indexed.
+        }
     }
 
-    GLuint* indices_out = new GLuint[vert_indices.size()];
+    Vertex* out_vertices_array = new Vertex[out_vertices.size()];
+    copy(out_vertices.begin(), out_vertices.end(), out_vertices_array);
 
-    for (GLuint i = 0; i < vert_indices.size(); i++)
-    {
-        indices_out[i] = vert_indices[i];
-        std::cout << indices_out[i] << "\n";
-    }
+    GLuint* out_indices_array = new GLuint[out_indices.size()];
+    copy(out_indices.begin(), out_indices.end(), out_indices_array);
 
-    StaticObject* loaded_obj = new StaticObject(name, vertices.size(), vertices_out, vert_indices.size(), indices_out);
+    StaticObject* loaded_obj = new StaticObject(name, out_vertices.size(), out_vertices_array, out_indices.size(), out_indices_array);
     return loaded_obj;
 }
 
