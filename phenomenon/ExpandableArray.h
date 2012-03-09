@@ -18,18 +18,18 @@ class ExpandableArray
 {
     T *Array;
     T *tmp_Array;
-    int NumArraySlots;
-    int UsedSlots;
+    unsigned int NumArraySlots;
+    unsigned int UsedSlots;
 
     public:
 
     ExpandableArray();
     ~ExpandableArray();
 
-    T getArrayMember(int);
-    int setArrayMember(int,T);
-    int addArrayMember(T);
-    int removeArrayEnd(int);
+    T getArrayMember(unsigned int);
+    unsigned int setArrayMember(unsigned int,T);
+    unsigned int addArrayMember(T);
+    unsigned int removeArrayEnd(unsigned int);
 };
 
 template <class T>
@@ -58,13 +58,13 @@ ExpandableArray<T>::~ExpandableArray()
 }
 
 template <class T>
-T ExpandableArray<T>::getArrayMember(int index)
+T ExpandableArray<T>::getArrayMember(unsigned int index)
 {
     return Array[index];
 }
 
 template <class T>
-int ExpandableArray<T>::setArrayMember(int index, T item)
+unsigned int ExpandableArray<T>::setArrayMember(unsigned int index, T item)
 {
     if (index >= NumArraySlots)
     {
@@ -76,41 +76,49 @@ int ExpandableArray<T>::setArrayMember(int index, T item)
 }
 
 template <class T>
-int ExpandableArray<T>::addArrayMember(T item)
+unsigned int ExpandableArray<T>::addArrayMember(T item)
 {
-    if (NumArraySlots > UsedSlots)
+    if (NumArraySlots > UsedSlots)          //If we have extra allocated slots, use one
     {
         Array[UsedSlots] = item;
         UsedSlots += 1;
 
         return (UsedSlots - 1);             //Return index number
 
-    } else {
-
-        tmp_Array = new T[UsedSlots + ARRAY_INCREASE_AMMOUNT];
-        int i = 0;
-        while (i<UsedSlots)
-        {
-            tmp_Array[i] = Array[i];
-            i += 1;
-        }
-        delete [] Array;
-        Array = tmp_Array;
-        tmp_Array = NULL;
-
-        NumArraySlots += ARRAY_INCREASE_AMMOUNT;
-        Array[UsedSlots] = item;
-        UsedSlots += 1;
-
-        return (UsedSlots - 1);             //Return index number
     }
+
+    for (unsigned int i = 0; i < NumArraySlots; i++)        //If we have an empty slot were something was deleted, use it
+    {
+        if (Array[i] == NULL)
+        {
+            Array[i] = item;
+            return (i);
+        }
+    }
+
+    tmp_Array = new T[UsedSlots + ARRAY_INCREASE_AMMOUNT];      //If neither of the above, add on to the end of the array.
+    unsigned int i = 0;
+    while (i<UsedSlots)
+    {
+        tmp_Array[i] = Array[i];
+        i += 1;
+    }
+    delete [] Array;
+    Array = tmp_Array;
+    tmp_Array = NULL;
+
+    NumArraySlots += ARRAY_INCREASE_AMMOUNT;
+    Array[UsedSlots] = item;
+    UsedSlots += 1;
+
+    return (UsedSlots - 1);             //Return index number
 }
 
 template <class T>
-int ExpandableArray<T>::removeArrayEnd(int numToDelete)
+unsigned int ExpandableArray<T>::removeArrayEnd(unsigned int numToDelete)
 {
         tmp_Array = new T[UsedSlots - numToDelete];
-        int i = 0;
+        unsigned int i = 0;
         while (i<(UsedSlots-numToDelete))
         {
             tmp_Array[i] = Array[i];
