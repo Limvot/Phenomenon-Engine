@@ -19,6 +19,7 @@ class Texture
         Texture(string tmp_name);
         virtual ~Texture();
 
+        int assignGLid(GLuint);             //Used if not using the load function- the texture has already been loaded by user/library/some other part of phenomenon.
         int load(string);
         int bind();
 

@@ -16,7 +16,17 @@ Texture::Texture(string tmp_name)
 
 Texture::~Texture()
 {
+    if (texture_id[0] != 0)
+    {
+        glDeleteTextures(1, texture_id[0]);
+        texture_id[0] = 0;
+    }
+}
 
+int Texture::assignGLid(GLuint texture_id_in)               //Used if not using the load function- the texture has already been loaded by user/library/some other part of phenomenon.
+{
+    texture_id[0] = texture_id_in;
+    return 0;
 }
 
 int Texture::load(string file_path)
@@ -39,7 +49,10 @@ int Texture::load(string file_path)
 
     //Free the surface memory, we don't need it anymore
     if (texture_image[0])
+    {
         SDL_FreeSurface(texture_image[0]);
+        texture_image[0] = NULL;
+    }
 
     return return_status;
 }
