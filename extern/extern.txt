@@ -1,0 +1,7 @@
+This folder contains the external bundled libraries that come with Phenomenon.
+
+////////////
+//Libraries
+////////////
+
+stb_image.c	Sean Barrett's (and contributers) great public-domain, single-file image loading library. Used to load images.

@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 
+#include "../extern/stb_image.h"
+
 using namespace std;
 
 class Texture
@@ -24,7 +26,6 @@ class Texture
         int bind();
 
         string name;
-        SDL_Surface* texture_image[1];
         GLuint texture_id[1];
     protected:
     private:
