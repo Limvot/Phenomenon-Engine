@@ -41,6 +41,10 @@
 			<Add library="GLU" />
 			<Add library="GLEW" />
 		</Linker>
+		<Unit filename="extern/stb_image.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="extern/stb_image.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="phenomenon/Camera.cpp" />
 		<Unit filename="phenomenon/Camera.h" />
