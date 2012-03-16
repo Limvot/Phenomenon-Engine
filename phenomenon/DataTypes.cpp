@@ -186,6 +186,20 @@ Vertex::~Vertex()
 
 }
 
+void Vertex::set(float tmp_in_x, float tmp_in_y, float tmp_in_z, float tmp_in_nx, float tmp_in_ny, float tmp_in_nz, float tmp_in_u, float tmp_in_v)      //Set our our properties
+{
+    x = tmp_in_x;
+    y = tmp_in_y;
+    z = tmp_in_z;
+
+    nx = tmp_in_nx;
+    ny = tmp_in_ny;
+    nz = tmp_in_nz;
+
+    u = tmp_in_u;
+    v = tmp_in_v;
+}
+
 bool Vertex::operator== (Vertex tmp_in_vertex)                    //Overload == so we can check for equality
 {
 

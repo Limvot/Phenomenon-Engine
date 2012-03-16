@@ -46,6 +46,7 @@ class Vertex           //Vertex class.
         Vertex();
         Vertex(float x,float y, float z, float nx, float ny, float nz, float u, float v);
         ~Vertex();
+        void set(float x, float y, float z, float nx, float ny, float nz, float u, float v);
         bool operator== (Vertex);
         Vertex operator+ (Vertex);
         Vertex operator- (Vertex);

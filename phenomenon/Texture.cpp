@@ -61,6 +61,33 @@ int Texture::load(string file_path)
 
     if (pixels != NULL)
     {
+        unsigned char pixel_move[n];                                                       //Flip our image to conform to OpenGL's bottom left coord system.
+        GLuint pixel_pos;
+        GLuint opposite_pixel_pos;
+
+        for (int x_pos = 0; x_pos < w; x_pos++)
+        {
+            for (int y_pos = 0; y_pos < (h/2); y_pos++)
+            {
+                pixel_pos = ((w*y_pos)+x_pos)*n;                                        //((w*y_pos)+x_pos)*n is equal to the specified pixel's position in the array (n is the number of components)
+                opposite_pixel_pos = ((w*(h-y_pos))+x_pos)*n;                           //((w*(h-y_pos))+x_pos)*n is equal to the specified pixel's vertical opposite
+
+                for (int i = 0; i < n; i++)
+                {
+                    pixel_move[i] = pixels[pixel_pos+i];                                //Get all pixel components and put them in our pixel_move array
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    pixels[pixel_pos+i] = pixels[opposite_pixel_pos+i];                 //Set all pixel components of our current location to all pixel components of our locations opposite
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    pixels[opposite_pixel_pos+i] = pixel_move[i];                      //Set all pixel components of the opposite to all pixel components of our pixel_move_array
+                }
+            }
+        }
         return_status = 0; //Texure creation sucessful
         //Create the texture
         glGenTextures(1, &texture_id[0]);

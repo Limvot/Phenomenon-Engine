@@ -92,7 +92,7 @@ StaticObject* ModelLoader::loadOBJ(string file_path, string name)
             if (out_vertex == out_vertices[j])
             {
                 found_match = true;
-                out_indices.push_back(j);
+                out_indices.push_back(j);                       //Found identicle vertex, so we just add its index to our indicies list and throw the new one away.
                 break;
             }
         }

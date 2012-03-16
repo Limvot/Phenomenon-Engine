@@ -29,10 +29,10 @@ int main(int argc, char* argv[])
 
     Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
     Node* rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
-    Node* childNode = new Triangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
-    Node* childNode2 = new Square("square");                    //Same with the Square class, but it draws a square.
-    Node* childNode3 = new Square("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
-    Node* logoNode = new Square("logo");
+    Node* childNode = createTriangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
+    Node* childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
+    Node* childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
+    Node* logoNode = createSquare("logo");
 
 
     ModelLoader model_loader;                                   //Our model-loading object
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
     loadedObject->setMaterial(monkey_material);
     Texture* monkey_texture = scene.newTexture("monkey");
-    monkey_texture->load("./data/MonkeyFace_flipped_safe.bmp");
+    monkey_texture->load("./data/MonkeyFace.bmp");
     monkey_material->setTexture(monkey_texture);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)

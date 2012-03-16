@@ -46,6 +46,8 @@
 		</Unit>
 		<Unit filename="extern/stb_image.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="phenomenon/BasicShapes.cpp" />
+		<Unit filename="phenomenon/BasicShapes.h" />
 		<Unit filename="phenomenon/Camera.cpp" />
 		<Unit filename="phenomenon/Camera.h" />
 		<Unit filename="phenomenon/DataTypes.cpp" />
@@ -64,14 +66,10 @@
 		<Unit filename="phenomenon/Render.h" />
 		<Unit filename="phenomenon/Scene.cpp" />
 		<Unit filename="phenomenon/Scene.h" />
-		<Unit filename="phenomenon/Square.cpp" />
-		<Unit filename="phenomenon/Square.h" />
 		<Unit filename="phenomenon/StaticObject.cpp" />
 		<Unit filename="phenomenon/StaticObject.h" />
 		<Unit filename="phenomenon/Texture.cpp" />
 		<Unit filename="phenomenon/Texture.h" />
-		<Unit filename="phenomenon/Triangle.cpp" />
-		<Unit filename="phenomenon/Triangle.h" />
 		<Unit filename="phenomenon/Window.cpp" />
 		<Unit filename="phenomenon/Window.h" />
 		<Extensions>
