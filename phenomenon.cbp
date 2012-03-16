@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wextra" />
+					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add directory="src" />
 				</Compiler>
@@ -23,7 +24,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O3" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,7 +32,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-g" />
 			<Add option="-fexceptions" />
 			<Add directory="/usr/include/SDL" />
 		</Compiler>

@@ -173,9 +173,9 @@ Vertex::Vertex(float tmp_in_x, float tmp_in_y, float tmp_in_z, float tmp_in_nx, 
     y = tmp_in_y;
     z = tmp_in_z;
 
-    nx = tmp_in_x;
-    ny = tmp_in_y;
-    nz = tmp_in_z;
+    nx = tmp_in_nx;
+    ny = tmp_in_ny;
+    nz = tmp_in_nz;
 
     u = tmp_in_u;
     v = tmp_in_v;

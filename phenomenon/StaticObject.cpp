@@ -40,6 +40,7 @@ int StaticObject::createVBO(GLuint numVertices, Vertex* Vertices)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, (sizeof(Vertex)*numVertices), Vertices, GL_STATIC_DRAW);              //Note that the third parameter is the size of what we're copying, which is found with
                                                                                                         //the size of one vertex (sizeof(Vertex)) times the number of vertices (numVertices)
+    return 0;
 }
 
 int StaticObject::createIBO(GLuint numIndicesIn, GLuint* Indices)
@@ -55,6 +56,8 @@ int StaticObject::createIBO(GLuint numIndicesIn, GLuint* Indices)
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, (sizeof(GLuint)*numIndices), Indices, GL_STATIC_DRAW);
+
+    return 0;
 }
 
 int StaticObject::draw()
