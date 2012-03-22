@@ -187,6 +187,13 @@ int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
     return 0;
 }
 
+int Node::setLocalScale(Vector set_scale)
+{
+    localScale = set_scale;
+
+    return 0;
+}
+
 Vector Node::getLocalScale()
 {
     return localScale;
@@ -211,6 +218,13 @@ int Node::setLocalRotation(float tmp_x_rot, float tmp_y_rot, float tmp_z_rot)
     localRotation.x = tmp_x_rot;
     localRotation.y = tmp_y_rot;
     localRotation.z = tmp_z_rot;
+
+    return 0;
+}
+
+int Node::setLocalRotation(Vector set_rotation)
+{
+    localRotation = set_rotation;
 
     return 0;
 }

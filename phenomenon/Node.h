@@ -31,16 +31,22 @@ class Node
         int deleteChild(string);
 
         virtual int draw();
-        Vector getLocalPosition();
-        Vector getGlobalPosition();
+
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vector);
+        Vector getLocalPosition();
+        Vector getGlobalPosition();
+
         int setLocalScale(float,float,float);
+        int setLocalScale(Vector);
         Vector getLocalScale();
         Vector getGlobalScale();
+
         int setLocalRotation(float,float,float);
+        int setLocalRotation(Vector);
         Vector getLocalRotation();
         Vector getGlobalRotation();
+
         int increaseLocalPosition(float,float,float);
         int increaseLocalScale(float,float,float);
         int increaseLocalRotation(float,float,float);
