@@ -7,7 +7,7 @@ This is important, as the engine uses it to handle window resize and window loss
 */
 
 #include <iostream>
-#include "phenomenon/Phenomenon.h"
+#include "../phenomenon/Phenomenon.h"
 
 using namespace std;
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 
     ModelLoader model_loader;                                   //Our model-loading object
-    Node* loadedObject = model_loader.loadOBJ("./data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
+    Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
     if (loadedObject == NULL)                                                          //Quit if the load failed.
     {
         cout << "Problem loading the demonstration .obj file, will now quit.\n";
@@ -70,12 +70,12 @@ int main(int argc, char* argv[])
 
     logoNode->setMaterial(logo_material);                       //Set this square to use the logo material
     Texture* logo_texture = scene.newTexture("logo_texture");   //Create a Texture object named logo_texture
-    logo_texture->load("./data/phenomenon.bmp");                //Load the phenomenon.bmp image
+    logo_texture->load("../data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
     loadedObject->setMaterial(monkey_material);
     Texture* monkey_texture = scene.newTexture("monkey");
-    monkey_texture->load("./data/MonkeyFace.bmp");
+    monkey_texture->load("../data/MonkeyFace.bmp");
     monkey_material->setTexture(monkey_texture);
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
 
                     case SDLK_j:
                         window.initGL();
-                        logo_texture->load("./data/phenomenon.bmp");
+                        logo_texture->load("../data/phenomenon.bmp");
                         scene.enableLighting();
                         cout << "j key pressed, ran workarounds\n";
 
