@@ -84,6 +84,8 @@ int StaticObject::draw()
         glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, material->specularHardness);
 
         material->bindTexture();                                                                        //Bind the material texture, if there is one.
+        if (material->material_shader != NULL)                                                          //Enable the material shader, if there is one.
+            material->material_shader->enableShader();
     }
 
 //BEGIN INDEXED VBO DRAW
@@ -135,6 +137,9 @@ int StaticObject::draw()
     //End OpenGL >2.1
     #endif
 //END INDEXED VBO DRAW
+
+    if(material->material_shader != NULL)
+        material->material_shader->disableShader();                                                     //Disable our shader, if there is one.
 
     glPopMatrix();                                                                                      //Return to state before object's translations, rotations, scale.
 

@@ -10,6 +10,7 @@
 #include <string>
 
 #include "Texture.h"        //For textured materials
+#include "Shader.h"         //For materials with shaders
 
 using namespace std;
 
@@ -20,17 +21,19 @@ class Material
         Material(string tmp_name);
         virtual ~Material();
 
-        int setDiffuse(float,float,float);
-        int setSpecular(float,float,float);
-        int setSpecularHardness(float);
-        int setTexture(Texture*);
+        int setDiffuse(float r, float g, float b);
+        int setSpecular(float r, float g,float b);
+        int setSpecularHardness(float hardness);
+        int setTexture(Texture* set_tex);
         int bindTexture();
+        int setShader(Shader* set_shader);
 
         string name;
         GLfloat diffuse[3];    //Material settings
         GLfloat specular[3];
         GLfloat specularHardness[1];
         Texture* material_texture;
+        Shader* material_shader;
 
     protected:
     private:

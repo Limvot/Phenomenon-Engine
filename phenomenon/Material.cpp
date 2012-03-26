@@ -4,6 +4,7 @@ Material::Material()
 {
     name = "no_name";
     material_texture = NULL;
+    material_shader = NULL;
 
     diffuse[0] = 1.0f;
     diffuse[1] = 1.0f;
@@ -21,6 +22,7 @@ Material::Material(string tmp_name)
 {
     name = tmp_name;
     material_texture = NULL;
+    material_shader = NULL;
 
     diffuse[0] = 1.0f;
     diffuse[1] = 1.0f;
@@ -78,5 +80,11 @@ int Material::bindTexture()
         return 0;
     }
     glBindTexture(GL_TEXTURE_2D, 0);
+    return 0;
+}
+
+int Material::setShader(Shader* set_shader)
+{
+    material_shader = set_shader;
     return 0;
 }

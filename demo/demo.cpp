@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
     Node* childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Node* logoNode = createSquare("logo");
+    Node* shaded_node = createTriangle("shaded_triangle");
 
 
     ModelLoader model_loader;                                   //Our model-loading object
@@ -55,6 +56,7 @@ int main(int argc, char* argv[])
     Material* blue_material = scene.newMaterial("blue");
     Material* logo_material = scene.newMaterial("logo");
     Material* monkey_material = scene.newMaterial("monkey");
+    Material* shaded_material = scene.newMaterial("shaded_material");
 
     childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
     red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
@@ -78,6 +80,13 @@ int main(int argc, char* argv[])
     monkey_texture->load("../data/MonkeyFace.bmp");
     monkey_material->setTexture(monkey_texture);
 
+    shaded_node->setMaterial(shaded_material);
+    Shader* basic_shader = new Shader("basic_shader");
+    //basic_shader.createShaderProgram("./data/sample_shader.vert", "./data/sample_shader.frag");
+    basic_shader->createShaderProgram("../data/sample_shader.frag");
+    shaded_material->setShader(basic_shader);
+
+
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
     lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
 
@@ -87,10 +96,10 @@ int main(int argc, char* argv[])
     rootNode->addChild(childNode);                              //You should add most nodes to your root node so that everything gets deleted properly on exit.
     rootNode->addChild(childNode2);                             //You can also assign a child to a new parent at will, the child will automatically remove itself from its previous parent's index.
     childNode2->addChild(childNode3);
-
     rootNode->addChild(loadedObject);
-
     rootNode->addChild(logoNode);
+    rootNode->addChild(shaded_node);
+
     camera.addChild(dynamic_cast<Node*>(lightNode2));           //Attach lightNode2 to the camera.
                                                                 //On creation, lights are automatically added as children of the root node by the scene object, so you don't have to assign them manually.
                                                                 //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
