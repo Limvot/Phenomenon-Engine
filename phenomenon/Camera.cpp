@@ -1,11 +1,13 @@
 #include "Camera.h"
 
+namespace phen {
+
 Camera::Camera()
 {
     name = "camera";
 }
 
-Camera::Camera(string tmp_name)                 //Please note that the Square inherets the Node class, and all of its node releated functions.
+Camera::Camera(std::string tmp_name)                 //Please note that the Square inherets the Node class, and all of its node releated functions.
 {
     name = tmp_name;                            //Rest of init is taken care of by the Node constructor
 }
@@ -92,3 +94,5 @@ int Camera::goRight(float movement_ammount)
 
     return 0;
 }
+
+} //End Namespace

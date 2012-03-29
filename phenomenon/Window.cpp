@@ -1,5 +1,6 @@
 #include "Window.h"
 
+namespace phen {
 
 Window::Window() {
 //Constructor
@@ -25,7 +26,7 @@ int Window::create(int width, int height, int inputBPP)
 
     if (SDL_Init( SDL_INIT_VIDEO) < 0)
     {
-        cout<< "SDL video init failed: " << SDL_GetError() << endl;
+        std::cout<< "SDL video init failed: " << SDL_GetError() << "\n";
         delete this;
     }
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);        //Set up double buffering
@@ -34,13 +35,13 @@ int Window::create(int width, int height, int inputBPP)
 
     if (!surface)               //Make sure we have a surface
     {
-        cout << "SDL surface set video mode failed: " << SDL_GetError() << endl;
+        std::cout << "SDL surface set video mode failed: " << SDL_GetError() << "\n";
         delete this;
     }
 
     if (initGL() == false)      //Init OpenGL
     {
-        cout << "OpenGL initilazation failed" << endl;
+        std::cout << "OpenGL initilazation failed" << "\n";
         delete this;
     }
 
@@ -49,9 +50,9 @@ int Window::create(int width, int height, int inputBPP)
     GLenum error = glewInit();         //Init GLEW so we can use OpenGL extensions
     if (error != GLEW_OK)
     {
-        cout << "GLEW could not init: " << glewGetErrorString(error) << "\n";
+        std::cout << "GLEW could not init: " << glewGetErrorString(error) << "\n";
     } else {
-        cout << "GLEW init sucessful\n";
+        std::cout << "GLEW init sucessful\n";
     }
 
 
@@ -71,7 +72,7 @@ int Window::getSDLVideoFlags()
 
     if (!videoInfo)
     {
-        cout << "SDL video info query failed: " << SDL_GetError() << endl;
+        std::cout << "SDL video info query failed: " << SDL_GetError() << "\n";
         delete this;
     }
 
@@ -100,7 +101,7 @@ int Window::resize(int width, int height, int bpp, int videoFlags) {
 
     if (!surface)                                                 //Make sure we still have a surface
     {
-        cout << "Could not get a surface after resize: " << SDL_GetError();
+        std::cout << "Could not get a surface after resize: " << SDL_GetError() << "\n";
         delete this;
     }
 
@@ -194,8 +195,10 @@ int Window::toggleFullScreen()
     return 0;
 }
 
-int Window::setCaption(string caption)
+int Window::setCaption(std::string caption)
 {
     SDL_WM_SetCaption(caption.c_str(), caption.c_str());
     return 0;
 }
+
+} //End Namespace

@@ -15,20 +15,20 @@
 #include "DataTypes.h"      //Also includes ExpandableArray.h
 #include "Material.h"
 
-using std::string;
+namespace phen {
 
 class Node
 {
     public:
         Node();
-        Node(string tmp_name);
+        Node(std::string tmp_name);
         virtual ~Node();
         int setParent(Node*);
         int addChild(Node*);
 
-        Node* findChild(string);
-        int removeChild(string);
-        int deleteChild(string);
+        Node* findChild(std::string);
+        int removeChild(std::string);
+        int deleteChild(std::string);
 
         virtual int draw();
 
@@ -53,7 +53,7 @@ class Node
 
         int setMaterial(Material*);
 
-        string name;
+        std::string name;
         Material* material;
 
     protected:
@@ -68,5 +68,7 @@ class Node
     Vector localRotation;
     Vector globalRotation;
 };
+
+}   //End namespace
 
 #endif // NODE_H

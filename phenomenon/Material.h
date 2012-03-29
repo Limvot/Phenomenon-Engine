@@ -12,13 +12,13 @@
 #include "Texture.h"        //For textured materials
 #include "Shader.h"         //For materials with shaders
 
-using namespace std;
+namespace phen {
 
 class Material
 {
     public:
         Material();
-        Material(string tmp_name);
+        Material(std::string tmp_name);
         virtual ~Material();
 
         int setDiffuse(float r, float g, float b);
@@ -28,7 +28,7 @@ class Material
         int bindTexture();
         int setShader(Shader* set_shader);
 
-        string name;
+        std::string name;
         GLfloat diffuse[3];    //Material settings
         GLfloat specular[3];
         GLfloat specularHardness[1];
@@ -38,5 +38,7 @@ class Material
     protected:
     private:
 };
+
+} //End Namespace
 
 #endif // MATERIAL_H

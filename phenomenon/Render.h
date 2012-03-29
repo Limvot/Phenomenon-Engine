@@ -14,7 +14,7 @@
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h
 
-using std::string;
+namespace phen {
 
 class Render
 {
@@ -25,5 +25,7 @@ class Render
 
     protected:
 };
+
+} //End Namespace
 
 #endif // RENDER_H

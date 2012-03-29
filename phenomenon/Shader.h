@@ -10,6 +10,8 @@
 #include <string>
 #include <cstring>
 
+namespace phen {
+
 class Shader
 {
     public:
@@ -31,5 +33,7 @@ class Shader
 
     private:
 };
+
+} //End Namespace
 
 #endif // SHADER_H

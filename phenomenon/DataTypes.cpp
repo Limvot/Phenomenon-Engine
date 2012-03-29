@@ -1,5 +1,7 @@
 #include "DataTypes.h"
 
+namespace phen {
+
 Vector::Vector()                                                    //If no arguments, init to 0
 {
     x = 0;
@@ -270,3 +272,5 @@ Vertex Vertex::operator* (Vertex tmp_in_vertex)
 
     return (tmp_return);
 }
+
+} //End Namespace

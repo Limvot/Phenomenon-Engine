@@ -1,5 +1,7 @@
 #include "Material.h"
 
+namespace phen {
+
 Material::Material()
 {
     name = "no_name";
@@ -18,7 +20,7 @@ Material::Material()
     specularHardness[0] = 128.0f;
 }
 
-Material::Material(string tmp_name)
+Material::Material(std::string tmp_name)
 {
     name = tmp_name;
     material_texture = NULL;
@@ -88,3 +90,5 @@ int Material::setShader(Shader* set_shader)
     material_shader = set_shader;
     return 0;
 }
+
+} //End Namespace

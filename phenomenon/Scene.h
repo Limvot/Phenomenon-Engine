@@ -16,7 +16,7 @@
 #include "Texture.h"
 #include "DataTypes.h"      //Also includes ExpandableArray.h
 
-using std::string;
+namespace phen {
 
 class Scene
 {
@@ -25,19 +25,19 @@ class Scene
         virtual ~Scene();
         int render();
         Node* getRootNode();
-        Light* newLight(string light_name);
-        Light* findLight(string light_name);
-        int deleteLight(string light_name);
+        Light* newLight(std::string light_name);
+        Light* findLight(std::string light_name);
+        int deleteLight(std::string light_name);
         int enableLighting();
         int disableLighting();
 
-        Material* newMaterial(string mat_name);
-        Material* findMaterial(string mat_name);
-        int deleteMaterial(string mat_name);
+        Material* newMaterial(std::string mat_name);
+        Material* findMaterial(std::string mat_name);
+        int deleteMaterial(std::string mat_name);
 
-        Texture* newTexture(string tex_name);
-        Texture* findTexture(string tex_name);
-        int deleteTexture(string tex_name);
+        Texture* newTexture(std::string tex_name);
+        Texture* findTexture(std::string tex_name);
+        int deleteTexture(std::string tex_name);
 
     protected:
     private:
@@ -54,5 +54,7 @@ class Scene
         ExpandableArray<Texture*> TextureArray;
         int numTextures;
 };
+
+} //End Namespace
 
 #endif // SCENE_H

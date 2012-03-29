@@ -3,6 +3,8 @@
 
 #include "ExpandableArray.h"    //Include the ExpandableArray class template, which has to be in one file. Because of this, it gets its own file.
 
+namespace phen {
+
 class Vector           //Simple vector class.
 {
     public:
@@ -55,4 +57,7 @@ class Vertex           //Vertex class.
         float nx,ny, nz;
         float u, v;
 };
+
+} //End Namespace
+
 #endif // DATATYPES_H

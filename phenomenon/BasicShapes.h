@@ -4,7 +4,11 @@
 #include "StaticObject.h"
 #include "DataTypes.h"
 
-StaticObject* createTriangle(string name);
-StaticObject* createSquare(string name);
+namespace phen {
+
+StaticObject* createTriangle(std::string name);
+StaticObject* createSquare(std::string name);
+
+} //End Namespace
 
 #endif // BASIC_SHAPES_H

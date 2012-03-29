@@ -1,5 +1,7 @@
 #include "Node.h"
 
+namespace phen {
+
 Node::Node()
 {
     //Don't call this. Nodes need unique names. Note that this is called by objects that inherit this class, but they re-assign the name.
@@ -25,7 +27,7 @@ Node::Node()
     globalScale.z = 1;
 }
 
-Node::Node(string tmp_name)
+Node::Node(std::string tmp_name)
 {
     name = tmp_name;
     parent = NULL;
@@ -73,7 +75,7 @@ int Node::setParent(Node* tempParent)
     return 0;
 }
 
-Node* Node::findChild(string child_name)
+Node* Node::findChild(std::string child_name)
 {
     if (numChildren > 0)                                                                    //Only search if we have children
     {
@@ -93,7 +95,7 @@ Node* Node::findChild(string child_name)
 }
 
 
-int Node::removeChild(string child_name)
+int Node::removeChild(std::string child_name)
 {
     for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
     {
@@ -116,7 +118,7 @@ int Node::addChild(Node* newChild)
     return 0;
 }
 
-int Node::deleteChild(string child_name)
+int Node::deleteChild(std::string child_name)
 {
     for (int i = 0; i < numChildren; i++)                           //Iterate through our children to find the child named
     {
@@ -297,5 +299,5 @@ int Node::setMaterial(Material* tmp_mat)
     return 0;
 }
 
-
+} //End Namespace
 

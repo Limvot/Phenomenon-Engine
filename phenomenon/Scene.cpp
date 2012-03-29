@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+namespace phen {
+
 Scene::Scene()
 {
     numLights = 0;
@@ -68,7 +70,7 @@ Node* Scene::getRootNode()
     return &rootNode;
 }
 
-Light* Scene::newLight(string light_name)
+Light* Scene::newLight(std::string light_name)
 {
     if (numLights >= 8)
         return NULL;                                        //We can't have more than 8 OpenGL lights
@@ -80,7 +82,7 @@ Light* Scene::newLight(string light_name)
     return tmp_light;
 }
 
-Light* Scene::findLight(string light_name)
+Light* Scene::findLight(std::string light_name)
 {
     if (numLights > 0)
     {
@@ -96,7 +98,7 @@ Light* Scene::findLight(string light_name)
     return NULL;       //We have no lights, return NULL
 }
 
-int Scene::deleteLight(string light_name)
+int Scene::deleteLight(std::string light_name)
 {
     if (numLights > 0)
     {
@@ -127,7 +129,7 @@ int Scene::disableLighting()
     return 0;
 }
 
-Material* Scene::newMaterial(string mat_name)
+Material* Scene::newMaterial(std::string mat_name)
 {
     Material* new_mat = new Material(mat_name);
     MaterialArray.addArrayMember(new_mat);
@@ -135,7 +137,7 @@ Material* Scene::newMaterial(string mat_name)
     return new_mat;
 }
 
-Material* Scene::findMaterial(string mat_name)
+Material* Scene::findMaterial(std::string mat_name)
 {
     if (numMaterials > 0)
     {
@@ -150,7 +152,7 @@ Material* Scene::findMaterial(string mat_name)
     return NULL;
 }
 
-int Scene::deleteMaterial(string mat_name)
+int Scene::deleteMaterial(std::string mat_name)
 {
     if (numMaterials > 0)
     {
@@ -169,7 +171,7 @@ int Scene::deleteMaterial(string mat_name)
 }
 
 
-Texture* Scene::newTexture(string tex_name)
+Texture* Scene::newTexture(std::string tex_name)
 {
     Texture* new_tex = new Texture(tex_name);
     TextureArray.addArrayMember(new_tex);
@@ -177,7 +179,7 @@ Texture* Scene::newTexture(string tex_name)
     return new_tex;
 }
 
-Texture* Scene::findTexture(string tex_name)
+Texture* Scene::findTexture(std::string tex_name)
 {
     if (numTextures > 0)
     {
@@ -192,7 +194,7 @@ Texture* Scene::findTexture(string tex_name)
     return NULL;
 }
 
-int Scene::deleteTexture(string tex_name)
+int Scene::deleteTexture(std::string tex_name)
 {
     if (numTextures > 0)
     {
@@ -209,4 +211,7 @@ int Scene::deleteTexture(string tex_name)
     }
     return 1;                   //No textures
 }
+
+} //End Namespace
+
 

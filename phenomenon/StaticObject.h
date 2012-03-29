@@ -4,11 +4,13 @@
 #include "Node.h"
 #include "DataTypes.h"
 
+namespace phen {
+
 class StaticObject: public Node
 {
     public:
-        StaticObject(string);
-        StaticObject(string, GLuint, Vertex*, GLuint, GLuint*);
+        StaticObject(std::string tmp_name);
+        StaticObject(std::string tmp_name, GLuint, Vertex*, GLuint, GLuint*);
         virtual ~StaticObject();
         int createVBO(GLuint, Vertex*);
         int createIBO(GLuint, GLuint*);
@@ -19,5 +21,7 @@ class StaticObject: public Node
         GLuint IBO;
         GLuint numIndices;
 };
+
+} //End Namespace
 
 #endif // STATICOBJECT_H

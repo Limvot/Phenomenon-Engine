@@ -4,10 +4,12 @@
 #include "Node.h"
 #include "DataTypes.h"
 
+namespace phen {
+
 class Light: public Node
 {
     public:
-        Light(string);
+        Light(std::string);
         virtual ~Light();
         int draw();
         int setAmbient(float,float,float);
@@ -19,5 +21,7 @@ class Light: public Node
     protected:
     private:
 };
+
+} //End Namespace
 
 #endif // LIGHT_H

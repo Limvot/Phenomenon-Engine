@@ -1,6 +1,8 @@
 #include "StaticObject.h"
 
-StaticObject::StaticObject(string tmp_name)                                                             //Please note that the StaticObject inherets the Node class, and all of its node releated functions.
+namespace phen {
+
+StaticObject::StaticObject(std::string tmp_name)                                                             //Please note that the StaticObject inherets the Node class, and all of its node releated functions.
 {
     name = tmp_name;                                                                                    //Rest of init is taken care of by the Node constructor
     VBO = 0;
@@ -8,7 +10,7 @@ StaticObject::StaticObject(string tmp_name)                                     
     numIndices = 0;
 }
 
-StaticObject::StaticObject(string tmp_name, GLuint numVerticesIn, Vertex* VerticesIn, GLuint numIndicesIn, GLuint* IndicesIn)
+StaticObject::StaticObject(std::string tmp_name, GLuint numVerticesIn, Vertex* VerticesIn, GLuint numIndicesIn, GLuint* IndicesIn)
 {
     name = tmp_name;
     VBO = 0;
@@ -154,3 +156,6 @@ int StaticObject::draw()
 
     return 0;
 }
+
+} //End Namespace
+

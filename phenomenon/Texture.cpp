@@ -1,12 +1,14 @@
 #include "Texture.h"
 
+namespace phen {
+
 Texture::Texture()
 {
     name = "no_name";
     texture_id[0] = 0;
 }
 
-Texture::Texture(string tmp_name)
+Texture::Texture(std::string tmp_name)
 {
     name = tmp_name;
     texture_id[0] = 0;
@@ -27,7 +29,7 @@ int Texture::assignGLid(GLuint texture_id_in)               //Used if not using 
     return 0;
 }
 
-int Texture::load(string file_path)
+int Texture::load(std::string file_path)
 {
     int return_status = 1; //Return unsucessful if load doesn't suceed
 
@@ -109,3 +111,5 @@ int Texture::bind()
     glBindTexture(GL_TEXTURE_2D, texture_id[0]);
     return 0;
 }
+
+} //End Namespace

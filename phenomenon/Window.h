@@ -12,10 +12,7 @@
 #include "SDL.h"
 #include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 
-using namespace std;
-
-
-
+namespace phen {
 
 class Window {
 
@@ -33,7 +30,7 @@ public:
     int swapBuffers();
     int getSDLVideoFlags();
     int toggleFullScreen();
-    int setCaption(string);
+    int setCaption(std::string);
 
     SDL_Surface *surface;
     int bpp;
@@ -43,5 +40,7 @@ public:
     int videoFlags;
 
 };
+
+} //End Namespace
 
 #endif

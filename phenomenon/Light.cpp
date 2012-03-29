@@ -1,6 +1,8 @@
 #include "Light.h"
 
-Light::Light(string tmp_name)                                               //Please note that the Light inherets the Node class, and all of its node releated functions.
+namespace phen {
+
+Light::Light(std::string tmp_name)                                               //Please note that the Light inherets the Node class, and all of its node releated functions.
 {
 
     name = tmp_name;                                                        //Rest of init is taken care of by the Node constructor
@@ -52,3 +54,5 @@ int Light::setDiffuse(float r, float g, float b)
 
     return 0;
 }
+
+} //End Namespace

@@ -7,6 +7,8 @@
 #define NULL 0
 #endif //NULL
 
+namespace phen {
+
 ///////////////////////////
 //NOTE:
 ///////////////////////////
@@ -133,5 +135,7 @@ unsigned int ExpandableArray<T>::removeArrayEnd(unsigned int numToDelete)
 
         return 0;
 }
+
+} //End Namespace
 
 #endif // EXPANDABLEARRAY_H

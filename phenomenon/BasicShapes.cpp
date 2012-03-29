@@ -1,6 +1,8 @@
 #include "BasicShapes.h"
 
-StaticObject* createTriangle(string name)
+namespace phen {
+
+StaticObject* createTriangle(std::string name)
 {
     GLuint num_vertices = 3;
     Vertex vertices[3];
@@ -15,7 +17,7 @@ StaticObject* createTriangle(string name)
     return new StaticObject(name, num_vertices, vertices, num_indices, indices);            //Return a pointer to the new object
 }
 
-StaticObject* createSquare(string name)
+StaticObject* createSquare(std::string name)
 {
     GLuint num_vertices = 4;
     Vertex vertices[4];
@@ -30,3 +32,5 @@ StaticObject* createSquare(string name)
 
     return new StaticObject(name, num_vertices, vertices, num_indices, indices);            //Return a pointer to the new object
 }
+
+} //End Namespace

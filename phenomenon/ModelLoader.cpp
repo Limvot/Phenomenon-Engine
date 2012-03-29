@@ -1,5 +1,7 @@
 #include "ModelLoader.h"
 
+namespace phen {
+
 ModelLoader::ModelLoader()
 {
     numIndices = 0;
@@ -10,7 +12,7 @@ ModelLoader::~ModelLoader()
 
 }
 
-StaticObject* ModelLoader::loadOBJ(string file_path, string name)
+StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
 {
     std::vector<Vector> vertices;
     std::vector<Vector2f> uvs;
@@ -113,5 +115,5 @@ StaticObject* ModelLoader::loadOBJ(string file_path, string name)
     return loaded_obj;
 }
 
-
+} //End Namespace
 

@@ -12,23 +12,25 @@
 
 #include "../extern/stb_image.h"
 
-using namespace std;
+namespace phen {
 
 class Texture
 {
     public:
         Texture();
-        Texture(string tmp_name);
+        Texture(std::string tmp_name);
         virtual ~Texture();
 
         int assignGLid(GLuint);             //Used if not using the load function- the texture has already been loaded by user/library/some other part of phenomenon.
-        int load(string);
+        int load(std::string file_path);
         int bind();
 
-        string name;
+        std::string name;
         GLuint texture_id[1];
     protected:
     private:
 };
+
+} //End Namespace
 
 #endif // TEXTURE_H

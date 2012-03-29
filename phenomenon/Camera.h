@@ -11,11 +11,13 @@
 #define PI 3.141592654f
 #endif
 
+namespace phen {
+
 class Camera: public Node
 {
     public:
         Camera();
-        Camera(string);
+        Camera(std::string);
         //Destructor is inhereted
         int drawScene(Scene*);
         int rotate(float,float,float);
@@ -26,5 +28,7 @@ class Camera: public Node
     protected:
     private:
 };
+
+} //End Namespace
 
 #endif // CAMERA_H

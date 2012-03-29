@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+namespace phen {
+
 Shader::Shader()
 {
     name = "no_name";
@@ -108,3 +110,5 @@ GLuint Shader::getShader(std::string file_path, GLenum type)
     }
     return Shader;
 }
+
+} //End Namespace
