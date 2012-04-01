@@ -13,7 +13,9 @@ class Light: public Node
         virtual ~Light();
         int draw();
         int setAmbient(float,float,float);
+        int setAmbient(Color3f ambient_in);
         int setDiffuse(float,float,float);
+        int setDiffuse(Color3f diffuse_in);
 
         GLfloat LightAmbient[4];    //Light settings
         GLfloat LightDiffuse[4];

@@ -12,4 +12,5 @@
 #include "Texture.h"
 #include "ModelLoader.h"
 #include "Shader.h"
+#include "SceneLoader.h"
 

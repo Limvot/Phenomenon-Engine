@@ -46,11 +46,29 @@ int Light::setAmbient(float r, float g, float b)
     return 0;
 }
 
+int Light::setAmbient(Color3f ambient_in)
+{
+    LightAmbient[0] = ambient_in.r;
+    LightAmbient[1] = ambient_in.g;
+    LightAmbient[2] = ambient_in.b;
+
+    return 0;
+}
+
 int Light::setDiffuse(float r, float g, float b)
 {
     LightDiffuse[0] = r;
     LightDiffuse[1] = g;
     LightDiffuse[2] = b;
+
+    return 0;
+}
+
+int Light::setDiffuse(Color3f diffuse_in)
+{
+    LightDiffuse[0] = diffuse_in.r;
+    LightDiffuse[1] = diffuse_in.g;
+    LightDiffuse[2] = diffuse_in.b;
 
     return 0;
 }
