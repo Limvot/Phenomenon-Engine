@@ -52,6 +52,15 @@ int Material::setDiffuse(float r, float g, float b)
     return 0;
 }
 
+int Material::setDiffuse(Color3f* set_color)
+{
+    diffuse[0] = set_color->r;
+    diffuse[1] = set_color->g;
+    diffuse[2] = set_color->b;
+
+    return 0;
+}
+
 int Material::setSpecular(float r, float g, float b)
 {
     specular[0] = r;
@@ -60,6 +69,16 @@ int Material::setSpecular(float r, float g, float b)
 
     return 0;
 }
+
+int Material::setSpecular(Color3f* set_color)
+{
+    specular[0] = set_color->r;
+    specular[1] = set_color->g;
+    specular[2] = set_color->b;
+
+    return 0;
+}
+
 
 int Material::setSpecularHardness(float hardness)
 {

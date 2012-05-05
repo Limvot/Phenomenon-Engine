@@ -2,9 +2,9 @@
 
 namespace phen {
 
-Window::Window() {
+Window::Window()
+{
 //Constructor
-
 }
 
 Window::~Window() {

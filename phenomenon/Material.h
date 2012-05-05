@@ -9,6 +9,7 @@
 #include "stdlib.h"
 #include <string>
 
+#include "DataTypes.h"      //For Color3f
 #include "Texture.h"        //For textured materials
 #include "Shader.h"         //For materials with shaders
 
@@ -22,7 +23,9 @@ class Material
         virtual ~Material();
 
         int setDiffuse(float r, float g, float b);
+        int setDiffuse(Color3f* set_color);
         int setSpecular(float r, float g,float b);
+        int setSpecular(Color3f* set_color);
         int setSpecularHardness(float hardness);
         int setTexture(Texture* set_tex);
         int bindTexture();

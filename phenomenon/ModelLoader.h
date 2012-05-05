@@ -9,6 +9,7 @@
 
 #include "DataTypes.h"
 #include "StaticObject.h"
+#include "Scene.h"
 
 namespace phen {
 
@@ -16,11 +17,15 @@ class ModelLoader
 {
     public:
         ModelLoader();
+        ModelLoader(Scene* set_scene);
         virtual ~ModelLoader();
-        StaticObject* loadOBJ(std::string, std::string);
+        int setScene(Scene* set_scene);
+        int loadMTL(std::string file_path);
+        StaticObject* loadOBJ(std::string file_path, std::string name);
 
     protected:
     private:
+        Scene* current_scene;
         GLuint numIndices;
 };
 

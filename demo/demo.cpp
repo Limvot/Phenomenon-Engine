@@ -10,6 +10,7 @@ This is important, as the engine uses it to handle window resize and window loss
 #include "../phenomenon/Phenomenon.h"
 
 using namespace std;
+using namespace phen;
 
 int main(int argc, char* argv[])
 {
