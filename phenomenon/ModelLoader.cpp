@@ -94,11 +94,17 @@ int ModelLoader::loadMTL(std::string file_path)
             if (loading_tex == NULL)
             {
                 loading_tex = current_scene->newTexture(texture_file_path);
-                loading_tex->load(texture_file_path);
+                if (texture_file_path[0] == '/' || !(file_path.find("/")))                      //If the texture_file_path is absolute, or if file_path only contains the name of the current file, meaning it resides in the local directory, then load texture_file_path.
+                {
+                    loading_tex->load(texture_file_path);
+                } else {
+                    loading_tex->load(findBasePath(file_path) + '/' + texture_file_path);       //If not the above, figure out the base path for the current file, and add the texture_file_path on top of that.
+                }
             }
             loading_mat->setTexture(loading_tex);
         }
     }
+    return 0;
 }
 
 StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
@@ -135,7 +141,15 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
         {
             fscanf(obj_file, "%s\n", valueBuffer);
             value_string = valueBuffer;
-            loadMTL(value_string);
+
+            if (value_string[0] == '/' || (file_path.find("/") == std::string::npos))                      //If the value_string is absolute, or if file_path only contains the name of the current file, meaning it resides in the local directory, then load value_string.
+            {
+                std::cout << "loading mtl with just value_string.\n";
+                loadMTL(value_string);
+            } else {
+                std::cout << "loading mtl with found base path.\n";
+                loadMTL(findBasePath(file_path) + '/' + value_string);                  //If not the above, figure out the base path for the current file, and add the value_string on top of that.
+            }
         }
 
         if (strcmp(lineHeader, "usemtl") == 0)
@@ -228,6 +242,18 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
     if (tmp_mat != NULL)
         loaded_obj->setMaterial(tmp_mat);
     return loaded_obj;
+}
+
+std::string ModelLoader::findBasePath(std::string file_path)
+{
+    std::string base_path = "";
+
+    if (file_path.rfind('/') != std::string::npos)
+    {
+        base_path = file_path.substr(0, file_path.rfind('/'));
+        std::cout << "file_path was " << file_path << " and the found base path is " << base_path << ".\n";
+    }
+    return base_path;
 }
 
 } //End Namespace

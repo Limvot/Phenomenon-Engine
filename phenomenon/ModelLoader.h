@@ -22,6 +22,7 @@ class ModelLoader
         int setScene(Scene* set_scene);
         int loadMTL(std::string file_path);
         StaticObject* loadOBJ(std::string file_path, std::string name);
+        std::string findBasePath(std::string file_path);
 
     protected:
     private:
