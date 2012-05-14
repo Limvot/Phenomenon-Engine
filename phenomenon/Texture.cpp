@@ -34,7 +34,12 @@ int Texture::load(std::string file_path)
     int return_status = 1; //Return unsucessful if load doesn't suceed
 
     int w, h, n;            //x, y, and components data from load
+
+    std::cout << "about to load image with stbi\n";
+
     unsigned char *pixels = stbi_load(file_path.c_str(), &w, &h, &n, 0);    //Load the image
+
+    std::cout << "loaded image sucessfully, will now attempt flip\n";
 
     GLenum pixel_format;
     switch (n)                                      //Give OpenGL the same format that is loaded
@@ -64,32 +69,41 @@ int Texture::load(std::string file_path)
     if (pixels != NULL)
     {
         unsigned char pixel_move[n];                                                       //Flip our image to conform to OpenGL's bottom left coord system.
-        GLuint pixel_pos;
-        GLuint opposite_pixel_pos;
+        GLuint pixel_pos = 0;
+        GLuint opposite_pixel_pos = 0;
+        GLuint maximum_index = (h*w*n);
+        std::cout << "Total number of slots in the array should be: " << maximum_index << ".\n";
 
-        for (int x_pos = 0; x_pos < w; x_pos++)
+        for (GLint x_pos = 0; x_pos < w; x_pos += 1)
         {
-            for (int y_pos = 0; y_pos < (h/2); y_pos++)
+            for (GLint y_pos = 0; y_pos < (h/2); y_pos += 1)
             {
                 pixel_pos = ((w*y_pos)+x_pos)*n;                                        //((w*y_pos)+x_pos)*n is equal to the specified pixel's position in the array (n is the number of components)
-                opposite_pixel_pos = ((w*(h-y_pos))+x_pos)*n;                           //((w*(h-y_pos))+x_pos)*n is equal to the specified pixel's vertical opposite
+                opposite_pixel_pos = ((w*((h-1)-y_pos))+x_pos)*n;                           //((w*(h-y_pos))+x_pos)*n is equal to the specified pixel's vertical opposite
 
-                for (int i = 0; i < n; i++)
+                if (opposite_pixel_pos > (maximum_index-n))
+                {
+                    std::cout << "Tried to access opposite_pixel_pos: " << opposite_pixel_pos << " out of a maximum of " << maximum_index << " which would cause an error later.\n";
+                    opposite_pixel_pos = (maximum_index-n);
+                }
+
+                for (GLint i = 0; i < n; i += 1)
                 {
                     pixel_move[i] = pixels[pixel_pos+i];                                //Get all pixel components and put them in our pixel_move array
                 }
 
-                for (int i = 0; i < n; i++)
+                for (GLint i = 0; i < n; i += 1)
                 {
                     pixels[pixel_pos+i] = pixels[opposite_pixel_pos+i];                 //Set all pixel components of our current location to all pixel components of our locations opposite
                 }
 
-                for (int i = 0; i < n; i++)
+                for (GLint i = 0; i < n; i += 1)
                 {
                     pixels[opposite_pixel_pos+i] = pixel_move[i];                      //Set all pixel components of the opposite to all pixel components of our pixel_move_array
                 }
             }
         }
+
         return_status = 0; //Texure creation sucessful
         //Create the texture
         glGenTextures(1, &texture_id[0]);
@@ -100,6 +114,11 @@ int Texture::load(std::string file_path)
         //Texture filtering
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        std::cout << "freeing pixels\n";
+        stbi_image_free(pixels);
+        pixels = NULL;
+        std::cout << "freed pixels\n";
     } else {std::cout << "Texture load of " << file_path << " failed.\n";}
 
     return return_status;

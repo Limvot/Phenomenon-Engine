@@ -21,13 +21,17 @@ class ModelLoader
         virtual ~ModelLoader();
         int setScene(Scene* set_scene);
         int loadMTL(std::string file_path);
-        StaticObject* loadOBJ(std::string file_path, std::string name);
+        Node* loadOBJ(std::string file_path, std::string name);
+        int loadOBJpart(FILE* file_path, std::string name, Node* loaded_obj_group);
         std::string findBasePath(std::string file_path);
 
     protected:
     private:
         Scene* current_scene;
         GLuint numIndices;
+        std::vector<Vector> vertices;
+        std::vector<Vector2f> uvs;
+        std::vector<Vector> normals;
 };
 
 } //End Namespace

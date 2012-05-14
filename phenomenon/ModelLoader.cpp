@@ -38,8 +38,8 @@ int ModelLoader::loadMTL(std::string file_path)
 
     Material* loading_mat = NULL;
     Texture* loading_tex = NULL;
-    char lineHeader[512];                   //Assuming words of only 512 chars is silly, but this is a very limited loader
-    char valueBuffer[512];                   //Ditto
+    char lineHeader[8192];                   //Assuming words of only 512 chars is silly, but this is a very limited loader
+    char valueBuffer[8192];                   //Ditto
     std::string loading_mat_name;
     std::string texture_file_path;
     float set_specular_intensity;
@@ -96,26 +96,22 @@ int ModelLoader::loadMTL(std::string file_path)
                 loading_tex = current_scene->newTexture(texture_file_path);
                 if (texture_file_path[0] == '/' || !(file_path.find("/")))                      //If the texture_file_path is absolute, or if file_path only contains the name of the current file, meaning it resides in the local directory, then load texture_file_path.
                 {
+                    std::cout << "loading Texture from " << texture_file_path << "\n";
                     loading_tex->load(texture_file_path);
                 } else {
+                    std::cout << "loading Texture from " << (findBasePath(file_path) + '/' + texture_file_path) << "\n";
                     loading_tex->load(findBasePath(file_path) + '/' + texture_file_path);       //If not the above, figure out the base path for the current file, and add the texture_file_path on top of that.
                 }
             }
             loading_mat->setTexture(loading_tex);
         }
     }
+    fclose(mtl_file);
     return 0;
 }
 
-StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
+Node* ModelLoader::loadOBJ(std::string file_path, std::string name)
 {
-    std::vector<Vector> vertices;
-    std::vector<Vector2f> uvs;
-    std::vector<Vector> normals;
-    std::vector<GLuint> vertices_indices, uv_indices, normal_indices;
-    std::vector<Vertex> out_vertices;
-    std::vector<GLuint> out_indices;
-
     FILE * obj_file = fopen(file_path.c_str(), "r");
     if (obj_file == NULL)
     {
@@ -123,13 +119,12 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
         return false;
     }
 
+    Node* loaded_obj_group = new Node(name);    //Our group node that all loaded objects will be made a child of.
 
-
-        char lineHeader[128];                   //Assuming words are less than 128 chars, which is pretty bad
-        char valueBuffer[512];                  //Ditto, even more so with file paths.
-        Material* tmp_mat = NULL;
-        std::string value_string;
-        int res;
+    char lineHeader[8192];                       //We're only looking for 'o', so 128 chars is fine.
+    char valueBuffer[8192];                      //Assuming that object names are less than 512 characters, which could be better.
+    std::string value_string;
+    int res;
 
     while (1)
     {
@@ -152,8 +147,61 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
             }
         }
 
+        if (strcmp(lineHeader, "o") == 0)
+        {
+            fscanf(obj_file, "%s\n", valueBuffer);
+            value_string = valueBuffer;
+            loadOBJpart(obj_file, value_string, loaded_obj_group);                  //loadOBJpart takes the current .obj file, the name of the object to be created, and the node that serves as the group of the loaded objs. It will attatch the new object, named, to the group.
+
+        }
+    }
+    fclose(obj_file);
+    return loaded_obj_group;                    //Return our group node with all our loaded objects as children.
+}
+
+int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_group)
+{
+
+    uint face_count = 0;
+
+    std::vector<GLuint> vertices_indices, uv_indices, normal_indices;
+    std::vector<Vertex> out_vertices;
+    std::vector<GLuint> out_indices;
+
+
+    char lineHeader[8192];                   //Assuming words are less than 128 chars, which is pretty bad
+    char valueBuffer[8192];                  //Ditto, even more so with file paths.
+    Material* tmp_mat = NULL;
+    std::string value_string;
+    int res;
+
+    std::string next_name;
+    bool next_obj_exists = false;
+
+    while (1)
+    {
+        //std::cout << "About to fscanf inside of loadOBJpart\n";
+        //std::cout << "lineHeader is equal to " << lineHeader << "\n";
+        res = fscanf(obj_file, "%s", lineHeader);
+        //std::cout << "lineHeader is now equal to " << lineHeader << ", res is equal to " << res << "\n";
+        if (res == EOF)
+        {
+            std::cout << "found EOF, breaking\n";
+            break;
+        }
+
+        if (strcmp(lineHeader, "o") == 0)
+        {
+            std::cout << "Found new object, ending this obj.\n";
+            fscanf(obj_file, "%s\n", valueBuffer);
+            next_name = valueBuffer;
+            next_obj_exists = true;
+            break;
+        }
+
         if (strcmp(lineHeader, "usemtl") == 0)
         {
+            std::cout << "Found usemtl, trying to use indicated material.\n";
             fscanf(obj_file, "%s\n", valueBuffer);
             value_string = valueBuffer;
             tmp_mat = current_scene->findMaterial(value_string);
@@ -165,6 +213,7 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
 
         if (strcmp(lineHeader, "v") == 0)
         {
+            //std::cout << "found v, adding vertex placement information.\n";
             Vector vertex;
             fscanf(obj_file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
             vertices.push_back(vertex);
@@ -172,6 +221,7 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
 
         if (strcmp(lineHeader, "vt") == 0)
         {
+            //std::cout << "found vt, adding tex coord information.\n";
             Vector2f uv;
             fscanf(obj_file, "%f %f\n", &uv.x, &uv.y);
             uvs.push_back(uv);
@@ -179,6 +229,7 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
 
         if (strcmp(lineHeader, "vn") == 0)
         {
+            //std::cout << "found vn, adding vertex normal information.\n";
             Vector normal;
             fscanf(obj_file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
             normals.push_back(normal);
@@ -186,6 +237,8 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
 
         if (strcmp(lineHeader, "f") == 0)
         {
+            face_count += 1;
+            //std::cout << "found f, adding face information. This is face #" << face_count << ".\n";
             GLuint vertex_index[3], uv_index[3], normal_index[3];
             GLuint num_values = 0;
 
@@ -209,12 +262,15 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
         }
     }
 
+    std::cout << "finished loading information for this obj, now compiling and creating.\n";
     bool found_match;
 
     for (GLuint i = 0; i < vertices_indices.size(); i++)
     {
+        //std::cout << "creating out_vertex\n";
+        //std::cout << vertices[vertices_indices[i]].x << vertices[vertices_indices[i]].y << vertices[vertices_indices[i]].z << normals[normal_indices[i]].x << normals[normal_indices[i]].y << normals[normal_indices[i]].z << uvs[uv_indices[i]].x << uvs[uv_indices[i]].y << "end\n";
         Vertex out_vertex(vertices[vertices_indices[i]].x, vertices[vertices_indices[i]].y, vertices[vertices_indices[i]].z, normals[normal_indices[i]].x, normals[normal_indices[i]].y, normals[normal_indices[i]].z, uvs[uv_indices[i]].x, uvs[uv_indices[i]].y);
-
+        //std::cout << "created out_vertex\n";
         found_match = false;
         for (GLuint j = 0; j < out_vertices.size(); j++)
         {
@@ -232,16 +288,30 @@ StaticObject* ModelLoader::loadOBJ(std::string file_path, std::string name)
         }
     }
 
+    std::cout << "finished creating vertexes, now copying to arrays\n";
+
     Vertex* out_vertices_array = new Vertex[out_vertices.size()];
     copy(out_vertices.begin(), out_vertices.end(), out_vertices_array);
 
     GLuint* out_indices_array = new GLuint[out_indices.size()];
     copy(out_indices.begin(), out_indices.end(), out_indices_array);
 
+    std::cout << "Finished creating arrays, now creating a new StaticObject\n";
+
     StaticObject* loaded_obj = new StaticObject(name, out_vertices.size(), out_vertices_array, out_indices.size(), out_indices_array);
     if (tmp_mat != NULL)
         loaded_obj->setMaterial(tmp_mat);
-    return loaded_obj;
+
+    std::cout << "Finished creating new StaticObject!\n";
+
+    loaded_obj_group->addChild(loaded_obj);
+
+    if (next_obj_exists)
+    {
+        loadOBJpart(obj_file, next_name, loaded_obj_group);
+    }
+
+    return 0;
 }
 
 std::string ModelLoader::findBasePath(std::string file_path)

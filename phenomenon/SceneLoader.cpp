@@ -24,14 +24,11 @@ int SceneLoader::loadScene(Scene* scene, std::string file_path)
     Material* default_material = scene->newMaterial("default");
 
     char buffer[1024];
-    char buffer2 [1024];
     std::string loading_obj_file_path;
     std::string loading_texture_file_path;
     std::string loading_name;
     ModelLoader model_loader;
-    StaticObject* loading_obj;
-    Material* loading_material;
-    Texture* loading_texture;
+    Node* loading_obj_group;
     Light* loading_light;
 
     Vector loading_position, loading_rotation, loading_scale;
@@ -52,19 +49,18 @@ int SceneLoader::loadScene(Scene* scene, std::string file_path)
 
             model_loader.setScene(scene);
 
-            loading_obj = model_loader.loadOBJ(loading_obj_file_path, loading_obj_file_path);
-            loading_obj->setMaterial(default_material);
+            loading_obj_group = model_loader.loadOBJ(loading_obj_file_path, loading_obj_file_path);
 
-            loading_obj->setLocalPosition(loading_position);
-            loading_obj->setLocalRotation(loading_rotation);
-            loading_obj->setLocalScale(loading_scale);
+            loading_obj_group->setLocalPosition(loading_position);
+            loading_obj_group->setLocalRotation(loading_rotation);
+            loading_obj_group->setLocalScale(loading_scale);
 
-            scene->getRootNode()->addChild(loading_obj);
+            scene->getRootNode()->addChild(loading_obj_group);
 
-            if(loading_obj)
-                std::cout << "Loaded object from " << loading_obj_file_path << "\n";
+            if(loading_obj_group)
+                std::cout << "Loaded object group from " << loading_obj_file_path << "\n";
 
-            loading_obj = NULL;
+            loading_obj_group = NULL;
             loading_obj_file_path = "";
         }
 
