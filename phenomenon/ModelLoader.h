@@ -17,9 +17,10 @@ class ModelLoader
 {
     public:
         ModelLoader();
-        ModelLoader(Scene* set_scene);
+        ModelLoader(Scene* set_scene, GLenum min_filter_in = GL_NEAREST, GLenum mag_filter_in = GL_LINEAR);
         virtual ~ModelLoader();
         int setScene(Scene* set_scene);
+        int setTextureFilters(GLenum min_filter_in, GLenum mag_filter_in);
         int loadMTL(std::string file_path);
         Node* loadOBJ(std::string file_path, std::string name);
         int loadOBJpart(FILE* file_path, std::string name, Node* loaded_obj_group);
@@ -32,6 +33,7 @@ class ModelLoader
         std::vector<Vector> vertices;
         std::vector<Vector2f> uvs;
         std::vector<Vector> normals;
+        GLenum min_filter, mag_filter;
 };
 
 } //End Namespace

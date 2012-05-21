@@ -29,7 +29,7 @@ int Texture::assignGLid(GLuint texture_id_in)               //Used if not using 
     return 0;
 }
 
-int Texture::load(std::string file_path, GLenum near_filter, GLenum far_filter)         //Defaults for near_filter and far_filter in .h file
+int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)         //Defaults for min_filter and mag_filter in .h file
 {
     int return_status = 1; //Return unsucessful if load doesn't suceed
 
@@ -112,8 +112,11 @@ int Texture::load(std::string file_path, GLenum near_filter, GLenum far_filter) 
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, pixel_format, GL_UNSIGNED_BYTE, pixels);
 
         //Texture filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, far_filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, near_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+
+        if (min_filter == GL_NEAREST_MIPMAP_NEAREST || min_filter == GL_NEAREST_MIPMAP_LINEAR || min_filter == GL_LINEAR_MIPMAP_NEAREST || min_filter == GL_LINEAR_MIPMAP_LINEAR)   //If we're using mipmaps
+            glGenerateMipmap(GL_TEXTURE_2D);                                                                                                                                        //Generate them
 
         std::cout << "freeing pixels\n";
         stbi_image_free(pixels);

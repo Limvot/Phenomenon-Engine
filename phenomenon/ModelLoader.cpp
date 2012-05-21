@@ -8,10 +8,12 @@ ModelLoader::ModelLoader()
     current_scene = NULL;
 }
 
-ModelLoader::ModelLoader(Scene* set_scene)
+ModelLoader::ModelLoader(Scene* set_scene, GLenum min_filter_in, GLenum mag_filter_in)      //min_filter_in and mag_filter_in defaults in .h file
 {
     numIndices = 0;
     current_scene = set_scene;
+    min_filter = min_filter_in;
+    mag_filter = mag_filter_in;
 }
 
 ModelLoader::~ModelLoader()
@@ -22,6 +24,13 @@ ModelLoader::~ModelLoader()
 int ModelLoader::setScene(Scene* set_scene)
 {
     current_scene = set_scene;
+    return 0;
+}
+
+int ModelLoader::setTextureFilters(GLenum min_filter_in, GLenum mag_filter_in)
+{
+    min_filter = min_filter_in;
+    mag_filter = mag_filter_in;
     return 0;
 }
 
@@ -97,10 +106,10 @@ int ModelLoader::loadMTL(std::string file_path)
                 if (texture_file_path[0] == '/' || !(file_path.find("/")))                      //If the texture_file_path is absolute, or if file_path only contains the name of the current file, meaning it resides in the local directory, then load texture_file_path.
                 {
                     std::cout << "loading Texture from " << texture_file_path << "\n";
-                    loading_tex->load(texture_file_path);
+                    loading_tex->load(texture_file_path, min_filter, mag_filter);
                 } else {
                     std::cout << "loading Texture from " << (findBasePath(file_path) + '/' + texture_file_path) << "\n";
-                    loading_tex->load(findBasePath(file_path) + '/' + texture_file_path);       //If not the above, figure out the base path for the current file, and add the texture_file_path on top of that.
+                    loading_tex->load(findBasePath(file_path) + '/' + texture_file_path, min_filter, mag_filter);       //If not the above, figure out the base path for the current file, and add the texture_file_path on top of that.
                 }
             }
             loading_mat->setTexture(loading_tex);
