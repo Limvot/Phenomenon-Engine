@@ -22,7 +22,7 @@ class Texture
         virtual ~Texture();
 
         int assignGLid(GLuint);             //Used if not using the load function- the texture has already been loaded by user/library/some other part of phenomenon.
-        int load(std::string file_path);
+        int load(std::string file_path, GLenum near_filter = GL_LINEAR, GLenum far_filter = GL_NEAREST);
         int bind();
 
         std::string name;

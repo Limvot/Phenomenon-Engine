@@ -29,7 +29,7 @@ int Texture::assignGLid(GLuint texture_id_in)               //Used if not using 
     return 0;
 }
 
-int Texture::load(std::string file_path)
+int Texture::load(std::string file_path, GLenum near_filter, GLenum far_filter)         //Defaults for near_filter and far_filter in .h file
 {
     int return_status = 1; //Return unsucessful if load doesn't suceed
 
@@ -112,8 +112,8 @@ int Texture::load(std::string file_path)
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, pixel_format, GL_UNSIGNED_BYTE, pixels);
 
         //Texture filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, far_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, near_filter);
 
         std::cout << "freeing pixels\n";
         stbi_image_free(pixels);
