@@ -255,7 +255,7 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
             if (num_values != 9)
             {
                 std::cout << "This .obj file cannot be loaded by our very limited loader. It must have normals and uvs, and be made of only triangles.\n";
-                return NULL;
+                return 0;
             }
             vertices_indices.push_back((vertex_index[0])-1);    //.obj indices are 1 based, C++ arrays and OpenGL are 0 based
             vertices_indices.push_back((vertex_index[1])-1);

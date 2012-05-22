@@ -39,8 +39,6 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
 
     unsigned char *pixels = stbi_load(file_path.c_str(), &w, &h, &n, 0);    //Load the image
 
-    std::cout << "loaded image sucessfully, will now attempt flip\n";
-
     GLenum pixel_format;
     switch (n)                                      //Give OpenGL the same format that is loaded
     {
@@ -68,6 +66,8 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
 
     if (pixels != NULL)
     {
+        std::cout << "loaded image sucessfully, will now attempt flip\n";
+
         unsigned char pixel_move[n];                                                       //Flip our image to conform to OpenGL's bottom left coord system.
         GLuint pixel_pos = 0;
         GLuint opposite_pixel_pos = 0;

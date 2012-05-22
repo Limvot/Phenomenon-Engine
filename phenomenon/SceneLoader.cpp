@@ -21,8 +21,6 @@ int SceneLoader::loadScene(Scene* scene, std::string file_path)
         return false;
     }
 
-    Material* default_material = scene->newMaterial("default");
-
     char buffer[1024];
     std::string loading_obj_file_path;
     std::string loading_texture_file_path;
