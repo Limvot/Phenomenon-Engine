@@ -11,6 +11,7 @@
 
 //Includes from with in engine
 #include "Node.h"
+#include "PhysicsManager.h"
 #include "Light.h"
 #include "Material.h"
 #include "Texture.h"
@@ -25,6 +26,7 @@ class Scene
         virtual ~Scene();
         int render();
         Node* getRootNode();
+        PhysicsManager* getPhysicsManager();
         Light* newLight(std::string light_name);
         Light* findLight(std::string light_name);
         int deleteLight(std::string light_name);
@@ -42,17 +44,18 @@ class Scene
     protected:
     private:
         Node rootNode;
+        PhysicsManager physicsManager;
         ExpandableArray<Light*> LightArray;
         Light* tmp_light;
-        int numLights;
+        GLuint numLights;
         Vector tmpGlobalLightPosition;
         GLfloat tmpLightPosition[4];
 
         ExpandableArray<Material*> MaterialArray;
-        int numMaterials;
+        GLuint numMaterials;
 
         ExpandableArray<Texture*> TextureArray;
-        int numTextures;
+        GLuint numTextures;
 };
 
 } //End Namespace

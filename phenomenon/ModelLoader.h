@@ -34,6 +34,7 @@ class ModelLoader
         std::vector<Vector2f> uvs;
         std::vector<Vector> normals;
         GLenum min_filter, mag_filter;
+        Material* default_material;
 };
 
 } //End Namespace

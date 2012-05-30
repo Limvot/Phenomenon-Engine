@@ -14,7 +14,7 @@ Scene::~Scene()
 {
     if (numMaterials > 0)
     {
-        for (int i = 0; i < numMaterials; i++)
+        for (GLuint i = 0; i < numMaterials; i++)
         {
             if (MaterialArray.getArrayMember(i) != NULL)
             {
@@ -27,7 +27,7 @@ Scene::~Scene()
 
         if (numTextures > 0)
     {
-        for (int i = 0; i < numTextures; i++)
+        for (GLuint i = 0; i < numTextures; i++)
         {
             if (TextureArray.getArrayMember(i) != NULL)
             {
@@ -43,7 +43,7 @@ int Scene::render()
 {
     GLenum current_light;
 
-    for (int i = 0; i < numLights; i++)
+    for (GLuint i = 0; i < numLights; i++)
     {
         if (LightArray.getArrayMember(i) != NULL)
         {
@@ -70,6 +70,11 @@ Node* Scene::getRootNode()
     return &rootNode;
 }
 
+PhysicsManager* Scene::getPhysicsManager()
+{
+    return &physicsManager;
+}
+
 Light* Scene::newLight(std::string light_name)
 {
     if (numLights >= 8)
@@ -86,7 +91,7 @@ Light* Scene::findLight(std::string light_name)
 {
     if (numLights > 0)
     {
-        for (int i = 0; i < numLights; i++)
+        for (GLuint i = 0; i < numLights; i++)
         {
             if (LightArray.getArrayMember(i)->name == light_name)
                 return LightArray.getArrayMember(i);
@@ -102,7 +107,7 @@ int Scene::deleteLight(std::string light_name)
 {
     if (numLights > 0)
     {
-        for (int i = 0; i < numLights; i++)
+        for (GLuint i = 0; i < numLights; i++)
         {
             if (LightArray.getArrayMember(i)->name == light_name)
             {
@@ -141,7 +146,7 @@ Material* Scene::findMaterial(std::string mat_name)
 {
     if (numMaterials > 0)
     {
-        for (int i = 0; i < numMaterials; i++)
+        for (GLuint i = 0; i < numMaterials; i++)
         {
             if (MaterialArray.getArrayMember(i)->name == mat_name)
                 return MaterialArray.getArrayMember(i);
@@ -156,7 +161,7 @@ int Scene::deleteMaterial(std::string mat_name)
 {
     if (numMaterials > 0)
     {
-        for (int i = 0; i < numMaterials; i++)
+        for (GLuint i = 0; i < numMaterials; i++)
         {
             if (MaterialArray.getArrayMember(i)->name == mat_name)
             {
@@ -183,7 +188,7 @@ Texture* Scene::findTexture(std::string tex_name)
 {
     if (numTextures > 0)
     {
-        for (int i = 0; i < numTextures; i++)
+        for (GLuint i = 0; i < numTextures; i++)
         {
             if (TextureArray.getArrayMember(i)->name == tex_name)
                 return TextureArray.getArrayMember(i);
@@ -198,7 +203,7 @@ int Scene::deleteTexture(std::string tex_name)
 {
     if (numTextures > 0)
     {
-        for (int i = 0; i < numTextures; i++)
+        for (GLuint i = 0; i < numTextures; i++)
         {
             if (TextureArray.getArrayMember(i)->name == tex_name)
             {

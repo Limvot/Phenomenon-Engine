@@ -36,6 +36,7 @@
 		</Build>
 		<Compiler>
 			<Add directory="/usr/include/SDL" />
+			<Add directory="/usr/local/include/bullet" />
 		</Compiler>
 		<Unit filename="extern/stb_image.c">
 			<Option compilerVar="CC" />
@@ -57,6 +58,12 @@
 		<Unit filename="phenomenon/Node.cpp" />
 		<Unit filename="phenomenon/Node.h" />
 		<Unit filename="phenomenon/Phenomenon.h" />
+		<Unit filename="phenomenon/PhenomenonMotionState.cpp" />
+		<Unit filename="phenomenon/PhenomenonMotionState.h" />
+		<Unit filename="phenomenon/PhysicsManager.cpp" />
+		<Unit filename="phenomenon/PhysicsManager.h" />
+		<Unit filename="phenomenon/PhysicsObject.cpp" />
+		<Unit filename="phenomenon/PhysicsObject.h" />
 		<Unit filename="phenomenon/Render.cpp" />
 		<Unit filename="phenomenon/Render.h" />
 		<Unit filename="phenomenon/Scene.cpp" />

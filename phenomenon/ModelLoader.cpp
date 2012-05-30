@@ -121,6 +121,9 @@ int ModelLoader::loadMTL(std::string file_path)
 
 Node* ModelLoader::loadOBJ(std::string file_path, std::string name)
 {
+
+    default_material = current_scene->newMaterial("default_material");  //Default material
+
     FILE * obj_file = fopen(file_path.c_str(), "r");
     if (obj_file == NULL)
     {
@@ -195,13 +198,13 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
         //std::cout << "lineHeader is now equal to " << lineHeader << ", res is equal to " << res << "\n";
         if (res == EOF)
         {
-            std::cout << "found EOF, breaking\n";
+            //std::cout << "found EOF, breaking\n";
             break;
         }
 
         if (strcmp(lineHeader, "o") == 0)
         {
-            std::cout << "Found new object, ending this obj.\n";
+            //std::cout << "Found new object, ending this obj.\n";
             fscanf(obj_file, "%s\n", valueBuffer);
             next_name = valueBuffer;
             next_obj_exists = true;
@@ -210,13 +213,15 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
 
         if (strcmp(lineHeader, "usemtl") == 0)
         {
-            std::cout << "Found usemtl, trying to use indicated material.\n";
+            //std::cout << "Found usemtl, trying to use indicated material.\n";
             fscanf(obj_file, "%s\n", valueBuffer);
             value_string = valueBuffer;
             tmp_mat = current_scene->findMaterial(value_string);
             if (tmp_mat == NULL)
             {
                 std::cout << "Could not find material referenced! Material should be: " << value_string << ".\n";
+                std::cout << "Using a default material.\n";
+                tmp_mat = default_material;
             }
         }
 
@@ -271,7 +276,7 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
         }
     }
 
-    std::cout << "finished loading information for this obj, now compiling and creating.\n";
+    //std::cout << "finished loading information for this obj, now compiling and creating.\n";
     bool found_match;
 
     for (GLuint i = 0; i < vertices_indices.size(); i++)
@@ -297,7 +302,7 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
         }
     }
 
-    std::cout << "finished creating vertexes, now copying to arrays\n";
+    //std::cout << "finished creating vertexes, now copying to arrays\n";
 
     Vertex* out_vertices_array = new Vertex[out_vertices.size()];
     copy(out_vertices.begin(), out_vertices.end(), out_vertices_array);
@@ -305,13 +310,13 @@ int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_
     GLuint* out_indices_array = new GLuint[out_indices.size()];
     copy(out_indices.begin(), out_indices.end(), out_indices_array);
 
-    std::cout << "Finished creating arrays, now creating a new StaticObject\n";
+    //std::cout << "Finished creating arrays, now creating a new StaticObject\n";
 
     StaticObject* loaded_obj = new StaticObject(name, out_vertices.size(), out_vertices_array, out_indices.size(), out_indices_array);
     if (tmp_mat != NULL)
         loaded_obj->setMaterial(tmp_mat);
 
-    std::cout << "Finished creating new StaticObject!\n";
+    //std::cout << "Finished creating new StaticObject!\n";
 
     loaded_obj_group->addChild(loaded_obj);
 
