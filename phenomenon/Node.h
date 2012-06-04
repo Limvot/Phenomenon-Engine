@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <math.h>
+
+#define PI 3.141592654
+
 #define NO_SDL_GLEXT
 
 #include <GL/glew.h>
@@ -30,22 +34,25 @@ class Node
         int removeChild(std::string);
         int deleteChild(std::string);
 
-        virtual int draw();
+        virtual int draw(Matrix4f);
 
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vector);
         Vector getLocalPosition();
         Vector getGlobalPosition();
+        Matrix4f getGlobalPositionMatrix();
 
         int setLocalScale(float,float,float);
         int setLocalScale(Vector);
         Vector getLocalScale();
         Vector getGlobalScale();
+        Matrix4f getGlobalScaleMatrix();
 
         int setLocalRotation(float,float,float);
         int setLocalRotation(Vector);
         Vector getLocalRotation();
         Vector getGlobalRotation();
+        Matrix4f getGlobalRotationMatrix();
 
         int increaseLocalPosition(float,float,float);
         int increaseLocalScale(float,float,float);
@@ -57,16 +64,26 @@ class Node
         Material* material;
 
     protected:
-    Node *parent;
-    ExpandableArray<Node*> children;
-    Node *tmp_return_child;
-    int numChildren;
-    Vector localPosition;
-    Vector globalPosition;
-    Vector localScale;
-    Vector globalScale;
-    Vector localRotation;
-    Vector globalRotation;
+        Node *parent;
+        ExpandableArray<Node*> children;
+        Node *tmp_return_child;
+        int numChildren;
+        Vector localPosition;
+        Vector globalPosition;
+        Vector localScale;
+        Vector globalScale;
+        Vector localRotation;
+        Vector globalRotation;
+
+        Matrix4f mat_localPosition;
+        Matrix4f mat_globalPosition;
+        Matrix4f mat_localScale;
+        Matrix4f mat_globalScale;
+        Matrix4f mat_localRotation;
+        Matrix4f mat_globalRotation;
+
+        Matrix4f mat_transformedMatrix;
+
 };
 
 }   //End namespace

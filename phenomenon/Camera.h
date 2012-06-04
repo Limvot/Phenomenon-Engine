@@ -20,11 +20,16 @@ class Camera: public Node
         Camera(std::string);
         //Destructor is inhereted
         int drawScene(Scene*);
+        int setProjectionMatrix(GLfloat aspectRatio, GLfloat FOV, GLfloat zNear, GLfloat zFar);
+        Matrix4f getViewMatrix();
         int rotate(float,float,float);
         int goForward(float);
         int goBackward(float);
         int goLeft(float);
         int goRight(float);
+
+        Matrix4f viewMatrix;
+        Matrix4f projectionMatrix;
     protected:
     private:
 };

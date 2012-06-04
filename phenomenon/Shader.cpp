@@ -19,11 +19,11 @@ Shader::~Shader()
 
 }
 
-int Shader::createShaderProgram(std::string vert_file_path, std::string frag_file_path)
+int Shader::createShaderProgram(std::string vert_file_path, std::string frag_file_path, GLint trys_remaining)
 {
     shader_program = glCreateProgram();
-    GLuint vert_shader = getShader(vert_file_path, GL_VERTEX_SHADER);
-    GLuint frag_shader = getShader(frag_file_path, GL_FRAGMENT_SHADER);
+    GLuint vert_shader = getIndividualShader(vert_file_path, GL_VERTEX_SHADER);
+    GLuint frag_shader = getIndividualShader(frag_file_path, GL_FRAGMENT_SHADER);
 
     glAttachShader(shader_program, vert_shader);
     glAttachShader(shader_program, frag_shader);
@@ -36,16 +36,22 @@ int Shader::createShaderProgram(std::string vert_file_path, std::string frag_fil
         GLchar error_msg[1024];
         glGetProgramInfoLog(shader_program, sizeof(error_msg), NULL, error_msg);
         std::cout << "Error linking program: " << error_msg << "\n";
+        if (trys_remaining > 0)
+        {
+            trys_remaining--;
+            std::cout << "Trying to create program again! " << trys_remaining << " trys remaining.\n";
+            createShaderProgram(vert_file_path, frag_file_path, trys_remaining);
+        }
     }
     return 0;
 }
 
-int Shader::createShaderProgram(std::string frag_file_path)                                     //Overload so, if we want, we can just load a fragment shader
+int Shader::createShaderProgram(std::string shad_file_path, GLenum type)                                     //Overload so, if we want, we can just load a fragment shader
 {
     shader_program = glCreateProgram();
-    GLuint frag_shader = getShader(frag_file_path, GL_FRAGMENT_SHADER);
+    GLuint shader = getIndividualShader(shad_file_path, type);
 
-    glAttachShader(shader_program, frag_shader);
+    glAttachShader(shader_program, shader);
     glLinkProgram(shader_program);
 
     GLint sucess = 0;
@@ -61,7 +67,7 @@ int Shader::createShaderProgram(std::string frag_file_path)                     
 
 int Shader::enableShader()
 {
-    glValidateProgram(shader_program);          //Should remove in final code for preformence reasons.
+    //glValidateProgram(shader_program);          //Should remove in final code for preformence reasons.
     glUseProgram(shader_program);
     return 0;
 }
@@ -81,12 +87,11 @@ std::string Shader::readFile(std::string file_path)
     if (file_stream.is_open())
     {
         ss << file_stream.rdbuf();
-        //file_string = ss.str();
     } else {std::cout << "Could not open file: " << file_path << "\n";}
     return ss.str();
 }
 
-GLuint Shader::getShader(std::string file_path, GLenum type)
+GLuint Shader::getIndividualShader(std::string file_path, GLenum type, GLint trys_remaining)
 {
     GLuint Shader = glCreateShader(type);
 
@@ -107,8 +112,20 @@ GLuint Shader::getShader(std::string file_path, GLenum type)
         GLchar error_msg[1024];
         glGetShaderInfoLog(Shader, sizeof(error_msg), NULL, error_msg);
         std::cout << "Error compiling shader of type " << type << " error: " << error_msg << "\n";
+
+        if (trys_remaining > 0)
+        {
+            trys_remaining--;
+            std::cout << "Trying to compile shader again! " << trys_remaining << " trys remaining.\n";
+            return getIndividualShader(file_path, type, trys_remaining);
+        }
     }
     return Shader;
+}
+
+GLuint Shader::getShader()
+{
+    return shader_program;
 }
 
 } //End Namespace

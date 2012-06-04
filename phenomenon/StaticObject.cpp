@@ -62,11 +62,20 @@ int StaticObject::createIBO(GLuint numIndicesIn, GLuint* Indices)
     return 0;
 }
 
-int StaticObject::draw()
+int StaticObject::draw(Matrix4f VPmatrix)
 {
     getGlobalPosition();                                                                                //Update our world-space varibles.
     getGlobalRotation();
     getGlobalScale();
+
+    getGlobalPositionMatrix();                                                                                //Update our world-space varibles.
+    getGlobalRotationMatrix();
+    getGlobalScaleMatrix();
+
+    //Matrix4f MVPmatrix = VPmatrix * mat_globalScale * mat_globalRotation * mat_globalPosition;        //Said to be the norm by a tutorial, but dosn't allow for rotation at a set posiiton, which is weird.
+    Matrix4f MVPmatrix = VPmatrix * mat_globalScale * mat_globalPosition * mat_globalRotation;
+
+    //Matrix4f MVPmatrix = mat_globalScale * mat_globalPosition * mat_globalRotation;                   //Without camera for testing
 
     glPushMatrix();                                                                                     //Save state before current object transformations, rotations, scale.
 
@@ -87,7 +96,92 @@ int StaticObject::draw()
 
         material->bindTexture();                                                                        //Bind the material texture, if there is one.
         if (material->material_shader != NULL)                                                          //Enable the material shader, if there is one.
-            material->material_shader->enableShader();
+        {
+             material->material_shader->enableShader();
+             GLuint MatrixID = glGetUniformLocation(material->material_shader->getShader(), "MVP");
+             glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVPmatrix.m[0][0]);
+             /*
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << MVPmatrix.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+            std::cout << "done with MVPmatrix\n";
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << VPmatrix.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with VPmatrix\n";
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_globalScale.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_globalScale\n";
+
+        for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_globalRotation.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_globalRotation\n";
+
+        for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_globalPosition.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_globalPosition\n";
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_globalScale.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_localScale\n";
+
+        for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_localRotation.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_localRotation. Would be: " << localRotation.x << ", " << localRotation.y << ", " << localRotation.z << "\n";
+
+        for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    std::cout << "" << mat_localPosition.m[i][j] << " ";
+                }
+                std::cout << "\n";
+            }
+        std::cout << "done with mat_localPosition. Would be: " << localPosition.x << ", " << localPosition.y << ", " << localPosition.z << "\n";
+        */
+        }
     }
 
 //BEGIN INDEXED VBO DRAW
@@ -150,7 +244,7 @@ int StaticObject::draw()
         for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
-                children.getArrayMember(i)->draw();
+                children.getArrayMember(i)->draw(VPmatrix);
         }
     }
 

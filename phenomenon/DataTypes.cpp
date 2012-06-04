@@ -54,17 +54,174 @@ Vector Vector::operator* (Vector tmp_in_vector)
     return (tmp_return);
 }
 
+
+//////////////////
+//Vector4f
+//////////////////
+
+Vector4f::Vector4f()                                                    //If no arguments, init to 0
+{
+    x = 0;
+    y = 0;
+    z = 0;
+    w = 0;
+}
+
+Vector4f::Vector4f(float tmp_in_x, float tmp_in_y, float tmp_in_z, float tmp_in_w)      //If we do have arguments, init to them
+{
+    x = tmp_in_x;
+    y = tmp_in_y;
+    z = tmp_in_z;
+    w = tmp_in_w;
+}
+
+Vector4f::~Vector4f()
+{
+
+}
+
+Vector4f Vector4f::operator+ (Vector4f tmp_in_vector)                    //Overload + so we can add vectors
+{
+    Vector4f tmp_return;
+
+    tmp_return.x = x + tmp_in_vector.x;
+    tmp_return.y = y + tmp_in_vector.y;
+    tmp_return.z = z + tmp_in_vector.z;
+    tmp_return.w = w + tmp_in_vector.w;
+
+    return (tmp_return);
+}
+
+Vector4f Vector4f::operator- (Vector4f tmp_in_vector)                    //Overload - so we can subtract vectors
+{
+    Vector4f tmp_return;
+
+    tmp_return.x = x - tmp_in_vector.x;
+    tmp_return.y = y - tmp_in_vector.y;
+    tmp_return.z = z - tmp_in_vector.z;
+    tmp_return.w = z - tmp_in_vector.w;
+
+    return (tmp_return);
+}
+
+Vector4f Vector4f::operator* (Vector4f tmp_in_vector)
+{
+    Vector4f tmp_return;
+
+    tmp_return.x = x * tmp_in_vector.x;
+    tmp_return.y = y * tmp_in_vector.y;
+    tmp_return.z = z * tmp_in_vector.z;
+    tmp_return.w = w * tmp_in_vector.w;
+
+    return (tmp_return);
+}
+
+
+//////////////////
+//Matrix4f
+//////////////////
+
+Matrix4f::Matrix4f()                                                                                //If no arguments, init to 0
+{
+    m[0][0] = 1;
+    m[0][1] = 0;
+    m[0][2] = 0;
+    m[0][3] = 0;
+
+    m[1][0] = 0;
+    m[1][1] = 1;
+    m[1][2] = 0;
+    m[1][3] = 0;
+
+    m[2][0] = 0;
+    m[2][1] = 0;
+    m[2][2] = 1;
+    m[2][3] = 0;
+
+    m[3][0] = 0;
+    m[3][1] = 0;
+    m[3][2] = 0;
+    m[3][3] = 1;
+}
+
+Matrix4f::Matrix4f(Vector4f tmp_in_1, Vector4f tmp_in_2, Vector4f tmp_in_3, Vector4f tmp_in_4)      //If we do have arguments, init to them
+{
+    m[0][0] = tmp_in_1.x;
+    m[0][1] = tmp_in_2.y;
+    m[0][2] = tmp_in_3.z;
+    m[0][3] = tmp_in_4.w;
+
+    m[1][0] = tmp_in_1.x;
+    m[1][1] = tmp_in_2.y;
+    m[1][2] = tmp_in_3.z;
+    m[1][3] = tmp_in_4.w;
+
+    m[2][0] = tmp_in_1.x;
+    m[2][1] = tmp_in_2.y;
+    m[2][2] = tmp_in_3.z;
+    m[2][3] = tmp_in_4.w;
+
+    m[3][0] = tmp_in_1.x;
+    m[3][1] = tmp_in_2.y;
+    m[3][2] = tmp_in_3.z;
+    m[3][3] = tmp_in_4.w;
+}
+
+Matrix4f::~Matrix4f()
+{
+
+}
+
+Vector4f Matrix4f::operator* (Vector4f tmp_in_vector)
+{
+    Vector4f tmp_return;
+
+    tmp_return.x = m[0][0] * tmp_in_vector.x + m[0][1] * tmp_in_vector.y + m[0][2] * tmp_in_vector.z + m[0][3] * tmp_in_vector.w;
+    tmp_return.y = m[1][0] * tmp_in_vector.x + m[1][1] * tmp_in_vector.y + m[1][2] * tmp_in_vector.z + m[1][3] * tmp_in_vector.w;
+    tmp_return.z = m[2][0] * tmp_in_vector.x + m[2][1] * tmp_in_vector.y + m[2][2] * tmp_in_vector.z + m[2][3] * tmp_in_vector.w;
+    tmp_return.w = m[3][0] * tmp_in_vector.x + m[3][1] * tmp_in_vector.y + m[3][2] * tmp_in_vector.z + m[3][3] * tmp_in_vector.w;
+
+    return (tmp_return);
+}
+
+Matrix4f Matrix4f::operator* (Matrix4f tmp_in_mat)
+{
+    Matrix4f tmp_return;
+
+    tmp_return.m[0][0] = m[0][0] * tmp_in_mat.m[0][0]  + m[0][1] * tmp_in_mat.m[1][0]  + m[0][2] * tmp_in_mat.m[2][0]  + m[0][3] * tmp_in_mat.m[3][0];
+    tmp_return.m[0][1] = m[0][0] * tmp_in_mat.m[0][1]  + m[0][1] * tmp_in_mat.m[1][1]  + m[0][2] * tmp_in_mat.m[2][1]  + m[0][3] * tmp_in_mat.m[3][1];
+    tmp_return.m[0][2] = m[0][0] * tmp_in_mat.m[0][2]  + m[0][1] * tmp_in_mat.m[1][2]  + m[0][2] * tmp_in_mat.m[2][2]  + m[0][3] * tmp_in_mat.m[3][2];
+    tmp_return.m[0][3] = m[0][0] * tmp_in_mat.m[0][3]  + m[0][1] * tmp_in_mat.m[1][3]  + m[0][2] * tmp_in_mat.m[2][3]  + m[0][3] * tmp_in_mat.m[3][3];
+
+    tmp_return.m[1][0] = m[1][0] * tmp_in_mat.m[0][0]  + m[1][1] * tmp_in_mat.m[1][0]  + m[1][2] * tmp_in_mat.m[2][0]  + m[1][3] * tmp_in_mat.m[3][0];
+    tmp_return.m[1][1] = m[1][0] * tmp_in_mat.m[0][1]  + m[1][1] * tmp_in_mat.m[1][1]  + m[1][2] * tmp_in_mat.m[2][1]  + m[1][3] * tmp_in_mat.m[3][1];
+    tmp_return.m[1][2] = m[1][0] * tmp_in_mat.m[0][2]  + m[1][1] * tmp_in_mat.m[1][2]  + m[1][2] * tmp_in_mat.m[2][2]  + m[1][3] * tmp_in_mat.m[3][2];
+    tmp_return.m[1][3] = m[1][0] * tmp_in_mat.m[0][3]  + m[1][1] * tmp_in_mat.m[1][3]  + m[1][2] * tmp_in_mat.m[2][3]  + m[1][3] * tmp_in_mat.m[3][3];
+
+    tmp_return.m[2][0] = m[2][0] * tmp_in_mat.m[0][0]  + m[2][1] * tmp_in_mat.m[1][0]  + m[2][2] * tmp_in_mat.m[2][0]  + m[2][3] * tmp_in_mat.m[3][0];
+    tmp_return.m[2][1] = m[2][0] * tmp_in_mat.m[0][1]  + m[2][1] * tmp_in_mat.m[1][1]  + m[2][2] * tmp_in_mat.m[2][1]  + m[2][3] * tmp_in_mat.m[3][1];
+    tmp_return.m[2][2] = m[2][0] * tmp_in_mat.m[0][2]  + m[2][1] * tmp_in_mat.m[1][2]  + m[2][2] * tmp_in_mat.m[2][2]  + m[2][3] * tmp_in_mat.m[3][2];
+    tmp_return.m[2][3] = m[2][0] * tmp_in_mat.m[0][3]  + m[2][1] * tmp_in_mat.m[1][3]  + m[2][2] * tmp_in_mat.m[2][3]  + m[2][3] * tmp_in_mat.m[3][3];
+
+    tmp_return.m[3][0] = m[3][0] * tmp_in_mat.m[0][0]  + m[3][1] * tmp_in_mat.m[1][0]  + m[3][2] * tmp_in_mat.m[2][0]  + m[3][3] * tmp_in_mat.m[3][0];
+    tmp_return.m[3][1] = m[3][0] * tmp_in_mat.m[0][1]  + m[3][1] * tmp_in_mat.m[1][1]  + m[3][2] * tmp_in_mat.m[2][1]  + m[3][3] * tmp_in_mat.m[3][1];
+    tmp_return.m[3][2] = m[3][0] * tmp_in_mat.m[0][2]  + m[3][1] * tmp_in_mat.m[1][2]  + m[3][2] * tmp_in_mat.m[2][2]  + m[3][3] * tmp_in_mat.m[3][2];
+    tmp_return.m[3][3] = m[3][0] * tmp_in_mat.m[0][3]  + m[3][1] * tmp_in_mat.m[1][3]  + m[3][2] * tmp_in_mat.m[2][3]  + m[3][3] * tmp_in_mat.m[3][3];
+
+    return (tmp_return);
+}
+
 //////////////////
 //Vector2f
 //////////////////
 
-Vector2f::Vector2f()                                                    //If no arguments, init to 0
+Vector2f::Vector2f()                                                                 //If no arguments, init to 0
 {
     x = 0;
     y = 0;
 }
 
-Vector2f::Vector2f(float tmp_in_x, float tmp_in_y)      //If we do have arguments, init to them
+Vector2f::Vector2f(float tmp_in_x, float tmp_in_y)                                  //If we do have arguments, init to them
 {
     x = tmp_in_x;
     y = tmp_in_y;
@@ -75,7 +232,7 @@ Vector2f::~Vector2f()
 
 }
 
-Vector2f Vector2f::operator+ (Vector2f tmp_in_vector)                    //Overload + so we can add vertexes
+Vector2f Vector2f::operator+ (Vector2f tmp_in_vector)                               //Overload + so we can add vertexes
 {
     Vector2f tmp_return;
 
@@ -85,7 +242,7 @@ Vector2f Vector2f::operator+ (Vector2f tmp_in_vector)                    //Overl
     return (tmp_return);
 }
 
-Vector2f Vector2f::operator- (Vector2f tmp_in_vector)                    //Overload - so we can subtract vertexes
+Vector2f Vector2f::operator- (Vector2f tmp_in_vector)                               //Overload - so we can subtract vertexes
 {
     Vector2f tmp_return;
 

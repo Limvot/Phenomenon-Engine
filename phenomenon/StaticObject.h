@@ -14,7 +14,7 @@ class StaticObject: public Node
         virtual ~StaticObject();
         int createVBO(GLuint, Vertex*);
         int createIBO(GLuint, GLuint*);
-        int draw();
+        int draw(Matrix4f VPmatrix);
     protected:
     private:
         GLuint VBO;

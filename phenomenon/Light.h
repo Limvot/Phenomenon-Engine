@@ -11,7 +11,7 @@ class Light: public Node
     public:
         Light(std::string);
         virtual ~Light();
-        int draw();
+        int draw(Matrix4f VPmatrix);
         int setAmbient(float,float,float);
         int setAmbient(Color3f ambient_in);
         int setDiffuse(float,float,float);

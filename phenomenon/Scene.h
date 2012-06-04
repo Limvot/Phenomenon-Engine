@@ -24,7 +24,7 @@ class Scene
     public:
         Scene();
         virtual ~Scene();
-        int render();
+        int render(Matrix4f VPmatrix);
         Node* getRootNode();
         PhysicsManager* getPhysicsManager();
         Light* newLight(std::string light_name);
@@ -41,13 +41,18 @@ class Scene
         Texture* findTexture(std::string tex_name);
         int deleteTexture(std::string tex_name);
 
+        Shader* newShader(std::string shader_name);
+        Shader* findShader(std::string shader_name);
+        int deleteShader(std::string shader_name);
+
     protected:
     private:
         Node rootNode;
         PhysicsManager physicsManager;
+
         ExpandableArray<Light*> LightArray;
-        Light* tmp_light;
         GLuint numLights;
+        Light* tmp_light;
         Vector tmpGlobalLightPosition;
         GLfloat tmpLightPosition[4];
 
@@ -56,6 +61,9 @@ class Scene
 
         ExpandableArray<Texture*> TextureArray;
         GLuint numTextures;
+
+        ExpandableArray<Shader*> ShaderArray;
+        GLuint numShaders;
 };
 
 } //End Namespace

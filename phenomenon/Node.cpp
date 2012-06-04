@@ -133,14 +133,14 @@ int Node::deleteChild(std::string child_name)
     return 1; //Failure
 }
 
-int Node::draw()
+int Node::draw(Matrix4f VPmatrix)
 {
     if (numChildren > 0)
     {
         for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
-                children.getArrayMember(i)->draw();
+                children.getArrayMember(i)->draw(VPmatrix);
         }
     }
     return 0;                       //Base node type has no draw functionality, just calls children's draw() function.
@@ -152,12 +152,20 @@ int Node::setLocalPosition(float set_x, float set_y, float set_z)
     localPosition.y = set_y;
     localPosition.z = set_z;
 
+    mat_localPosition.m[0][3] = set_x;
+    mat_localPosition.m[1][3] = set_y;
+    mat_localPosition.m[2][3] = set_z;
+
     return 0;
 }
 
 int Node::setLocalPosition(Vector set_position)
 {
     localPosition = set_position;
+
+    mat_localPosition.m[0][3] = set_position.x;
+    mat_localPosition.m[1][3] = set_position.y;
+    mat_localPosition.m[2][3] = set_position.z;
 
     return 0;
 }
@@ -179,6 +187,18 @@ Vector Node::getGlobalPosition()
     return globalPosition;
 }
 
+Matrix4f Node::getGlobalPositionMatrix()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        mat_globalPosition = mat_localPosition;                                 //Global position is the same as local position
+    } else {                                                            //If we do have a parent
+        mat_globalPosition = mat_localPosition * parent->getGlobalPositionMatrix();   //Add its positon to ours. (note that this will continue back to the root node.)
+    }
+
+    return mat_globalPosition;
+}
+
 
 int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
 {
@@ -186,12 +206,20 @@ int Node::setLocalScale(float tmp_x_scale, float tmp_y_scale, float tmp_z_scale)
     localScale.y = tmp_y_scale;
     localScale.z = tmp_z_scale;
 
+    mat_localScale.m[0][0] = tmp_x_scale;
+    mat_localScale.m[1][1] = tmp_y_scale;
+    mat_localScale.m[2][2] = tmp_z_scale;
+
     return 0;
 }
 
 int Node::setLocalScale(Vector set_scale)
 {
     localScale = set_scale;
+
+    mat_localScale.m[0][0] = set_scale.x;
+    mat_localScale.m[1][1] = set_scale.y;
+    mat_localScale.m[2][2] = set_scale.z;
 
     return 0;
 }
@@ -214,6 +242,18 @@ Vector Node::getGlobalScale()
 }
 
 
+Matrix4f Node::getGlobalScaleMatrix()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        mat_globalScale = mat_localScale;                                 //Global scale is the same as local scale
+    } else {                                                            //If we do have a parent
+        mat_globalScale = mat_localScale * parent->getGlobalScaleMatrix();   //Multiply its scale with ours. (note that this will continue back to the root node.)
+    }
+
+    return mat_globalScale;
+}
+
 
 int Node::setLocalRotation(float tmp_x_rot, float tmp_y_rot, float tmp_z_rot)
 {
@@ -221,12 +261,71 @@ int Node::setLocalRotation(float tmp_x_rot, float tmp_y_rot, float tmp_z_rot)
     localRotation.y = tmp_y_rot;
     localRotation.z = tmp_z_rot;
 
+    GLfloat tmp_x_rot_rad = (tmp_x_rot/180) * PI;
+    GLfloat tmp_y_rot_rad = (tmp_y_rot/180) * PI;
+    GLfloat tmp_z_rot_rad = (tmp_z_rot/180) * PI;
+
+    Matrix4f tmp_mat_x, tmp_mat_y, tmp_mat_z;
+
+    tmp_mat_x.m[0][0] = 1;                  //The x rotations
+    tmp_mat_x.m[1][1] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[1][2] = sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][1] = -sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][2] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[3][3] = 1;
+
+    tmp_mat_y.m[0][0] = cos(tmp_y_rot_rad);     //The y rotations
+    tmp_mat_y.m[0][2] = -sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = 1;
+    tmp_mat_y.m[2][0] = sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = cos(tmp_y_rot_rad);
+    tmp_mat_y.m[3][3] = 1;
+
+    tmp_mat_z.m[0][0] = cos(tmp_z_rot_rad);     //The y rotations
+    tmp_mat_z.m[0][1] = sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][0] = -sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][1] = cos(tmp_z_rot_rad);
+    tmp_mat_z.m[2][2] = 1;
+    tmp_mat_z.m[3][3] = 1;
+
+    mat_localRotation = tmp_mat_x * tmp_mat_y * tmp_mat_z;
+
     return 0;
 }
 
 int Node::setLocalRotation(Vector set_rotation)
 {
     localRotation = set_rotation;
+
+    GLfloat tmp_x_rot_rad = (set_rotation.x/180) * PI;
+    GLfloat tmp_y_rot_rad = (set_rotation.y/180) * PI;
+    GLfloat tmp_z_rot_rad = (set_rotation.z/180) * PI;
+
+
+    Matrix4f tmp_mat_x, tmp_mat_y, tmp_mat_z;
+
+    tmp_mat_x.m[0][0] = 1;                  //The x rotations
+    tmp_mat_x.m[1][1] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[1][2] = sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][1] = -sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][2] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[3][3] = 1;
+
+    tmp_mat_y.m[0][0] = cos(tmp_y_rot_rad);     //The y rotations
+    tmp_mat_y.m[0][2] = -sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = 1;
+    tmp_mat_y.m[2][0] = sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = cos(tmp_y_rot_rad);
+    tmp_mat_y.m[3][3] = 1;
+
+    tmp_mat_z.m[0][0] = cos(tmp_z_rot_rad);     //The y rotations
+    tmp_mat_z.m[0][1] = sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][0] = -sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][1] = cos(tmp_z_rot_rad);
+    tmp_mat_z.m[2][2] = 1;
+    tmp_mat_z.m[3][3] = 1;
+
+    mat_localRotation = tmp_mat_x * tmp_mat_y * tmp_mat_z;
 
     return 0;
 }
@@ -248,11 +347,27 @@ Vector Node::getGlobalRotation()
     return globalRotation;
 }
 
+Matrix4f Node::getGlobalRotationMatrix()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        mat_globalRotation = mat_localRotation;                                 //Global rotation is the same as local rotation
+    } else {                                                            //If we do have a parent
+        mat_globalRotation = mat_localRotation * parent->getGlobalRotationMatrix();   //Add its rotation to ours. (note that this will continue back to the root node.)
+    }
+
+    return mat_globalRotation;
+}
+
 int Node::increaseLocalPosition(float inc_x, float inc_y, float inc_z)
 {
     localPosition.x += inc_x;
     localPosition.y += inc_y;
     localPosition.z += inc_z;
+
+    mat_localPosition.m[0][3] += inc_x;
+    mat_localPosition.m[1][3] += inc_y;
+    mat_localPosition.m[2][3] += inc_z;
 
     return 0;
 }
@@ -262,6 +377,10 @@ int Node::increaseLocalScale(float inc_x, float inc_y, float inc_z)
     localScale.x += inc_x;
     localScale.y += inc_y;
     localScale.z += inc_z;
+
+    mat_localScale.m[0][0] += inc_x;
+    mat_localScale.m[1][1] += inc_y;
+    mat_localScale.m[2][2] += inc_z;
 
     return 0;
 }
@@ -289,6 +408,36 @@ int Node::increaseLocalRotation(float inc_x, float inc_y, float inc_z)
     if (localRotation.z < -360)
         localRotation.z += 360;
 
+
+    GLfloat tmp_x_rot_rad = (localRotation.x/180) * PI;
+    GLfloat tmp_y_rot_rad = (localRotation.y/180) * PI;
+    GLfloat tmp_z_rot_rad = (localRotation.z/180) * PI;
+
+
+    Matrix4f tmp_mat_x, tmp_mat_y, tmp_mat_z;
+
+    tmp_mat_x.m[0][0] = 1;                  //The x rotations
+    tmp_mat_x.m[1][1] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[1][2] = sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][1] = -sin(tmp_x_rot_rad);
+    tmp_mat_x.m[2][2] = cos(tmp_x_rot_rad);
+    tmp_mat_x.m[3][3] = 1;
+
+    tmp_mat_y.m[0][0] = cos(tmp_y_rot_rad);     //The y rotations
+    tmp_mat_y.m[0][2] = -sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = 1;
+    tmp_mat_y.m[2][0] = sin(tmp_y_rot_rad);
+    tmp_mat_y.m[2][2] = cos(tmp_y_rot_rad);
+    tmp_mat_y.m[3][3] = 1;
+
+    tmp_mat_z.m[0][0] = cos(tmp_z_rot_rad);     //The y rotations
+    tmp_mat_z.m[0][1] = sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][0] = -sin(tmp_z_rot_rad);
+    tmp_mat_z.m[1][1] = cos(tmp_z_rot_rad);
+    tmp_mat_z.m[2][2] = 1;
+    tmp_mat_z.m[3][3] = 1;
+
+    mat_localRotation = tmp_mat_x * tmp_mat_y * tmp_mat_z;
 
     return 0;
 }

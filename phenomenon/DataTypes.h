@@ -17,6 +17,18 @@ class Vector           //Simple vector class.
         float x,y,z;
 };
 
+class Vector4f           //Vector4f class.
+{
+    public:
+        Vector4f();
+        Vector4f(float,float,float,float);
+        ~Vector4f();
+        Vector4f operator+ (Vector4f);
+        Vector4f operator- (Vector4f);
+        Vector4f operator* (Vector4f);
+        float x,y,z,w;
+};
+
 class Vector2f           //Simple vector class.
 {
     public:
@@ -39,6 +51,17 @@ class Color3f           //Simple rgb color class.
         Color3f operator+ (Color3f);
         Color3f operator- (Color3f);
         float r,g,b;
+};
+
+class Matrix4f           //Matrix4f class.
+{
+    public:
+        Matrix4f();
+        Matrix4f(Vector4f,Vector4f,Vector4f,Vector4f);
+        ~Matrix4f();
+        Vector4f operator* (Vector4f);
+        Matrix4f operator* (Matrix4f);
+        float m[4][4];
 };
 
 

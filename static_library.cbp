@@ -38,7 +38,7 @@
 			<Add directory="/usr/include/SDL" />
 			<Add directory="/usr/local/include/bullet" />
 		</Compiler>
-		<Unit filename="extern/stb_image.c">
+		<Unit filename="extern/stb_image.cpp">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="extern/stb_image.h" />

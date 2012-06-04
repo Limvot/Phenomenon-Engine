@@ -19,12 +19,13 @@ class Shader
         Shader(std::string tmp_name);
         virtual ~Shader();
 
-        int createShaderProgram(std::string vert_file_path, std::string frag_file_path);
-        int createShaderProgram(std::string frag_file_path);                                        //Overloaded so, if we want, we can load just a fragment shader
+        int createShaderProgram(std::string vert_file_path, std::string frag_file_path, GLint trys_remaining = 5);
+        int createShaderProgram(std::string shad_file_path, GLenum type);                                        //Overloaded so, if we want, we can load just a fragment shader
         int enableShader();
         int disableShader();
         std::string readFile(std::string file_path);
-        GLuint getShader(std::string file_path, GLenum type);
+        GLuint getIndividualShader(std::string file_path, GLenum type, GLint trys_remaining = 5);
+        GLuint getShader();
 
         std::string name;
 

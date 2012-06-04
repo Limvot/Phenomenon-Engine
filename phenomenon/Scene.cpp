@@ -7,6 +7,7 @@ Scene::Scene()
     numLights = 0;
     numMaterials = 0;
     numTextures = 0;
+    numShaders = 0;
     tmp_light = NULL;
 }
 
@@ -25,7 +26,7 @@ Scene::~Scene()
         numMaterials = 0;
     }
 
-        if (numTextures > 0)
+    if (numTextures > 0)
     {
         for (GLuint i = 0; i < numTextures; i++)
         {
@@ -37,9 +38,22 @@ Scene::~Scene()
         }
         numTextures = 0;
     }
+
+    if (numShaders > 0)
+    {
+        for (GLuint i = 0; i < numShaders; i++)
+        {
+            if (ShaderArray.getArrayMember(i) != NULL)
+            {
+                delete ShaderArray.getArrayMember(i);
+                ShaderArray.setArrayMember(i, NULL);
+            }
+        }
+        numShaders = 0;
+    }
 }
 
-int Scene::render()
+int Scene::render(Matrix4f VPmatrix)
 {
     GLenum current_light;
 
@@ -61,7 +75,7 @@ int Scene::render()
         }
 
     }
-    rootNode.draw();
+    rootNode.draw(VPmatrix);
     return 0;
 }
 
@@ -215,6 +229,47 @@ int Scene::deleteTexture(std::string tex_name)
         return 1;               //Couldn't find texture
     }
     return 1;                   //No textures
+}
+
+Shader* Scene::newShader(std::string shader_name)
+{
+    Shader* new_shader = new Shader(shader_name);
+    ShaderArray.addArrayMember(new_shader);
+    numShaders += 1;
+    return new_shader;
+}
+
+Shader* Scene::findShader(std::string shader_name)
+{
+    if (numShaders > 0)
+    {
+        for (GLuint i = 0; i < numShaders; i++)
+        {
+            if (ShaderArray.getArrayMember(i)->name == shader_name)
+                return ShaderArray.getArrayMember(i);
+        }
+
+        return NULL;
+    }
+    return NULL;
+}
+
+int Scene::deleteShader(std::string shader_name)
+{
+    if (numShaders > 0)
+    {
+        for (GLuint i = 0; i < numShaders; i++)
+        {
+            if (ShaderArray.getArrayMember(i)->name == shader_name)
+            {
+                delete ShaderArray.getArrayMember(i);
+                ShaderArray.setArrayMember(i, NULL);
+                return 0;
+            }
+        }
+        return 1;               //Couldn't find shader
+    }
+    return 1;                   //No shaders
 }
 
 } //End Namespace
