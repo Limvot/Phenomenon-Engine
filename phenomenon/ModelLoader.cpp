@@ -8,10 +8,11 @@ ModelLoader::ModelLoader()
     current_scene = NULL;
 }
 
-ModelLoader::ModelLoader(Scene* set_scene, GLenum min_filter_in, GLenum mag_filter_in)      //min_filter_in and mag_filter_in defaults in .h file
+ModelLoader::ModelLoader(Scene* set_scene, Shader* default_shader_in, GLenum min_filter_in, GLenum mag_filter_in)      //min_filter_in and mag_filter_in defaults in .h file
 {
     numIndices = 0;
     current_scene = set_scene;
+    default_shader = default_shader_in;
     min_filter = min_filter_in;
     mag_filter = mag_filter_in;
 }
@@ -24,6 +25,12 @@ ModelLoader::~ModelLoader()
 int ModelLoader::setScene(Scene* set_scene)
 {
     current_scene = set_scene;
+    return 0;
+}
+
+int ModelLoader::setDefaultShader(Shader* default_shader_in)
+{
+    default_shader = default_shader_in;
     return 0;
 }
 
@@ -47,9 +54,6 @@ int ModelLoader::loadMTL(std::string file_path)
 
     Material* loading_mat = NULL;
     Texture* loading_tex = NULL;
-    //Shader* default_shader = current_scene->newShader("default_model_loader_shader");
-    //default_shader->createShaderProgram("./data/sample_shader.vert", "./data/sample_shader.frag");
-
     char lineHeader[8192];                   //Assuming words of only 512 chars is silly, but this is a very limited loader
     char valueBuffer[8192];                   //Ditto
     std::string loading_mat_name;
@@ -72,7 +76,7 @@ int ModelLoader::loadMTL(std::string file_path)
             if (loading_mat == NULL)
             {
                 loading_mat = current_scene->newMaterial(loading_mat_name);
-                //loading_mat->setShader(default_shader);
+                loading_mat->setShader(default_shader);
                 std::cout << "creating new material named " << loading_mat_name << ".\n";
 
             } else {

@@ -17,7 +17,7 @@ void Window::quit()
     SDL_Quit();
     isActive = false;       //Let the outside world know that we're not active. Hopefully, they won't try to draw with a window that's quit.
 }
-int Window::create(int width, int height, int inputBPP)
+GLint Window::create(GLint width, GLint height, GLint inputBPP)
 {
     bpp = inputBPP;
     isActive = true;    //Set to true when starting, since we should have focus. (Whether or not the window is active (focus))
@@ -59,7 +59,7 @@ int Window::create(int width, int height, int inputBPP)
     return (0);                                       //Done starting up
 }
 
-int Window::getSDLVideoFlags()
+GLint Window::getSDLVideoFlags()
 {
     //Note that videoFlags already exists from Window.h
     if (videoFlags != 0)
@@ -95,7 +95,7 @@ int Window::getSDLVideoFlags()
 }
 
 
-int Window::resize(int width, int height, int bpp, int videoFlags) {
+GLint Window::resize(GLint width, GLint height, GLint bpp, GLint videoFlags) {
 
     surface = SDL_SetVideoMode(width, height, bpp, videoFlags);    //Change SDL window
 
@@ -126,6 +126,11 @@ int Window::resize(int width, int height, int bpp, int videoFlags) {
     return(true);
 }
 
+GLint Window::simpleResize(GLint width, GLint height) {
+
+    return resize(width, height, bpp, getSDLVideoFlags());
+}
+
 
 void Window::handleEvent(SDL_Event* event) {
 
@@ -154,7 +159,7 @@ void Window::handleEvent(SDL_Event* event) {
 }
 
 
-int Window::initGL()
+GLint Window::initGL()
 {
     glEnable(GL_TEXTURE_2D);                            //Texturing
 
@@ -174,7 +179,7 @@ int Window::initGL()
 
 }
 
-int Window::clearScreen()
+GLint Window::clearScreen()
 {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear screen and depth buffer
 
@@ -183,21 +188,37 @@ int Window::clearScreen()
     return 0;
 }
 
-int Window::swapBuffers()
+GLint Window::swapBuffers()
 {
     SDL_GL_SwapBuffers();                               //Display on screen
     return 0;
 }
 
-int Window::toggleFullScreen()
+GLint Window::toggleFullScreen()
 {
     SDL_WM_ToggleFullScreen(surface);                   //If toggle fullscreen function called, toggle full screen.
     return 0;
 }
 
-int Window::setCaption(std::string caption)
+GLint Window::setCaption(std::string caption)
 {
     SDL_WM_SetCaption(caption.c_str(), caption.c_str());
+    return 0;
+}
+
+GLint Window::enableBackfaceCulling()
+{
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+
+    return 0;
+}
+
+GLint Window::disableBackfaceCulling()
+{
+    glDisable(GL_CULL_FACE);
+
     return 0;
 }
 

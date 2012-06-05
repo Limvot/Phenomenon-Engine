@@ -190,7 +190,7 @@ int StaticObject::draw(Matrix4f VPmatrix)
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    #define PHENOMENON_OPENGL_OLD_WAY
+    //#define PHENOMENON_OPENGL_OLD_WAY
     #ifdef PHENOMENON_OPENGL_OLD_WAY
     //Used for OpenGL 2.1
     glEnableClientState(GL_VERTEX_ARRAY);

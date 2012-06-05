@@ -22,22 +22,25 @@ public:
     ~Window();
     void quit();
 
-    int create(int,int,int);
-    int resize(int,int,int,int);
+    GLint create(GLint,GLint,GLint);
+    GLint resize(GLint,GLint,GLint,GLint);
+    GLint simpleResize(GLint,GLint);
     void handleEvent(SDL_Event*);
-    int initGL();
-    int clearScreen();
-    int swapBuffers();
-    int getSDLVideoFlags();
-    int toggleFullScreen();
-    int setCaption(std::string);
+    GLint initGL();
+    GLint clearScreen();
+    GLint swapBuffers();
+    GLint getSDLVideoFlags();
+    GLint toggleFullScreen();
+    GLint setCaption(std::string);
+    GLint enableBackfaceCulling();
+    GLint disableBackfaceCulling();
 
     SDL_Surface *surface;
-    int bpp;
-    int isActive;           //Whether or not the window is active (focus)
+    GLint bpp;
+    GLint isActive;           //Whether or not the window is active (focus)
 
     private:
-    int videoFlags;
+    GLint videoFlags;
 
 };
 

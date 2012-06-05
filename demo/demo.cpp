@@ -34,10 +34,11 @@ int main(int argc, char* argv[])
     Node* childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
     Node* childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     Node* logoNode = createSquare("logo");
-    Node* shaded_node = createTriangle("shaded_triangle");
 
+    Shader* basic_shader = scene.newShader("basic_shader");
+    basic_shader->createShaderProgram("../data/sample_shader.vert", "../data/sample_shader.frag");
 
-    ModelLoader model_loader;                                   //Our model-loading object
+    ModelLoader model_loader(&scene, basic_shader);                                   //Our model-loading object
     Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
     if (loadedObject == NULL)                                                          //Quit if the load failed.
     {
@@ -50,42 +51,35 @@ int main(int argc, char* argv[])
     scene.enableLighting();                                     //Enable lighting by default.
 
     Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
+    camera.setProjectionMatrix(640/480, 45, 0.1, 100);
 
-    Material* white_material = scene.newMaterial("white");
+
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
     Material* logo_material = scene.newMaterial("logo");
-    Material* monkey_material = scene.newMaterial("monkey");
-    Material* shaded_material = scene.newMaterial("shaded_material");
 
     childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
+    red_material->setShader(basic_shader);
     red_material->setDiffuse(1.0f, 0.0f, 0.0f);                 //Default is 1.0f, 1.0f, 1.0f
     red_material->setSpecular(0.0f, 1.0f, 0.0f);                //Default is 1.0f, 1.0f, 1.0f
     red_material->setSpecularHardness(32.0f);                   //Default hardness is 128
 
     childNode2->setMaterial(green_material);
+    green_material->setShader(basic_shader);
     green_material->setDiffuse(0.0f, 1.0f, 0.0f);
     green_material->setSpecular(0.0f, 0.0f, 1.0f);
 
     childNode3->setMaterial(blue_material);
+    blue_material->setShader(basic_shader);
     blue_material->setDiffuse(0.0f, 0.0f, 1.0f);
 
     logoNode->setMaterial(logo_material);                       //Set this square to use the logo material
+    logo_material->setShader(basic_shader);
     Texture* logo_texture = scene.newTexture("logo_texture");   //Create a Texture object named logo_texture
     logo_texture->load("../data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-    loadedObject->setMaterial(monkey_material);
-    Texture* monkey_texture = scene.newTexture("monkey");
-    monkey_texture->load("../data/MonkeyFace.bmp");
-    monkey_material->setTexture(monkey_texture);
-
-    shaded_node->setMaterial(shaded_material);
-    Shader* basic_shader = new Shader("basic_shader");
-    //basic_shader.createShaderProgram("./data/sample_shader.vert", "./data/sample_shader.frag");
-    basic_shader->createShaderProgram("../data/sample_shader.frag");
-    shaded_material->setShader(basic_shader);
 
 
     lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
@@ -99,7 +93,6 @@ int main(int argc, char* argv[])
     childNode2->addChild(childNode3);
     rootNode->addChild(loadedObject);
     rootNode->addChild(logoNode);
-    rootNode->addChild(shaded_node);
 
     camera.addChild(dynamic_cast<Node*>(lightNode2));           //Attach lightNode2 to the camera.
                                                                 //On creation, lights are automatically added as children of the root node by the scene object, so you don't have to assign them manually.
@@ -114,7 +107,7 @@ int main(int argc, char* argv[])
 
     loadedObject->setLocalPosition(0.0f, 0.0f, 0.0f);
 
-    logoNode->setLocalPosition(0.0f, 0.0f, -2.0f);
+    logoNode->setLocalPosition(0.0f, 0.0f, 2.0f);
     lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
     lightNode2->setLocalPosition(0.0f, 0.0f, -3.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
 

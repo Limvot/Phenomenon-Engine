@@ -1,6 +1,7 @@
 # Blender3D v249 OBJ File: Monkey.blend
 # www.blender3d.org
 mtllib Monkey.mtl
+o monkey
 v 0.437500 0.765625 -0.164063
 v -0.437500 0.765625 -0.164063
 v 0.500000 0.687500 -0.093750
@@ -1966,7 +1967,7 @@ vn -0.671345 0.714459 0.197092
 vn -0.661707 0.721862 0.202628
 vn 0.671345 0.714459 0.197092
 vn 0.661707 0.721862 0.202628
-usemtl Material.001_MonkeyFace.bmp
+usemtl MonkeyFace
 s off
 f 61/1/1 65/2/1 49/3/1
 f 50/4/2 66/5/2 62/6/2

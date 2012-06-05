@@ -34,6 +34,7 @@
 		<Compiler>
 			<Add option="-fexceptions" />
 			<Add directory="/usr/include/SDL" />
+			<Add directory="/usr/local/include/bullet" />
 		</Compiler>
 		<Linker>
 			<Add library="phenomenon" />
@@ -41,8 +42,13 @@
 			<Add library="GL" />
 			<Add library="GLU" />
 			<Add library="GLEW" />
+			<Add library="BulletDynamics" />
+			<Add library="BulletCollision" />
+			<Add library="LinearMath" />
 			<Add directory="../../Phenomenon-Engine" />
 		</Linker>
+		<Unit filename="../data/sample_shader.frag" />
+		<Unit filename="../data/sample_shader.vert" />
 		<Unit filename="demo.cpp" />
 		<Extensions>
 			<code_completion />
