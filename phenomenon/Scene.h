@@ -16,6 +16,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "DataTypes.h"      //Also includes ExpandableArray.h
+#include "Renderer.h"
 
 namespace phen {
 
@@ -24,7 +25,7 @@ class Scene
     public:
         Scene();
         virtual ~Scene();
-        int render(Matrix4f VPmatrix);
+        int draw(Renderer* renderer);
         Node* getRootNode();
         PhysicsManager* getPhysicsManager();
         Light* newLight(std::string light_name);

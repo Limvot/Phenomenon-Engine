@@ -133,14 +133,14 @@ int Node::deleteChild(std::string child_name)
     return 1; //Failure
 }
 
-int Node::draw(Matrix4f VPmatrix)
+int Node::draw(Renderer* renderer)
 {
     if (numChildren > 0)
     {
         for (int i = 0; i < numChildren; i++)
         {
             if (children.getArrayMember(i) != NULL)
-                children.getArrayMember(i)->draw(VPmatrix);
+                children.getArrayMember(i)->draw(renderer);
         }
     }
     return 0;                       //Base node type has no draw functionality, just calls children's draw() function.

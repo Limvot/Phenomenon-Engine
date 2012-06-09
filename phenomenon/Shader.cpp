@@ -35,7 +35,7 @@ int Shader::createShaderProgram(std::string vert_file_path, std::string frag_fil
     {
         GLchar error_msg[1024];
         glGetProgramInfoLog(shader_program, sizeof(error_msg), NULL, error_msg);
-        std::cout << "Error linking program: " << error_msg << "\n";
+        std::cout << "Error linking program using " << vert_file_path << " and " << frag_file_path << "\nError: " << error_msg << "\n";
         if (trys_remaining > 0)
         {
             trys_remaining--;
@@ -60,7 +60,7 @@ int Shader::createShaderProgram(std::string shad_file_path, GLenum type)        
     {
         GLchar error_msg[1024];
         glGetProgramInfoLog(shader_program, sizeof(error_msg), NULL, error_msg);
-        std::cout << "Error linking program: " << error_msg << "\n";
+        std::cout << "Error linking program " << shad_file_path << "\n with error: " << error_msg << "\n";
     }
     return 0;
 }
@@ -111,7 +111,7 @@ GLuint Shader::getIndividualShader(std::string file_path, GLenum type, GLint try
     {
         GLchar error_msg[1024];
         glGetShaderInfoLog(Shader, sizeof(error_msg), NULL, error_msg);
-        std::cout << "Error compiling shader of type " << type << " error: " << error_msg << "\n";
+        std::cout << "Error compiling shader of type " << type << " from " << file_path << "\nwith error: " << error_msg << "\n";
 
         if (trys_remaining > 0)
         {

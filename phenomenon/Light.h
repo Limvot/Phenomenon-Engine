@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include "DataTypes.h"
+#include "Renderer.h"
 
 namespace phen {
 
@@ -11,7 +12,7 @@ class Light: public Node
     public:
         Light(std::string);
         virtual ~Light();
-        int draw(Matrix4f VPmatrix);
+        int draw(Renderer* renderer);
         int setAmbient(float,float,float);
         int setAmbient(Color3f ambient_in);
         int setDiffuse(float,float,float);

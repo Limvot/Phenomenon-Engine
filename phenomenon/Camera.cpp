@@ -13,33 +13,14 @@ Camera::Camera(std::string tmp_name)                 //Please note that the Squa
 }
 
                                                 //Inherit destructor as well.
-
-int Camera::drawScene(Scene *scene)
+int Camera::setProjectionMatrix(GLuint width, GLuint height, GLfloat FOV, GLfloat zNear, GLfloat zFar)
 {
-    getGlobalPosition();
-    getGlobalRotation();
-    getGlobalScale();
-    //Doing this with matrix. The matrix is transformed, roatated, and scaled, and then nothing else modifies the matrix (permenantly) because they push and pop accordingly.
-
-
-    glRotatef(-globalRotation.x, 1.0f, 0.0f, 0.0f);                            //Note that this time we rotate first.
-    glRotatef(-globalRotation.y, 0.0f, 1.0f, 0.0f);
-    glRotatef(-globalRotation.z, 0.0f, 0.0f, 1.0f);
-
-    glTranslatef(-globalPosition.x, -globalPosition.y, -globalPosition.z);     //Translate to the approiate position. (the reverse of the camera position.)
-
-    glScalef((1/globalScale.x), (1/globalScale.y), (1/globalScale.z));         //Scale along each axis the proper ammount. NOTE: I'm not sure why, for expected results, you have to scale after translation and rotation, but it seems you do.
-
-    //scene->render(getViewMatrix());
-    //scene->render(projectionMatrix);
-    scene->render(projectionMatrix * getViewMatrix());                         //Render the scene passing the View-Projection matrix. This may eventually reach the camera, in which case our draw function will draw our children.
-                                                                               //The camera passes itself in so that each object can acess the View and Projection Matrixes.
-
-    return 0;
+    return setProjectionMatrix(GLfloat(width) / GLfloat(height), FOV, zNear, zFar);
 }
 
 int Camera::setProjectionMatrix(GLfloat aspectRatio, GLfloat FOV, GLfloat zNear, GLfloat zFar)
 {
+    std::cout << "aspectRation is: " << aspectRatio << "\n";
 
     GLfloat cotanHalfFOV = 1/(tanf((FOV/360)*PI));                //FOV/2/180 * PI simplifies to FOV/360*PI
     GLfloat zRange = zNear-zFar;
@@ -116,6 +97,11 @@ Matrix4f Camera::getViewMatrix()
     invScale.m[2][2] = 1/globalScale.z;
 
     return invScale * invRotation * invPosition;                       //Return the resulting viewMatrix
+}
+
+Matrix4f Camera::getProjectionMatrix()
+{
+    return projectionMatrix;
 }
 
 int Camera::rotate(float rot_x, float rot_y, float rot_z)

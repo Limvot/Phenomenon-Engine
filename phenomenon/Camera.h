@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <iostream>
 #include <math.h>
 
 #include "Scene.h"
@@ -19,9 +20,10 @@ class Camera: public Node
         Camera();
         Camera(std::string);
         //Destructor is inhereted
-        int drawScene(Scene*);
+        int setProjectionMatrix(GLuint width, GLuint height, GLfloat FOV, GLfloat zNear, GLfloat zFar);
         int setProjectionMatrix(GLfloat aspectRatio, GLfloat FOV, GLfloat zNear, GLfloat zFar);
         Matrix4f getViewMatrix();
+        Matrix4f getProjectionMatrix();
         int rotate(float,float,float);
         int goForward(float);
         int goBackward(float);

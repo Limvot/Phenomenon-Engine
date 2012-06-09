@@ -22,14 +22,14 @@ Light::~Light()
 
 }
 
-int Light::draw(Matrix4f VPmatrix)
+int Light::draw(Renderer* renderer)
 {
     if (numChildren > 0)                                                    //If we have children, go through and draw them
     {
         for (int i = 0; i < numChildren;)
         {
             if (children.getArrayMember(i) != NULL)
-                children.getArrayMember(i)->draw(VPmatrix);
+                children.getArrayMember(i)->draw(renderer);
             i += 1;
         }
     }

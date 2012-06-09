@@ -64,8 +64,8 @@
 		<Unit filename="phenomenon/PhysicsManager.h" />
 		<Unit filename="phenomenon/PhysicsObject.cpp" />
 		<Unit filename="phenomenon/PhysicsObject.h" />
-		<Unit filename="phenomenon/Render.cpp" />
-		<Unit filename="phenomenon/Render.h" />
+		<Unit filename="phenomenon/Renderer.cpp" />
+		<Unit filename="phenomenon/Renderer.h" />
 		<Unit filename="phenomenon/Scene.cpp" />
 		<Unit filename="phenomenon/Scene.h" />
 		<Unit filename="phenomenon/SceneLoader.cpp" />

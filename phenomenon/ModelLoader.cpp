@@ -19,7 +19,6 @@ ModelLoader::ModelLoader(Scene* set_scene, Shader* default_shader_in, GLenum min
 
 ModelLoader::~ModelLoader()
 {
-
 }
 
 int ModelLoader::setScene(Scene* set_scene)

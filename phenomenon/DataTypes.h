@@ -11,6 +11,7 @@ class Vector           //Simple vector class.
         Vector();
         Vector(float,float,float);
         ~Vector();
+        int set(float,float,float);
         Vector operator+ (Vector);
         Vector operator- (Vector);
         Vector operator* (Vector);

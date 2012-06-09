@@ -39,26 +39,32 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
 
     unsigned char *pixels = stbi_load(file_path.c_str(), &w, &h, &n, 0);    //Load the image
 
+    GLenum internal_pixel_format;
     GLenum pixel_format;
     switch (n)                                      //Give OpenGL the same format that is loaded
     {
         case 1:
+            internal_pixel_format = GL_SLUMINANCE;
             pixel_format = GL_LUMINANCE;
             break;
 
         case 2:
+            internal_pixel_format = GL_SLUMINANCE8_ALPHA8;
             pixel_format = GL_LUMINANCE8_ALPHA8;    //Pretty sure this is the correct format, but not absolutly positve
             break;
 
         case 3:
+            internal_pixel_format = GL_SRGB;
             pixel_format = GL_RGB;
             break;
 
         case 4:
+            internal_pixel_format = GL_SRGB_ALPHA;
             pixel_format = GL_RGBA;
             break;
 
         default:
+            internal_pixel_format = GL_SRGB;
             pixel_format = GL_RGBA;
             break;
     }
@@ -72,7 +78,7 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
         GLuint pixel_pos = 0;
         GLuint opposite_pixel_pos = 0;
         GLuint maximum_index = (h*w*n);
-        std::cout << "Total number of slots in the array should be: " << maximum_index << ".\n";
+        //std::cout << "Total number of slots in the array should be: " << maximum_index << ".\n";
 
         for (GLint x_pos = 0; x_pos < w; x_pos += 1)
         {
@@ -109,7 +115,7 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
         glGenTextures(1, &texture_id[0]);
         glBindTexture(GL_TEXTURE_2D, texture_id[0]);
         //Generate the texture
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, pixel_format, GL_UNSIGNED_BYTE, pixels);
+        glTexImage2D(GL_TEXTURE_2D, 0, internal_pixel_format, w, h, 0, pixel_format, GL_UNSIGNED_BYTE, pixels);
 
         //Texture filtering
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);

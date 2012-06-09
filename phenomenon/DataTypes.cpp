@@ -21,6 +21,15 @@ Vector::~Vector()
 
 }
 
+int Vector::set(float x_in, float y_in, float z_in)
+{
+    x = x_in;
+    y = y_in;
+    z = z_in;
+
+    return 0;
+}
+
 Vector Vector::operator+ (Vector tmp_in_vector)                    //Overload + so we can add vertexes
 {
     Vector tmp_return;

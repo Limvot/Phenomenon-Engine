@@ -53,7 +53,7 @@ Scene::~Scene()
     }
 }
 
-int Scene::render(Matrix4f VPmatrix)
+int Scene::draw(Renderer* renderer)
 {
     GLenum current_light;
 
@@ -75,7 +75,7 @@ int Scene::render(Matrix4f VPmatrix)
         }
 
     }
-    rootNode.draw(VPmatrix);
+    rootNode.draw(renderer);
     return 0;
 }
 

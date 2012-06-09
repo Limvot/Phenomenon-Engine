@@ -17,6 +17,7 @@
 
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h
+#include "Renderer.h"
 #include "Material.h"
 
 namespace phen {
@@ -34,7 +35,7 @@ class Node
         int removeChild(std::string);
         int deleteChild(std::string);
 
-        virtual int draw(Matrix4f);
+        virtual int draw(Renderer* renderer);
 
         int setLocalPosition(float,float,float);
         int setLocalPosition(Vector);
