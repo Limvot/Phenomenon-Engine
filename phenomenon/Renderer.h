@@ -27,8 +27,9 @@ class Renderer
     public:
         Renderer();
         virtual ~Renderer();
-        int init(GLuint width_in, GLuint height_in);
+        int init(GLuint width_in, GLuint height_in, GLfloat gamma_in = 2.2);
         int initQuad(Shader* shader_in);
+        int setGamma(GLfloat gamma_in);
         int render(Camera* camera, Scene* scene);
 
         Matrix4f Vmatrix, VPmatrix;
@@ -47,10 +48,12 @@ class Renderer
         GLuint quad_vertexbuffer;
         Shader* quad_shader;
         GLuint texID;
+        GLuint gammaID;
         GLuint timeID;
 
         GLuint width;
         GLuint height;
+        GLfloat gamma_divided;
     protected:
 };
 

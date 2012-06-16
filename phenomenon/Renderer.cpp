@@ -16,10 +16,12 @@ Renderer::~Renderer()
     glDeleteVertexArrays(1, &quad_VertexArrayID);
 }
 
-int Renderer::init(GLuint width_in, GLuint height_in)
+int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
 {
     width = width_in;
     height = height_in;
+
+    setGamma(gamma_in);
 
     FramebufferName = 0;
     glGenFramebuffers(1, &FramebufferName);
@@ -30,7 +32,7 @@ int Renderer::init(GLuint width_in, GLuint height_in)
 
 
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, 0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -74,8 +76,15 @@ int Renderer::initQuad(Shader* shader_in)
 
     quad_shader = shader_in;
     texID = glGetUniformLocation(quad_shader->getShader(), "renderedTexture");
+    gammaID = glGetUniformLocation(quad_shader->getShader(), "gamma_divided");
     timeID = glGetUniformLocation(quad_shader->getShader(), "time");
 
+    return 0;
+}
+
+int Renderer::setGamma(GLfloat gamma_in)
+{
+    gamma_divided = 1/gamma_in;
     return 0;
 }
 
@@ -111,6 +120,7 @@ int Renderer::render(Camera* camera, Scene* scene)
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
 
     glUniform1i(texID, 0);
+    glUniform1f(gammaID, gamma_divided);
     glUniform1f(timeID, float(SDL_GetTicks()/100));
 
     glEnableVertexAttribArray(0);
