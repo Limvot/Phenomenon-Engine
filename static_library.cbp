@@ -49,6 +49,8 @@
 		<Unit filename="phenomenon/DataTypes.cpp" />
 		<Unit filename="phenomenon/DataTypes.h" />
 		<Unit filename="phenomenon/ExpandableArray.h" />
+		<Unit filename="phenomenon/GBuffer.cpp" />
+		<Unit filename="phenomenon/GBuffer.h" />
 		<Unit filename="phenomenon/Light.cpp" />
 		<Unit filename="phenomenon/Light.h" />
 		<Unit filename="phenomenon/Material.cpp" />

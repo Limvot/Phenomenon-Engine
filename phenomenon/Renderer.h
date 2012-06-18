@@ -13,9 +13,10 @@
 
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h
+#include "GBuffer.h"
 #include "Shader.h"
 //#include "Camera.h"
-//#include "Scene.h"
+//#include "Scene.h"        //Lets avoid circular dependencies!!
 
 namespace phen {
 
@@ -31,8 +32,12 @@ class Renderer
         int initQuad(Shader* shader_in);
         int setGamma(GLfloat gamma_in);
         int render(Camera* camera, Scene* scene);
+        int geometryPass(Scene* scene);
+        int lightingPass();
 
         Matrix4f Vmatrix, VPmatrix;
+
+        GBuffer G_Buffer;
 
         GLfloat light_position[1][3];
         GLfloat light_color[1][3];

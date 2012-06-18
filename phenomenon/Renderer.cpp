@@ -21,6 +21,8 @@ int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
     width = width_in;
     height = height_in;
 
+    G_Buffer.init(width, height);                       //Init our GBuffer
+
     setGamma(gamma_in);
 
     FramebufferName = 0;
@@ -88,6 +90,38 @@ int Renderer::setGamma(GLfloat gamma_in)
     return 0;
 }
 
+int Renderer::geometryPass(Scene* scene)
+{
+    G_Buffer.bindForWriting();
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    scene->draw(this);
+
+    return 0;
+}
+
+int Renderer::lightingPass()
+{
+    G_Buffer.bindForReading();
+
+    GLsizei HalfWidth = (GLsizei)(width/2.0f);
+    GLsizei HalfHeight = (GLsizei)(height/2.0f);
+
+    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+    glBlitFramebuffer(0, 0, width, height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+    glBlitFramebuffer(0, 0, width, height, 0, HalfHeight, HalfWidth, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    glBlitFramebuffer(0, 0, width, height, HalfWidth, HalfHeight, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
+    glBlitFramebuffer(0, 0, width, height, HalfWidth, 0, width, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    return 0;
+}
+
 int Renderer::render(Camera* camera, Scene* scene)
 {
     light_position[0][0] = 0;
@@ -103,14 +137,19 @@ int Renderer::render(Camera* camera, Scene* scene)
     Vmatrix = camera->getViewMatrix();
     VPmatrix = camera->getProjectionMatrix() * Vmatrix;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);     //Bind the framebuffer
-    glViewport(0, 0, width, height);
+    //Here is the defferd rendering part
+    geometryPass(scene);
 
+    //Bind the framebuffer that the lighting pass will render into, used for post-processing
+    glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);     //Bind the framebuffer that is written to for post-processing
+    glViewport(0, 0, width, height);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene->draw(this);
+    //Now do the lighting
+    lightingPass();
+    //End deffered rendering
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);                   //Render to screen
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);                   //Render the post-processing to screen
     glViewport(0, 0, width, height);
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -131,6 +170,8 @@ int Renderer::render(Camera* camera, Scene* scene)
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
 
     return 0;
