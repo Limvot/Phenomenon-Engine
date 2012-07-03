@@ -93,11 +93,30 @@ int Renderer::setGamma(GLfloat gamma_in)
 int Renderer::geometryPass(Scene* scene)
 {
     G_Buffer.bindForWriting();
+
+    glDepthMask(GL_TRUE);  //Only the geometry pass updates the depth buffer
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glEnable(GL_DEPTH_TEST);    //Return to normal
+    glDisable(GL_BLEND);        //Ditto
 
     scene->draw(this);
 
+    glDepthMask(GL_FALSE);      //Light pass does not write to depth buffer
+    glDisable(GL_DEPTH_TEST);   //Don't want to test for depth for lighting either
+
     return 0;
+}
+
+int Renderer::beginLightingPass()
+{
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    G_Buffer.bindForReading();
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 int Renderer::lightingPass()

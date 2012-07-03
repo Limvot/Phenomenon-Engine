@@ -13,7 +13,7 @@
 
 #include <GL/glew.h>
 #include "SDL.h"
-#include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
+//#include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h

@@ -8,35 +8,37 @@ This is important, as the engine uses it to handle window resize and window loss
 
 #include <iostream>
 #include "../phenomenon/Phenomenon.h"
-
 using namespace std;
 using namespace phen;
 
-int main(int argc, char* argv[])
+Window window;
+Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
+
+Renderer renderer;
+
+Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
+
+Node *rootNode, *childNode, *childNode2, *childNode3;
+
+
+
+int setup()
 {
-
-    Window window;                                              //Create our window class, which handles all the windowing/SDL/GL init stuff
-
-    int done = false;                                           //Main loop variable
-    SDL_Event *event;                                           //Useed in collecting events
-    event = new SDL_Event;
-
-    window.create(640,480,32);                                  //Creates the window. Sets up SDL and OpenGL, sets some variables
-    window.setCaption("Phenomenon Engine Test/Demo");           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
-
+    window.initGL();
     cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
+    renderer.init(1024.0f, 720.0f, 2.2);
+    Shader* fullScreenQuadShader = scene.newShader("fullScreenQuad");
+    fullScreenQuadShader->createShaderProgram("..\\data\\FullScreenQuad.vert", "..\\data\\FullScreenQuad.frag");
+    renderer.initQuad(fullScreenQuadShader);
 
-
-
-    Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
-    Node* rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
-    Node* childNode = createTriangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
-    Node* childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
-    Node* childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
-    Node* logoNode = createSquare("logo");
+    rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
+    childNode = createTriangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
+    childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
+    childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
+    //Node* logoNode = createSquare("logo");
 
     Shader* basic_shader = scene.newShader("basic_shader");
-    basic_shader->createShaderProgram("../data/sample_shader.vert", "../data/sample_shader.frag");
+    basic_shader->createShaderProgram("..\\data\\sample_shader.vert", "..\\data\\sample_shader.frag");
 
     ModelLoader model_loader(&scene, basic_shader);                                   //Our model-loading object
     Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
@@ -46,18 +48,13 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    Light* lightNode = scene.newLight("light");                 //Lights are handled specially, so you must create them using a scene object.
-    Light* lightNode2 = scene.newLight("camera_light");
-    scene.enableLighting();                                     //Enable lighting by default.
-
-    Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
-    camera.setProjectionMatrix(640/480, 45, 0.1, 100);
+    camera.setProjectionMatrix(1024.0f/720.0f, 45, 0.1, 100);
 
 
     Material* red_material = scene.newMaterial("red");
     Material* green_material = scene.newMaterial("green");
     Material* blue_material = scene.newMaterial("blue");
-    Material* logo_material = scene.newMaterial("logo");
+    //Material* logo_material = scene.newMaterial("logo");
 
     childNode->setMaterial(red_material);                       //All nodes that actually draw an object need a material
     red_material->setShader(basic_shader);
@@ -73,43 +70,29 @@ int main(int argc, char* argv[])
     childNode3->setMaterial(blue_material);
     blue_material->setShader(basic_shader);
     blue_material->setDiffuse(0.0f, 0.0f, 1.0f);
-
+/*
     logoNode->setMaterial(logo_material);                       //Set this square to use the logo material
     logo_material->setShader(basic_shader);
     Texture* logo_texture = scene.newTexture("logo_texture");   //Create a Texture object named logo_texture
     logo_texture->load("../data/phenomenon.bmp");                //Load the phenomenon.bmp image
     logo_material->setTexture(logo_texture);                    //Have logo_material use the logo_texture Texture.
 
-
-
-    lightNode->setDiffuse(1.0f, 1.0f, 1.0f);                    //Default is full white (1.0f, 1.0f, 1.0f)
-    lightNode->setAmbient(0.5f, 0.5f, 0.5f);                    //Default is medium gray (0.5f, 0.5f, 0.5f)
-
-    lightNode2->setDiffuse(0.0f, 1.0f, 1.0f);
-    lightNode2->setAmbient(0.0f, 0.0f, 0.0f);
+*/
 
     rootNode->addChild(childNode);                              //You should add most nodes to your root node so that everything gets deleted properly on exit.
     rootNode->addChild(childNode2);                             //You can also assign a child to a new parent at will, the child will automatically remove itself from its previous parent's index.
     childNode2->addChild(childNode3);
     rootNode->addChild(loadedObject);
-    rootNode->addChild(logoNode);
-
-    camera.addChild(dynamic_cast<Node*>(lightNode2));           //Attach lightNode2 to the camera.
-                                                                //On creation, lights are automatically added as children of the root node by the scene object, so you don't have to assign them manually.
-                                                                //However, they can be children of nodes if you wish, just use a dynamic cast to Node* like so:
-                                                                //parentNode.addChild(dynamic_cast<Node*>(lightNode));
-
+   // rootNode->addChild(logoNode);
 
     rootNode->setLocalPosition(0.0f, 0.0f, 0.0f);               //This is to show that position, scale, and rotation is inhereted from parent to child. The childNode3 will end up with a position of 2.0, -2.0, -6.0, etc.
     childNode->setLocalPosition(-2.0f,0.0f,0.0f);
     childNode2->setLocalPosition(2.0f, 0.0f, 0.0f);
     childNode3->setLocalPosition(0.0f,-2.0f, 0.0f);
 
-    loadedObject->setLocalPosition(0.0f, 0.0f, 0.0f);
+    //loadedObject->setLocalPosition(0.0f, 0.0f, 0.0f);
 
-    logoNode->setLocalPosition(0.0f, 0.0f, 2.0f);
-    lightNode->setLocalPosition(0.0f, 0.0f, 1.0f);
-    lightNode2->setLocalPosition(0.0f, 0.0f, -3.0f);            //The light node will be 4 units in front of the camera. You can see when it passes through the logo when the camera moves forward.
+    //logoNode->setLocalPosition(0.0f, 0.0f, 2.0f);
 
     childNode->setLocalRotation(0.0f, 30.0f, 0.0f);
     childNode2->setLocalRotation(0.0f, 0.0f, 45.0f);
@@ -118,7 +101,7 @@ int main(int argc, char* argv[])
     childNode->setLocalScale(1.0f, 1.0f, 1.0f);
     childNode2->setLocalScale(0.5f, 1.0f, 1.0f);
     childNode3->setLocalScale(1.0f, 0.5f, 1.0f);                //Scale is inherited, so now it has a scale of 0.5, 0.5, 1.0, so it is half sized. Also note that scales are multipled together, not added.
-    logoNode->setLocalScale(3.0f, 3.0f, 1.0f);
+    //logoNode->setLocalScale(3.0f, 3.0f, 1.0f);
 
     loadedObject->setLocalRotation(90.0f, 0.0f, 0.0f);
 
@@ -127,6 +110,22 @@ int main(int argc, char* argv[])
     camera.setLocalRotation(0.0f, 0.0f, 0.0f);
     camera.setLocalScale(1.0f, 1.0f, 1.0f);
 
+    cout << "j key pressed, ran workarounds\n";
+    return 0;
+}
+int main(int argc, char* argv[])
+{
+    //freopen("CON", "w", stdout);                                //Don't let SDL redirect the standard output to a file
+    //freopen("CON", "w", stderr);                                //Same for standard errors`
+
+    window.create(1024.0f,720.0f,32);                                  //Creates the window. Sets up SDL and OpenGL, sets some variables
+    window.setCaption("Phenomenon Engine Test/Demo");           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
+
+    int done = false;                                           //Main loop variable
+    SDL_Event *event;                                           //Useed in collecting events
+    event = new SDL_Event;
+
+    bool workaroundsRun = false;
 
     while(!done)                                                //Main loop
     {
@@ -178,19 +177,10 @@ int main(int argc, char* argv[])
                         camera.goRight(1.0f);
                         break;
 
-                    case SDLK_l:
-                        scene.enableLighting();
-                        break;
-
-                    case SDLK_k:
-                        scene.disableLighting();
-                        break;
-
                     case SDLK_j:
-                        window.initGL();
-                        logo_texture->load("../data/phenomenon.bmp");
-                        scene.enableLighting();
-                        cout << "j key pressed, ran workarounds\n";
+                        setup();
+                        workaroundsRun = true;
+                        break;
 
                     default:
                         break;
@@ -209,15 +199,17 @@ int main(int argc, char* argv[])
             }
         } //end while
 
-        if (window.isActive)                            //window.isActive is false if we've already quit, or if we're minimised.
+        if (window.isActive && workaroundsRun == true)                            //window.isActive is false if we've already quit, or if we're minimised.
         {
             childNode->increaseLocalRotation(0.0f, 1.0f, 0.0f);
             childNode2->increaseLocalRotation(0.0f, 0.0f, 1.0f);
             childNode3->increaseLocalRotation(1.0f, 0.0f, 0.0f);
-            loadedObject->increaseLocalRotation(0.0f, 0.0f, 1.0f);
+            //loadedObject->increaseLocalRotation(0.0f, 0.0f, 1.0f);
 
             window.clearScreen();
-            camera.drawScene(&scene);                   //All nodes draw() function, including basic nodes like rootNode, calls the draw() functions of their children.
+            cout << "about to render!\n";
+            renderer.render(&camera, &scene);
+            cout << "Finished rendering!\n";
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
         } else {/*sleep(1);*/}                          //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
                                                         //Scene will set up lights and rendering, then call draw() on the root node.

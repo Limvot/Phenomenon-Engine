@@ -20,7 +20,7 @@ int Camera::setProjectionMatrix(GLuint width, GLuint height, GLfloat FOV, GLfloa
 
 int Camera::setProjectionMatrix(GLfloat aspectRatio, GLfloat FOV, GLfloat zNear, GLfloat zFar)
 {
-    std::cout << "aspectRation is: " << aspectRatio << "\n";
+    std::cout << "aspectRatio is: " << aspectRatio << "\n";
 
     GLfloat cotanHalfFOV = 1/(tanf((FOV/360)*PI));                //FOV/2/180 * PI simplifies to FOV/360*PI
     GLfloat zRange = zNear-zFar;

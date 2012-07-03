@@ -134,7 +134,7 @@ Node* ModelLoader::loadOBJ(std::string file_path, std::string name)
     if (obj_file == NULL)
     {
         std::cout << "Could not open .obj file.\n";
-        return false;
+        return NULL;
     }
 
     Node* loaded_obj_group = new Node(name);    //Our group node that all loaded objects will be made a child of.
@@ -180,7 +180,7 @@ Node* ModelLoader::loadOBJ(std::string file_path, std::string name)
 int ModelLoader::loadOBJpart(FILE* obj_file, std::string name, Node* loaded_obj_group)
 {
 
-    uint face_count = 0;
+    GLuint face_count = 0;
 
     std::vector<GLuint> vertices_indices, uv_indices, normal_indices;
     std::vector<Vertex> out_vertices;

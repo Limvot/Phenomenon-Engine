@@ -9,7 +9,7 @@
 
 #include <GL/glew.h>
 #include "SDL.h"
-#include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
+//#include "SDL/SDL_opengl.h" //Encapsulates GL/gl.h and GL/glu.h for platform compatibility. (lazyfoo tutorial)
 
 //Includes from with in engine
 #include "DataTypes.h"      //Also includes ExpandableArray.h
@@ -33,6 +33,7 @@ class Renderer
         int setGamma(GLfloat gamma_in);
         int render(Camera* camera, Scene* scene);
         int geometryPass(Scene* scene);
+        int beginLightingPass();
         int lightingPass();
 
         Matrix4f Vmatrix, VPmatrix;

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Phenomenon_Engine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libphenomenon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="libphenomenon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-DGLEW_STATIC" />
+			<Add directory="..\SDL-1.2.15\include" />
+			<Add directory="..\bullet-2.80-rev2531\src" />
+			<Add directory="..\glew-1.7.0\include" />
+			<Add directory="..\SDL-1.2.15\include\SDL" />
+		</Compiler>
+		<Linker>
+			<Add directory="..\glew-1.7.0\lib" />
+		</Linker>
+		<Unit filename="extern\stb_image.cpp">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="extern\stb_image.h" />
+		<Unit filename="phenomenon\BasicShapes.cpp" />
+		<Unit filename="phenomenon\BasicShapes.h" />
+		<Unit filename="phenomenon\Camera.cpp" />
+		<Unit filename="phenomenon\Camera.h" />
+		<Unit filename="phenomenon\DataTypes.cpp" />
+		<Unit filename="phenomenon\DataTypes.h" />
+		<Unit filename="phenomenon\ExpandableArray.h" />
+		<Unit filename="phenomenon\GBuffer.cpp" />
+		<Unit filename="phenomenon\GBuffer.h" />
+		<Unit filename="phenomenon\Light.cpp" />
+		<Unit filename="phenomenon\Light.h" />
+		<Unit filename="phenomenon\Material.cpp" />
+		<Unit filename="phenomenon\Material.h" />
+		<Unit filename="phenomenon\ModelLoader.cpp" />
+		<Unit filename="phenomenon\ModelLoader.h" />
+		<Unit filename="phenomenon\Node.cpp" />
+		<Unit filename="phenomenon\Node.h" />
+		<Unit filename="phenomenon\Phenomenon.h" />
+		<Unit filename="phenomenon\PhenomenonMotionState.cpp" />
+		<Unit filename="phenomenon\PhenomenonMotionState.h" />
+		<Unit filename="phenomenon\PhysicsManager.cpp" />
+		<Unit filename="phenomenon\PhysicsManager.h" />
+		<Unit filename="phenomenon\PhysicsObject.cpp" />
+		<Unit filename="phenomenon\PhysicsObject.h" />
+		<Unit filename="phenomenon\Renderer.cpp" />
+		<Unit filename="phenomenon\Renderer.h" />
+		<Unit filename="phenomenon\Scene.cpp" />
+		<Unit filename="phenomenon\Scene.h" />
+		<Unit filename="phenomenon\SceneLoader.cpp" />
+		<Unit filename="phenomenon\SceneLoader.h" />
+		<Unit filename="phenomenon\Shader.cpp" />
+		<Unit filename="phenomenon\Shader.h" />
+		<Unit filename="phenomenon\StaticObject.cpp" />
+		<Unit filename="phenomenon\StaticObject.h" />
+		<Unit filename="phenomenon\Texture.cpp" />
+		<Unit filename="phenomenon\Texture.h" />
+		<Unit filename="phenomenon\Window.cpp" />
+		<Unit filename="phenomenon\Window.h" />
+		<Unit filename="..\glew-1.7.0\src\glew.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
