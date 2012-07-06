@@ -28,7 +28,10 @@ int setup()
     cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
     renderer.init(1024.0f, 720.0f, 2.2);
     Shader* fullScreenQuadShader = scene.newShader("fullScreenQuad");
-    fullScreenQuadShader->createShaderProgram("..\\data\\FullScreenQuad.vert", "..\\data\\FullScreenQuad.frag");
+
+    //fullScreenQuadShader->createShaderProgram("..\\data\\FullScreenQuad.vert", "..\\data\\FullScreenQuad.frag");
+    fullScreenQuadShader->createShaderProgram("../data/FullScreenQuad.vert", "../data/FullScreenQuad.frag");
+
     renderer.initQuad(fullScreenQuadShader);
 
     rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
@@ -38,10 +41,16 @@ int setup()
     //Node* logoNode = createSquare("logo");
 
     Shader* basic_shader = scene.newShader("basic_shader");
-    basic_shader->createShaderProgram("..\\data\\sample_shader.vert", "..\\data\\sample_shader.frag");
+
+    //basic_shader->createShaderProgram("..\\data\\sample_shader.vert", "..\\data\\sample_shader.frag");
+    basic_shader->createShaderProgram("../data/sample_shader.vert", "../data/sample_shader.frag");
+
 
     ModelLoader model_loader(&scene, basic_shader);                                   //Our model-loading object
+
+    //Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
     Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
+
     if (loadedObject == NULL)                                                          //Quit if the load failed.
     {
         cout << "Problem loading the demonstration .obj file, will now quit.\n";
