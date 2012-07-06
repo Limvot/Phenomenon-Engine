@@ -36,6 +36,7 @@ class Vector2f           //Simple vector class.
         Vector2f();
         Vector2f(float,float);
         ~Vector2f();
+        int set(float,float);
         Vector2f operator+ (Vector2f);
         Vector2f operator- (Vector2f);
         Vector2f operator* (Vector2f);

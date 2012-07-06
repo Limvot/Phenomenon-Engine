@@ -29,12 +29,16 @@ class Renderer
         Renderer();
         virtual ~Renderer();
         int init(GLuint width_in, GLuint height_in, GLfloat gamma_in = 2.2);
-        int initQuad(Shader* shader_in);
+        int initQuad();
+        int initLighting(Shader* shader_in);
+        int initPostProcess(Shader* shader_in);
         int setGamma(GLfloat gamma_in);
         int render(Camera* camera, Scene* scene);
         int geometryPass(Scene* scene);
         int beginLightingPass();
         int lightingPass();
+        int preparePostProcess();
+        int postProcess();
 
         Matrix4f Vmatrix, VPmatrix;
 
@@ -52,13 +56,18 @@ class Renderer
         GLuint quad_VertexArrayID;
 
         GLuint quad_vertexbuffer;
-        Shader* quad_shader;
+        Shader* post_shader;
         GLuint texID;
         GLuint gammaID;
         GLuint timeID;
 
-        GLuint width;
-        GLuint height;
+        Shader* light_shader;
+        GLuint light_position_textureID;
+        GLuint light_diffuse_textureID;
+        GLuint light_normal_textureID;
+        GLuint light_screen_sizeID;
+
+        Vector2f screen_size;
         GLfloat gamma_divided;
     protected:
 };

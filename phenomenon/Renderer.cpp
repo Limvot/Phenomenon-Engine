@@ -18,10 +18,9 @@ Renderer::~Renderer()
 
 int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
 {
-    width = width_in;
-    height = height_in;
+    screen_size.set(width_in, height_in);
 
-    G_Buffer.init(width, height);                       //Init our GBuffer
+    G_Buffer.init(screen_size.x, screen_size.y);                       //Init our GBuffer
 
     setGamma(gamma_in);
 
@@ -34,7 +33,7 @@ int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
 
 
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, screen_size.x, screen_size.y, 0, GL_RGB, GL_FLOAT, 0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -43,7 +42,7 @@ int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
 
     glGenRenderbuffers(1, &depthrenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, screen_size.x, screen_size.y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
 
@@ -58,7 +57,7 @@ int Renderer::init(GLuint width_in, GLuint height_in, GLfloat gamma_in)
     return true;
 }
 
-int Renderer::initQuad(Shader* shader_in)
+int Renderer::initQuad()
 {
     static const GLfloat g_quad_vertex_buffer_data[] = {
          1.0f, -1.0f, 0.0f,     1.0f, 0.0f,
@@ -76,10 +75,26 @@ int Renderer::initQuad(Shader* shader_in)
     glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
-    quad_shader = shader_in;
-    texID = glGetUniformLocation(quad_shader->getShader(), "renderedTexture");
-    gammaID = glGetUniformLocation(quad_shader->getShader(), "gamma_divided");
-    timeID = glGetUniformLocation(quad_shader->getShader(), "time");
+    return 0;
+}
+
+int Renderer::initLighting(Shader* shader_in)
+{
+    light_shader = shader_in;
+    light_position_textureID = glGetUniformLocation(light_shader->getShader(), "position_worldspace");
+    light_diffuse_textureID = glGetUniformLocation(light_shader->getShader(), "diffuse");
+    light_normal_textureID = glGetUniformLocation(light_shader->getShader(), "normal_worldspace");
+    light_screen_sizeID = glGetUniformLocation(light_shader->getShader(), "position_worldspace");
+
+    return 0;
+}
+
+int Renderer::initPostProcess(Shader* shader_in)
+{
+    post_shader = shader_in;
+    texID = glGetUniformLocation(post_shader->getShader(), "renderedTexture");
+    gammaID = glGetUniformLocation(post_shader->getShader(), "gamma_divided");
+    timeID = glGetUniformLocation(post_shader->getShader(), "time");
 
     return 0;
 }
@@ -117,26 +132,92 @@ int Renderer::beginLightingPass()
 
     G_Buffer.bindForReading();
     glClear(GL_COLOR_BUFFER_BIT);
+
+    return 0;
 }
 
 int Renderer::lightingPass()
 {
-    G_Buffer.bindForReading();
+    glUseProgram(light_shader->getShader());
 
-    GLsizei HalfWidth = (GLsizei)(width/2.0f);
-    GLsizei HalfHeight = (GLsizei)(height/2.0f);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
 
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
+
+    std::cout << "textures[] is equal to " << G_Buffer.textures[0] << " " << G_Buffer.textures[1] << " " << G_Buffer.textures[2] << " " << GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE << "\n";
+
+    glUniform1i(light_position_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+    glUniform1i(light_diffuse_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+    glUniform1i(light_normal_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    glUniform2f(light_screen_sizeID, screen_size.x, screen_size.y);
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)12);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+/*
     G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-    glBlitFramebuffer(0, 0, width, height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
     G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-    glBlitFramebuffer(0, 0, width, height, 0, HalfHeight, HalfWidth, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, 0, HalfHeight, HalfWidth, screen_size.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
     G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-    glBlitFramebuffer(0, 0, width, height, HalfWidth, HalfHeight, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, HalfWidth, HalfHeight, screen_size.x, screen_size.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
     G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
-    glBlitFramebuffer(0, 0, width, height, HalfWidth, 0, width, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, HalfWidth, 0, screen_size.x, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+*/
+    return 0;
+}
+
+int Renderer::preparePostProcess()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);     //Bind the framebuffer that is written to for post-processing
+    glViewport(0, 0, screen_size.x, screen_size.y);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    return 0;
+}
+
+int Renderer::postProcess()
+{
+    std::cout << "Here is renderedTexture: " << renderedTexture << "\n";
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);                   //Render the post-processing to screen
+    glViewport(0, 0, screen_size.x, screen_size.y);
+
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glUseProgram(post_shader->getShader());
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, renderedTexture);
+
+    glUniform1i(texID, 0);
+    glUniform1f(gammaID, gamma_divided);
+    glUniform1f(timeID, float(SDL_GetTicks()/100));
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)12);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     return 0;
 }
@@ -160,38 +241,12 @@ int Renderer::render(Camera* camera, Scene* scene)
     geometryPass(scene);
 
     //Bind the framebuffer that the lighting pass will render into, used for post-processing
-    glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);     //Bind the framebuffer that is written to for post-processing
-    glViewport(0, 0, width, height);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    preparePostProcess();
     //Now do the lighting
+    beginLightingPass();
     lightingPass();
     //End deffered rendering
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);                   //Render the post-processing to screen
-    glViewport(0, 0, width, height);
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(quad_shader->getShader());
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, renderedTexture);
-
-    glUniform1i(texID, 0);
-    glUniform1f(gammaID, gamma_divided);
-    glUniform1f(timeID, float(SDL_GetTicks()/100));
-
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)12);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
+    postProcess();  //Do post-process
 
     return 0;
 }

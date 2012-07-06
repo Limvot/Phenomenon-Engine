@@ -241,6 +241,14 @@ Vector2f::~Vector2f()
 
 }
 
+int Vector2f::set(float tmp_in_x, float tmp_in_y)                                  //If we do have arguments, init to them
+{
+    x = tmp_in_x;
+    y = tmp_in_y;
+
+    return 0;
+}
+
 Vector2f Vector2f::operator+ (Vector2f tmp_in_vector)                               //Overload + so we can add vertexes
 {
     Vector2f tmp_return;
