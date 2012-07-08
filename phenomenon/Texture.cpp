@@ -136,6 +136,7 @@ int Texture::load(std::string file_path, GLenum min_filter, GLenum mag_filter)  
 int Texture::bind()
 {
     //Future- investigate glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id[0]);
     return 0;
 }

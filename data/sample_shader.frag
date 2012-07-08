@@ -5,8 +5,8 @@ in vec3 normal_worldspace, position_worldspace;
 
 uniform sampler2D TextureSampler;
 
-layout (location = 0) out vec3 outDiffuse;
-layout (location = 1) out vec3 outposition_worldspace;
+layout (location = 0) out vec3 outposition_worldspace;
+layout (location = 1) out vec3 outDiffuse;
 layout (location = 2) out vec3 outnormal_worldspace;
 layout (location = 3) out vec3 outUV;
 

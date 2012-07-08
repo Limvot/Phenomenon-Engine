@@ -36,7 +36,7 @@ class Renderer
         int render(Camera* camera, Scene* scene);
         int geometryPass(Scene* scene);
         int beginLightingPass();
-        int lightingPass();
+        int lightingPass(Camera* camera, Scene* scene);
         int preparePostProcess();
         int postProcess();
 
@@ -66,6 +66,12 @@ class Renderer
         GLuint light_diffuse_textureID;
         GLuint light_normal_textureID;
         GLuint light_screen_sizeID;
+        GLuint light_colorID;
+        GLuint light_powerID;
+        GLuint light_positionID;
+        GLuint camera_positionID;
+
+        Vector camera_position;
 
         Vector2f screen_size;
         GLfloat gamma_divided;

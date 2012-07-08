@@ -84,7 +84,11 @@ int Renderer::initLighting(Shader* shader_in)
     light_position_textureID = glGetUniformLocation(light_shader->getShader(), "position_worldspace");
     light_diffuse_textureID = glGetUniformLocation(light_shader->getShader(), "diffuse");
     light_normal_textureID = glGetUniformLocation(light_shader->getShader(), "normal_worldspace");
-    light_screen_sizeID = glGetUniformLocation(light_shader->getShader(), "position_worldspace");
+    light_screen_sizeID = glGetUniformLocation(light_shader->getShader(), "screenSize");
+    light_colorID = glGetUniformLocation(light_shader->getShader(), "LightColor");
+    light_powerID = glGetUniformLocation(light_shader->getShader(), "LightPower");
+    light_positionID = glGetUniformLocation(light_shader->getShader(), "LightPosition");
+    camera_positionID = glGetUniformLocation(light_shader->getShader(), "CameraPosition");
 
     return 0;
 }
@@ -136,49 +140,50 @@ int Renderer::beginLightingPass()
     return 0;
 }
 
-int Renderer::lightingPass()
+int Renderer::lightingPass(Camera* camera, Scene* scene)
 {
+//*
+    G_Buffer.bindForReading();
+    glBindFramebuffer(GL_DRAW_BUFFER, FramebufferName);
     glUseProgram(light_shader->getShader());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
+    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE]);
 
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_POSITION]);
+    glBindTexture(GL_TEXTURE_2D, G_Buffer.textures[GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL]);
 
-    std::cout << "textures[] is equal to " << G_Buffer.textures[0] << " " << G_Buffer.textures[1] << " " << G_Buffer.textures[2] << " " << GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE << "\n";
+    for (GLuint i = 0; i < scene->numLights; i++)
+    {
+        glUniform1i(light_position_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+        glUniform1i(light_diffuse_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+        glUniform1i(light_normal_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+        glUniform2f(light_screen_sizeID, screen_size.x, screen_size.y);
 
-    glUniform1i(light_position_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-    glUniform1i(light_diffuse_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-    glUniform1i(light_normal_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-    glUniform2f(light_screen_sizeID, screen_size.x, screen_size.y);
+        Vector light_position = scene->LightArray.getArrayMember(i)->getGlobalPosition();
+        Color3f light_diffuse = scene->LightArray.getArrayMember(i)->getDiffuse();
+        camera_position = camera->getGlobalPosition();
 
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)12);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
+        glUniform3f(light_colorID, light_diffuse.r, light_diffuse.g, light_diffuse.b);
+        glUniform1f(light_powerID, 1.0f);
+        glUniform3f(light_positionID, light_position.x, light_position.y, light_position.z);
+        glUniform3f(camera_positionID, camera_position.x, camera_position.y, camera_position.z);
+
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (void*)12);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+    }
 
     glBindTexture(GL_TEXTURE_2D, 0);
-/*
-    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, 0, HalfHeight, HalfWidth, screen_size.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, HalfWidth, HalfHeight, screen_size.x, screen_size.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    G_Buffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
-    glBlitFramebuffer(0, 0, screen_size.x, screen_size.y, HalfWidth, 0, screen_size.x, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-*/
     return 0;
 }
 
@@ -244,7 +249,7 @@ int Renderer::render(Camera* camera, Scene* scene)
     preparePostProcess();
     //Now do the lighting
     beginLightingPass();
-    lightingPass();
+    lightingPass(camera, scene);
     //End deffered rendering
     postProcess();  //Do post-process
 

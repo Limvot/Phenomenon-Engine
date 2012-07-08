@@ -46,11 +46,6 @@ class Scene
         Shader* findShader(std::string shader_name);
         int deleteShader(std::string shader_name);
 
-    protected:
-    private:
-        Node rootNode;
-        PhysicsManager physicsManager;
-
         ExpandableArray<Light*> LightArray;
         GLuint numLights;
         Light* tmp_light;
@@ -65,6 +60,11 @@ class Scene
 
         ExpandableArray<Shader*> ShaderArray;
         GLuint numShaders;
+
+    protected:
+    private:
+        Node rootNode;
+        PhysicsManager physicsManager;
 };
 
 } //End Namespace

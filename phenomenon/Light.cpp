@@ -73,4 +73,14 @@ int Light::setDiffuse(Color3f diffuse_in)
     return 0;
 }
 
+Color3f Light::getAmbient()
+{
+    return Color3f(LightAmbient[0], LightAmbient[1], LightAmbient[2]);
+}
+
+Color3f Light::getDiffuse()
+{
+    return Color3f(LightDiffuse[0], LightDiffuse[1], LightDiffuse[2]);
+}
+
 } //End Namespace

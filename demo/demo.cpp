@@ -19,36 +19,45 @@ Renderer renderer;
 Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
 Node *rootNode, *childNode, *childNode2, *childNode3;
+Light *lightNode, *lightNode2;
 
 
 
 int setup()
 {
     window.initGL();
-    cout<< "OpenGL version is reported as: " << glGetString(GL_VERSION) << endl;    //Show OpenGL version
-    renderer.init(1024.0f, 720.0f, 2.2);
-    Shader* fullScreenQuadShader = scene.newShader("fullScreenQuad");
+    string OpenGL_Version = (const char*)glGetString(GL_VERSION);           //Note the C-style cast
+    cout<< "OpenGL version is reported as: " << OpenGL_Version << endl;    //Show OpenGL version
+    string windowCaption = "Phenomenon Engine Demo: OpenGL is reported as " + OpenGL_Version;
+    window.setCaption(windowCaption);           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
 
-    //fullScreenQuadShader->createShaderProgram("..\\data\\FullScreenQuad.vert", "..\\data\\FullScreenQuad.frag");
+    renderer.init(1024.0f, 720.0f, 2.2);        //Init the renderer
+    renderer.initQuad();                        //Init the renderer's quad
+
+    Shader* lightShader = scene.newShader("lightQuad");                                                         //Setup the shader for the defered rendering lights
+    lightShader->createShaderProgram("../data/LightPass.vert", "../data/LightPass.frag");
+    renderer.initLighting(lightShader);
+
+    Shader* fullScreenQuadShader = scene.newShader("fullScreenQuad");                                           //And for the post-process (including gamma correction)
     fullScreenQuadShader->createShaderProgram("../data/FullScreenQuad.vert", "../data/FullScreenQuad.frag");
-
-    renderer.initQuad(fullScreenQuadShader);
+    renderer.initPostProcess(fullScreenQuadShader);
 
     rootNode = scene.getRootNode();                       //All objects are represented with nodes. Basic nodes can be used to group together other nodes. This node is the root node.
     childNode = createTriangle("triangle");                 //The Triangle class inherets the Node class, but draws a triangle on draw().
     childNode2 = createSquare("square");                    //Same with the Square class, but it draws a square.
     childNode3 = createSquare("square2");                   //Also, Nodes NEED unique names, or searching for them and deleting them will probally not work, and may delete other nodes.
     //Node* logoNode = createSquare("logo");
+    lightNode = scene.newLight("light");
+    lightNode->setLocalPosition(-1.0f, 1.0f, -1.0f);
+    lightNode->setDiffuse(1.0f, 0.2f, 0.0f);
+    lightNode2 = scene.newLight("second_light");
+    lightNode2->setLocalPosition(1.0f,1.0f,-1.0f);
+    lightNode2->setDiffuse(0.0f,0.2f,1.0f);
 
     Shader* basic_shader = scene.newShader("basic_shader");
-
-    //basic_shader->createShaderProgram("..\\data\\sample_shader.vert", "..\\data\\sample_shader.frag");
     basic_shader->createShaderProgram("../data/sample_shader.vert", "../data/sample_shader.frag");
 
-
     ModelLoader model_loader(&scene, basic_shader);                                   //Our model-loading object
-
-    //Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
     Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
 
     if (loadedObject == NULL)                                                          //Quit if the load failed.
@@ -128,7 +137,7 @@ int main(int argc, char* argv[])
     //freopen("CON", "w", stderr);                                //Same for standard errors`
 
     window.create(1024.0f,720.0f,32);                                  //Creates the window. Sets up SDL and OpenGL, sets some variables
-    window.setCaption("Phenomenon Engine Test/Demo");           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
+    window.setCaption("Phenomenon Engine Demo");           //The window should be created before you start setting up anything that could make SDL or OpenGL calls.
 
     int done = false;                                           //Main loop variable
     SDL_Event *event;                                           //Useed in collecting events
@@ -216,9 +225,7 @@ int main(int argc, char* argv[])
             //loadedObject->increaseLocalRotation(0.0f, 0.0f, 1.0f);
 
             window.clearScreen();
-            cout << "about to render!\n";
             renderer.render(&camera, &scene);
-            cout << "Finished rendering!\n";
             window.swapBuffers();                       //Thus, calling rootNode.draw() will draw the entire scene. However, to use a camera, you must call drawScene on it
         } else {/*sleep(1);*/}                          //and pass it the scene. It will apply the appropriate translation, rotation, and scale for its own properties,
                                                         //Scene will set up lights and rendering, then call draw() on the root node.

@@ -17,6 +17,8 @@ class Light: public Node
         int setAmbient(Color3f ambient_in);
         int setDiffuse(float,float,float);
         int setDiffuse(Color3f diffuse_in);
+        Color3f getAmbient();
+        Color3f getDiffuse();
 
         GLfloat LightAmbient[4];    //Light settings
         GLfloat LightDiffuse[4];
