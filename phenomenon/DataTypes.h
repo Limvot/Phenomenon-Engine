@@ -23,6 +23,7 @@ class Vector4f           //Vector4f class.
     public:
         Vector4f();
         Vector4f(float,float,float,float);
+        Vector4f(Vector,float);
         ~Vector4f();
         Vector4f operator+ (Vector4f);
         Vector4f operator- (Vector4f);

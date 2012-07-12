@@ -58,9 +58,10 @@
 		<Unit filename="..\data\FullScreenQuad.vert" />
 		<Unit filename="..\data\LightPass.frag" />
 		<Unit filename="..\data\LightPass.vert" />
-		<Unit filename="..\data\sample_shader.frag" />
-		<Unit filename="..\data\sample_shader.vert" />
+		<Unit filename="..\data\geometry_pass.frag" />
+		<Unit filename="..\data\geometry_pass.vert" />
 		<Unit filename="demo.cpp" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

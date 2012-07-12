@@ -84,6 +84,14 @@ Vector4f::Vector4f(float tmp_in_x, float tmp_in_y, float tmp_in_z, float tmp_in_
     w = tmp_in_w;
 }
 
+Vector4f::Vector4f(Vector tmp_in_vec, float tmp_in_w)      //Also allow construction from a three-component vector and a w component
+{
+    x = tmp_in_vec.x;
+    y = tmp_in_vec.y;
+    z = tmp_in_vec.z;
+    w = tmp_in_w;
+}
+
 Vector4f::~Vector4f()
 {
 

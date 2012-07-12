@@ -187,6 +187,19 @@ Vector Node::getGlobalPosition()
     return globalPosition;
 }
 
+Vector4f Node::getGlobalPositionv4f()
+{
+    if (parent == NULL)                                                 //If we don't have a parent
+    {
+        globalPosition = localPosition;                                 //Global position is the same as local position
+    } else {                                                            //If we do have a parent
+        globalPosition = localPosition + parent->getGlobalPosition();   //Add its positon to ours. (note that this will continue back to the root node.)
+    }
+
+    return Vector4f(globalPosition, 1);                                 //Return with a w component of 1, since it's a position
+}
+
+
 Matrix4f Node::getGlobalPositionMatrix()
 {
     if (parent == NULL)                                                 //If we don't have a parent

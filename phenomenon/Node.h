@@ -41,6 +41,7 @@ class Node
         int setLocalPosition(Vector);
         Vector getLocalPosition();
         Vector getGlobalPosition();
+        Vector4f getGlobalPositionv4f();            //Return a four-dimentional vector with a w component of 1
         Matrix4f getGlobalPositionMatrix();
 
         int setLocalScale(float,float,float);

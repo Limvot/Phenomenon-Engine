@@ -8,20 +8,25 @@ This is important, as the engine uses it to handle window resize and window loss
 
 #include <iostream>
 #include "../phenomenon/Phenomenon.h"
+
 using namespace std;
 using namespace phen;
+
+class Demo
+{
 
 Window window;
 Scene scene;                                                //Scenes are just that, scenes. They are renderd with a camera. Each scene has its own root node. Rendering will also take place inside of scenes.
 
 Renderer renderer;
 
-Camera camera("camera");                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
+Camera camera;                                    //Cameras inherit Node too, and thus require a name. It also dosn't have to be attached to a root node, but can be attached to a node if you wish. Just <dynamic_cast> again.
 
 Node *rootNode, *childNode, *childNode2, *childNode3;
 Light *lightNode, *lightNode2;
 
 
+public:
 
 int setup()
 {
@@ -55,7 +60,7 @@ int setup()
     lightNode2->setDiffuse(0.0f,0.2f,1.0f);
 
     Shader* basic_shader = scene.newShader("basic_shader");
-    basic_shader->createShaderProgram("../data/sample_shader.vert", "../data/sample_shader.frag");
+    basic_shader->createShaderProgram("../data/geometry_pass.vert", "../data/geometry_pass.frag");
 
     ModelLoader model_loader(&scene, basic_shader);                                   //Our model-loading object
     Node* loadedObject = model_loader.loadOBJ("../data/Monkey.obj", "monkey");   //loadOBJ returns a pointer to a StaticObject, which is derived from the Node class.
@@ -131,7 +136,7 @@ int setup()
     cout << "j key pressed, ran workarounds\n";
     return 0;
 }
-int main(int argc, char* argv[])
+int start()
 {
     //freopen("CON", "w", stdout);                                //Don't let SDL redirect the standard output to a file
     //freopen("CON", "w", stderr);                                //Same for standard errors`
@@ -240,3 +245,5 @@ int main(int argc, char* argv[])
                                 //Materials and textures are handeld by scene as well, and are deleted when it falls out of scope.
     return 0;
 }
+
+}; //END DEMO CLASS

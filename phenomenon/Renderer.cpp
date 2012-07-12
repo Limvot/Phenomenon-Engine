@@ -81,11 +81,13 @@ int Renderer::initQuad()
 int Renderer::initLighting(Shader* shader_in)
 {
     light_shader = shader_in;
-    light_position_textureID = glGetUniformLocation(light_shader->getShader(), "position_worldspace");
+    light_position_textureID = glGetUniformLocation(light_shader->getShader(), "position_viewspace");
     light_diffuse_textureID = glGetUniformLocation(light_shader->getShader(), "diffuse");
-    light_normal_textureID = glGetUniformLocation(light_shader->getShader(), "normal_worldspace");
+    light_normal_textureID = glGetUniformLocation(light_shader->getShader(), "normal_viewspace");
     light_screen_sizeID = glGetUniformLocation(light_shader->getShader(), "screenSize");
-    light_colorID = glGetUniformLocation(light_shader->getShader(), "LightColor");
+    light_diffuse_colorID = glGetUniformLocation(light_shader->getShader(), "DiffuseColor");
+    light_ambient_colorID = glGetUniformLocation(light_shader->getShader(), "AmbientColor");
+    light_specular_colorID = glGetUniformLocation(light_shader->getShader(), "SpecularColor");
     light_powerID = glGetUniformLocation(light_shader->getShader(), "LightPower");
     light_positionID = glGetUniformLocation(light_shader->getShader(), "LightPosition");
     camera_positionID = glGetUniformLocation(light_shader->getShader(), "CameraPosition");
@@ -163,12 +165,16 @@ int Renderer::lightingPass(Camera* camera, Scene* scene)
         glUniform1i(light_normal_textureID, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
         glUniform2f(light_screen_sizeID, screen_size.x, screen_size.y);
 
-        Vector light_position = scene->LightArray.getArrayMember(i)->getGlobalPosition();
+        Vector4f light_position = Vmatrix * scene->LightArray.getArrayMember(i)->getGlobalPositionv4f(); //Get the worldspace position of the light and multiply by the view matrix to get it in viewspace (shader uses viewspace)
         Color3f light_diffuse = scene->LightArray.getArrayMember(i)->getDiffuse();
+        Color3f light_ambient = scene->LightArray.getArrayMember(i)->getAmbient();
+        Color3f light_specular = scene->LightArray.getArrayMember(i)->getSpecular();
         camera_position = camera->getGlobalPosition();
 
-        glUniform3f(light_colorID, light_diffuse.r, light_diffuse.g, light_diffuse.b);
-        glUniform1f(light_powerID, 1.0f);
+        glUniform3f(light_diffuse_colorID, light_diffuse.r, light_diffuse.g, light_diffuse.b);
+        glUniform3f(light_ambient_colorID, light_ambient.r, light_ambient.g, light_ambient.b);
+        glUniform3f(light_specular_colorID, light_specular.r, light_specular.g, light_specular.b);
+        glUniform1f(light_powerID, scene->LightArray.getArrayMember(i)->getPower());
         glUniform3f(light_positionID, light_position.x, light_position.y, light_position.z);
         glUniform3f(camera_positionID, camera_position.x, camera_position.y, camera_position.z);
 
@@ -198,8 +204,6 @@ int Renderer::preparePostProcess()
 
 int Renderer::postProcess()
 {
-    std::cout << "Here is renderedTexture: " << renderedTexture << "\n";
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);                   //Render the post-processing to screen
     glViewport(0, 0, screen_size.x, screen_size.y);
 
@@ -229,15 +233,6 @@ int Renderer::postProcess()
 
 int Renderer::render(Camera* camera, Scene* scene)
 {
-    light_position[0][0] = 0;
-    light_position[0][1] = 1;
-    light_position[0][2] = 1;
-
-    light_color[0][0] = 1;
-    light_color[0][1] = 1;
-    light_color[0][2] = 1;
-
-    light_power[0] = 10;
 
     Vmatrix = camera->getViewMatrix();
     VPmatrix = camera->getProjectionMatrix() * Vmatrix;

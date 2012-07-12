@@ -47,8 +47,8 @@
 			<Add library="LinearMath" />
 			<Add directory="../../Phenomenon-Engine" />
 		</Linker>
-		<Unit filename="../data/sample_shader.frag" />
-		<Unit filename="../data/sample_shader.vert" />
+		<Unit filename="../data/geometry_pass.frag" />
+		<Unit filename="../data/geometry_pass.vert" />
 		<Unit filename="demo.cpp" />
 		<Extensions>
 			<code_completion />

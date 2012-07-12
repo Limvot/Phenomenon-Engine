@@ -91,9 +91,6 @@ PhysicsManager* Scene::getPhysicsManager()
 
 Light* Scene::newLight(std::string light_name)
 {
-    if (numLights >= 8)
-        return NULL;                                        //We can't have more than 8 OpenGL lights
-
     tmp_light = new Light(light_name);
     LightArray.addArrayMember(tmp_light);
     rootNode.addChild(dynamic_cast<Node*>(tmp_light));      //Add our new light to rootNode by default.

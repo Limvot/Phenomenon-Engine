@@ -66,7 +66,9 @@ class Renderer
         GLuint light_diffuse_textureID;
         GLuint light_normal_textureID;
         GLuint light_screen_sizeID;
-        GLuint light_colorID;
+        GLuint light_diffuse_colorID;
+        GLuint light_ambient_colorID;
+        GLuint light_specular_colorID;
         GLuint light_powerID;
         GLuint light_positionID;
         GLuint camera_positionID;
